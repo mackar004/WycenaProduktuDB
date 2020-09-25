@@ -16,4 +16,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MaterialyRepository extends JpaRepository<Materialy, Long>{
     List<Materialy> findById(long id);
     List<Materialy> findByNazwa(String name);
+    List<Materialy> findByNazwaContainsIgnoreCase(String name);
 }

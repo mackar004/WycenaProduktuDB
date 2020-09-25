@@ -9,12 +9,14 @@ import pl.torun.roma.RoMa3.model.Firma;
 import pl.torun.roma.RoMa3.repository.FirmaRepository;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -22,6 +24,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import pl.torun.roma.RoMa3.forms.FirmaForm;
 
 /**
  *
@@ -30,177 +34,93 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route("user/firmy")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @PageTitle("RoMa - Firmy")
-@SpringComponent
-@UIScope
 public class FirmyView extends VerticalLayout {
 
     private final FirmaRepository firmaRepository;
 
     private Firma firma;
+    final FirmaForm firmaForm;
 
     private TextField nazwaFirmy = new TextField("Nazwa");
     private TextField miasto = new TextField("Miasto");
     private TextField kraj = new TextField("Kraj");
     final Grid firmaGrid;
 
-    private final Button nowaFirmaBtn = new Button("Nowa firma");
-    private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
-    private final Button cancel = new Button("Anuluj");
-    private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
-    private final Button edit = new Button("Edytuj");
-    private final HorizontalLayout buttonBar = new HorizontalLayout(nowaFirmaBtn, save, cancel, edit, delete);
-    private final HorizontalLayout formularz = new HorizontalLayout(nazwaFirmy, miasto, kraj);
+    private final Button nowaFirma;
+    final TextField filtrFirma;
+    final Dialog dialog;
 
-    Binder<Firma> binderFirma = new Binder<>(Firma.class);
-
-    @Autowired
-    private FirmyView(FirmaRepository repo) {
+    private FirmyView(FirmaRepository repo, FirmaForm firmaForm) {
 
         add(new Button("Powrót", event -> {
-            listFirmy();
             getUI().ifPresent(ui -> ui.navigate("main"));
         }));
 
         this.firmaRepository = repo;
+        this.firmaForm = new FirmaForm(repo);
         firmaGrid = new Grid<>(Firma.class);
 
-        binderFirma.bindInstanceFields(this);
+        this.filtrFirma = new TextField();
+        this.dialog = new Dialog();
 
-        nazwaFirmy.setEnabled(false);
-        miasto.setEnabled(false);
-        kraj.setEnabled(false);
-        save.setEnabled(false);
-        cancel.setEnabled(false);
-        delete.setEnabled(false);
-        edit.setEnabled(false);
+        this.nowaFirma = new Button("Nowa", VaadinIcon.PLUS.create());
 
-        //nowafirmabtn
-        nowaFirmaBtn.addClickListener(e -> {
+        HorizontalLayout filterBar = new HorizontalLayout(filtrFirma, nowaFirma);
+
+        filtrFirma.setPlaceholder("Szukaj w bazie");
+        filtrFirma.setValueChangeMode(ValueChangeMode.EAGER);
+        filtrFirma.addValueChangeListener(e -> listFirmy(e.getValue()));
+
+        dialog.add(this.firmaForm);
+        dialog.setWidth("600px");
+        dialog.setHeight("400px");
+        dialog.setCloseOnEsc(false);
+        dialog.setCloseOnOutsideClick(false);
+
+        firmaGrid.setColumns("nazwaFirmy", "miasto", "kraj");
+        firmaGrid.getColumnByKey("nazwaFirmy").setWidth("250px").setFlexGrow(0).setSortProperty("nazwaFirmy");
+
+        firmaGrid.asSingleSelect().addValueChangeListener(e -> {
+            nowaFirma.setEnabled(false);
+            dialog.open();
+            this.firmaForm.editFirma((Firma) e.getValue());
+        });
+
+        nowaFirma.addClickListener(e -> {
             nazwaFirmy.setEnabled(true);
             miasto.setEnabled(true);
             kraj.setEnabled(true);
-            nowaFirmaBtn.setEnabled(false);
-            save.setEnabled(true);
-            cancel.setEnabled(true);
+            nowaFirma.setEnabled(false);
             nazwaFirmy.focus();
         });
 
-        //grid
-        firmaGrid.setWidth("500px");
-        firmaGrid.setColumns("nazwaFirmy", "miasto", "kraj");
-        firmaGrid.getColumnByKey("nazwaFirmy").setHeader("Nazwa");
-        firmaGrid.setHeightByRows(true);
-        firmaGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        firmaGrid.asSingleSelect().addValueChangeListener(e -> {
-            if (e.getValue() == null) {
-                nowaFirmaBtn.setEnabled(true);
-                delete.setEnabled(false);
-                edit.setEnabled(false);
-            } else {
-                this.firma = (Firma) e.getValue();
-                nowaFirmaBtn.setEnabled(false);
-                delete.setEnabled(true);
-                edit.setEnabled(true);
-            }
+        // Stworzenie i edytowanie nowego pracownika po kliknięciu przycisku Nowy
+        nowaFirma.addClickListener(e -> {
+            dialog.open();
+            this.firmaForm.editFirma(new Firma("", "", ""));
         });
-        add(buttonBar, formularz, firmaGrid);
 
-//        https://vaadin.com/components/vaadin-form-layout/java-examples
-//        https://vaadin.com/components/vaadin-crud/java-examples
-        binderFirma.bind(nazwaFirmy, Firma::getNazwaFirmy, Firma::setNazwaFirmy);
-        binderFirma.bind(miasto, Firma::getMiasto, Firma::setMiasto);
-        binderFirma.bind(kraj, Firma::getKraj, Firma::setKraj);
+        // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych
+        this.firmaForm.setChangeHandler(() -> {
+            this.firmaForm.setVisible(false);
+            listFirmy(filtrFirma.getValue());
+            nowaFirma.setEnabled(true);
+            dialog.close();
+        });
 
-        delete.getElement().getThemeList().add("error");
-        delete.addClickListener(e -> delete());
-        edit.addClickListener(e -> editFirma(firma));
-        save.getElement().getThemeList().add("primary");
-        save.addClickListener(e -> save());
-        cancel.addClickListener(e -> cancel());
+        add(filterBar, firmaGrid);
 
-        listFirmy();
+        listFirmy(filtrFirma.getValue());
 
     }
 
-    public final void getFirma(Firma f) {
-        if (f == null) {
-            return;
-        }
-        final boolean nIstnieje = f.getId() != null;
-        if (nIstnieje) {
-            this.firma = firmaRepository.findById(f.getId()).get();
+    private void listFirmy(String filterText) {
+        if (StringUtils.isEmpty(filterText)) {
+            firmaGrid.setItems(firmaRepository.findAll());
         } else {
-            this.firma = f;
+            firmaGrid.setItems(firmaRepository.findByNazwaFirmyContainsIgnoreCase(filterText));
+
         }
-    }
-
-    private void delete() {
-        if (firma == null) {
-            return;
-        }
-        firmaGrid.select(null);
-        firmaRepository.delete(firma);
-        this.firma = null;
-        nazwaFirmy.setValue("");
-        miasto.setValue("");
-        kraj.setValue("");
-        delete.setEnabled(false);
-        listFirmy();
-    }
-
-    private void save() {
-        ///////////
-        //zrobić firma = firmaRepo.findByName(nazwaFirmy.getValue)
-        ///////////
-        getFirma(firma);
-
-        if (firma != null) {
-            firma.setNazwaFirmy(nazwaFirmy.getValue());
-            firma.setMiasto(miasto.getValue());
-            firma.setKraj(kraj.getValue());
-            firmaRepository.save(firma);
-        } else {
-            firmaRepository.save(new Firma(nazwaFirmy.getValue(), miasto.getValue(), kraj.getValue()));
-        }
-        cancel();
-        listFirmy();
-
-    }
-
-    private void cancel() {
-        this.firma = null;
-        firmaGrid.select(null);
-        firmaGrid.setEnabled(true);
-        nazwaFirmy.setEnabled(false);
-        miasto.setEnabled(false);
-        kraj.setEnabled(false);
-        nowaFirmaBtn.setEnabled(true);
-        save.setEnabled(false);
-        cancel.setEnabled(false);
-        nazwaFirmy.setValue("");
-        miasto.setValue("");
-        kraj.setValue("");
-    }
-
-    public final void editFirma(Firma f) {
-        firmaGrid.setEnabled(false);
-        nazwaFirmy.setEnabled(true);
-        miasto.setEnabled(true);
-        kraj.setEnabled(true);
-        nowaFirmaBtn.setEnabled(false);
-        edit.setEnabled(false);
-        save.setEnabled(true);
-        cancel.setEnabled(true);
-        delete.setEnabled(false);
-
-        getFirma(f);
-
-        binderFirma.setBean(firma);
-        setVisible(true);
-    }
-
-    private void listFirmy() {
-        firmaGrid.setItems(firmaRepository.findAll());
     }
 
 }
