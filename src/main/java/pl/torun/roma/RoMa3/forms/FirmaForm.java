@@ -30,9 +30,12 @@ public class FirmaForm extends VerticalLayout implements KeyNotifier {
     private final FirmaRepository firmaRepo;
 
     private Firma firma;
-
-    final Grid firmaGrid;
-
+    
+    ///////////
+    //Brak obsługi Grid'a w tej klasie! Cały Grid do usunięcia
+    //final Grid firmaGrid;
+    ///////////
+    
     private final TextField nazwaFirmy = new TextField("Nazwa");
     private final TextField miasto = new TextField("Miasto");
     private final TextField kraj = new TextField("Kraj");
@@ -46,7 +49,7 @@ public class FirmaForm extends VerticalLayout implements KeyNotifier {
 
     Binder<Firma> binderFirma = new Binder<>(Firma.class);
 
-    private ChangeHandler changeHandler;
+    private FirmaForm.ChangeHandler changeHandler;
 
     @Autowired
     public FirmaForm(FirmaRepository firmaRepo) {
@@ -54,7 +57,7 @@ public class FirmaForm extends VerticalLayout implements KeyNotifier {
 
         delete.setEnabled(false);
 
-        this.firmaGrid = new Grid<>(Firma.class);
+        //this.firmaGrid = new Grid<>(Firma.class);
 
         add(buttonBar, formularz);
 
@@ -77,18 +80,18 @@ public class FirmaForm extends VerticalLayout implements KeyNotifier {
 
     void save() {
         firmaRepo.save(firma);
-        firmaGrid.select(null);
+        //firmaGrid.select(null);
         changeHandler.onChange();
     }
 
     void delete() {
-        firmaGrid.select(null);
+        //firmaGrid.select(null);
         firmaRepo.delete(firma);
         changeHandler.onChange();
     }
 
     void cancel() {
-        firmaGrid.select(null);
+        //firmaGrid.select(null);
         changeHandler.onChange();
     }
 

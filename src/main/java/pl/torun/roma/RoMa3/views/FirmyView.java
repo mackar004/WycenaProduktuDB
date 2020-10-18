@@ -26,6 +26,9 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import pl.torun.roma.RoMa3.forms.FirmaForm;
+import pl.torun.roma.RoMa3.forms.InwestycjaForm;
+import pl.torun.roma.RoMa3.model.Inwestycja;
+import pl.torun.roma.RoMa3.repository.InwestycjaRepository;
 
 /**
  *
@@ -40,6 +43,7 @@ public class FirmyView extends VerticalLayout {
 
     private Firma firma;
     final FirmaForm firmaForm;
+    final InwestycjaForm inwestForm;
 
     private TextField nazwaFirmy = new TextField("Nazwa");
     private TextField miasto = new TextField("Miasto");
@@ -47,42 +51,61 @@ public class FirmyView extends VerticalLayout {
     final Grid firmaGrid;
 
     private final Button nowaFirma;
+    private final Button edytuj;
+    private final Button pokazInwestycje;
     final TextField filtrFirma;
-    final Dialog dialog;
+    final Dialog dialogFirma;
+    final Dialog dialogInwestycja;
 
-    private FirmyView(FirmaRepository repo, FirmaForm firmaForm) {
+    private FirmyView(FirmaRepository firmaRepo, FirmaForm firmaForm,
+            InwestycjaRepository inwestRepo, InwestycjaForm inwestForm) {
 
         add(new Button("Powrót", event -> {
             getUI().ifPresent(ui -> ui.navigate("main"));
         }));
 
-        this.firmaRepository = repo;
-        this.firmaForm = new FirmaForm(repo);
+        this.firmaRepository = firmaRepo;
+        this.firmaForm = new FirmaForm(firmaRepo);
+        this.inwestForm = new InwestycjaForm(inwestRepo);
         firmaGrid = new Grid<>(Firma.class);
 
         this.filtrFirma = new TextField();
-        this.dialog = new Dialog();
+        this.dialogFirma = new Dialog();
+        this.dialogInwestycja = new Dialog();
 
-        this.nowaFirma = new Button("Nowa", VaadinIcon.PLUS.create());
+        nowaFirma = new Button("Nowa", VaadinIcon.PLUS.create());
+        edytuj = new Button("Edytuj");
+        pokazInwestycje = new Button("Wyświetl inwestycje");
 
-        HorizontalLayout filterBar = new HorizontalLayout(filtrFirma, nowaFirma);
+        edytuj.setEnabled(false);
+        pokazInwestycje.setEnabled(false);
+
+        HorizontalLayout filterBar = new HorizontalLayout(filtrFirma, nowaFirma, edytuj, pokazInwestycje);
 
         filtrFirma.setPlaceholder("Szukaj w bazie");
         filtrFirma.setValueChangeMode(ValueChangeMode.EAGER);
         filtrFirma.addValueChangeListener(e -> listFirmy(e.getValue()));
 
-        dialog.add(this.firmaForm);
-        dialog.setWidth("600px");
-        dialog.setHeight("400px");
-        dialog.setCloseOnEsc(false);
-        dialog.setCloseOnOutsideClick(false);
+        dialogFirma.add(this.firmaForm);
+        dialogFirma.setWidth("600px");
+        dialogFirma.setHeight("400px");
+        dialogFirma.setCloseOnEsc(false);
+        dialogFirma.setCloseOnOutsideClick(false);
+
+        dialogInwestycja.add(this.inwestForm);
+        dialogInwestycja.setWidth("600px");
+        dialogInwestycja.setHeight("400px");
+        dialogInwestycja.setCloseOnEsc(false);
+        dialogInwestycja.setCloseOnOutsideClick(false);
 
         firmaGrid.setColumns("nazwaFirmy", "miasto", "kraj");
         firmaGrid.getColumnByKey("nazwaFirmy").setWidth("250px").setFlexGrow(0).setSortProperty("nazwaFirmy");
 
         firmaGrid.asSingleSelect().addValueChangeListener(e -> {
             nowaFirma.setEnabled(false);
-            dialog.open();
+            //dialog.open();
+            edytuj.setEnabled(true);
+            pokazInwestycje.setEnabled(true);
             this.firmaForm.editFirma((Firma) e.getValue());
         });
 
@@ -94,9 +117,25 @@ public class FirmyView extends VerticalLayout {
             nazwaFirmy.focus();
         });
 
-        // Stworzenie i edytowanie nowego pracownika po kliknięciu przycisku Nowy
+        edytuj.addClickListener(e -> {
+            dialogFirma.open();
+            edytuj.setEnabled(false);
+            pokazInwestycje.setEnabled(false);
+        });
+
+        //////////
+        pokazInwestycje.addClickListener(e -> {
+            dialogInwestycja.open();
+            edytuj.setEnabled(false);
+            pokazInwestycje.setEnabled(false);
+            //navigateto + param (nazwa firmy)
+            //this.inwestForm.editInwestycja(new Inwestycja("", "", firma));
+        });
+        //////////
+
+        // Stworzenie i edytowanie nowej firmy po kliknięciu przycisku Nowy
         nowaFirma.addClickListener(e -> {
-            dialog.open();
+            dialogFirma.open();
             this.firmaForm.editFirma(new Firma("", "", ""));
         });
 
@@ -105,7 +144,9 @@ public class FirmyView extends VerticalLayout {
             this.firmaForm.setVisible(false);
             listFirmy(filtrFirma.getValue());
             nowaFirma.setEnabled(true);
-            dialog.close();
+            edytuj.setEnabled(false);
+            pokazInwestycje.setEnabled(false);
+            dialogFirma.close();
         });
 
         add(filterBar, firmaGrid);
