@@ -5,6 +5,7 @@
  */
 package pl.torun.roma.RoMa3.views;
 
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -40,16 +41,18 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
     private final FirmaRepository firmaRepository;
 
     private Inwestycja inwestycja;
-    private Firma firma;
+    private Firma firma = null;
     final InwestycjaForm inwestForm;
 
     private TextField nazwaInwestycji = new TextField("Nazwa");
     private TextField miasto = new TextField("Miasto");
     private TextField nazwaFirma = new TextField("Firma");
+    private TextField aktualnaFirma = new TextField();
     final Grid inwestycjaGrid;
-
     private final Button nowaInwestycja;
+    private final Button anulujFirme;
     private final Button edytuj;
+
     final TextField filtrInwestycja;
     final Dialog dialogInwestycja;
 
@@ -64,13 +67,29 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         this.inwestForm = new InwestycjaForm(inwestycjaRepository);
         inwestycjaGrid = new Grid<>(Inwestycja.class);
 
-        nowaInwestycja = new Button("Nowa", VaadinIcon.PLUS.create());
-        edytuj = new Button("Edytuj");
+        aktualnaFirma.setLabel("Aktualna firma:");
+        aktualnaFirma.setReadOnly(true);
 
         this.filtrInwestycja = new TextField();
         this.dialogInwestycja = new Dialog();
 
+        nowaInwestycja = new Button("Nowa", VaadinIcon.PLUS.create());
+        anulujFirme = new Button("Anuluj wybór", VaadinIcon.CLOSE_CIRCLE_O.create());
+        edytuj = new Button("Edytuj");
+        anulujFirme.addClickListener(e -> {
+            this.firma = null;
+            anulujFirme.setEnabled(false);
+            filtrInwestycja.setPlaceholder("");
+            aktualnaFirma.setReadOnly(false);
+            aktualnaFirma.setValue("---");
+            aktualnaFirma.setReadOnly(true);
+            inwestycjaGrid.setItems(inwestycjaRepository.findAll());
+        });
+
+        anulujFirme.setEnabled(false);
+
         HorizontalLayout filterBar = new HorizontalLayout(filtrInwestycja, nowaInwestycja, edytuj);
+        HorizontalLayout aktualnaFirmaBar = new HorizontalLayout(aktualnaFirma, anulujFirme);
 
         filtrInwestycja.setPlaceholder("Szukaj w bazie");
         filtrInwestycja.setValueChangeMode(ValueChangeMode.EAGER);
@@ -86,7 +105,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             this.inwestForm.editInwestycja((Inwestycja) e.getValue());
         });
 
-        add(filterBar, inwestycjaGrid);
+        add(filterBar, aktualnaFirmaBar, inwestycjaGrid);
 
         listInwestycje(filtrInwestycja.getValue());
 
@@ -103,13 +122,17 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
 
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        //setText(String.format("Hello, %s!", parameter));
         if (parameter == null) {
-    //    if (parameter.isEmpty()) {
-            //this.firma = null;
+            this.firma = null;
+            aktualnaFirma.setPlaceholder("---");
+            anulujFirme.setEnabled(false);
         } else {
-            this.firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
+            firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
             filtrInwestycja.setPlaceholder(this.firma.toString());
+            anulujFirme.setEnabled(true);
+            aktualnaFirma.setReadOnly(false);
+            aktualnaFirma.setValue(this.firma.toString());
+            aktualnaFirma.setReadOnly(true);
         }
     }
 }
