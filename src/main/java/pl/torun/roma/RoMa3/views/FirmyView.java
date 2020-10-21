@@ -123,15 +123,13 @@ public class FirmyView extends VerticalLayout {
             pokazInwestycje.setEnabled(false);
         });
 
-        //////////
         pokazInwestycje.addClickListener(e -> {
-            dialogInwestycja.open();
+            getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/"
+                    + firmaGrid.getSelectedItems().toString().replace("[", "").replace("]", "")));
+
             edytuj.setEnabled(false);
             pokazInwestycje.setEnabled(false);
-            //navigateto + param (nazwa firmy)
-            //this.inwestForm.editInwestycja(new Inwestycja("", "", firma));
         });
-        //////////
 
         // Stworzenie i edytowanie nowej firmy po kliknięciu przycisku Nowy
         nowaFirma.addClickListener(e -> {
