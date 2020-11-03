@@ -43,7 +43,6 @@ public class FirmyView extends VerticalLayout {
 
     private Firma firma;
     final FirmaForm firmaForm;
-    final InwestycjaForm inwestForm;
 
     private TextField nazwaFirmy = new TextField("Nazwa");
     private TextField miasto = new TextField("Miasto");
@@ -58,7 +57,7 @@ public class FirmyView extends VerticalLayout {
     final Dialog dialogInwestycja;
 
     private FirmyView(FirmaRepository firmaRepo, FirmaForm firmaForm,
-            InwestycjaRepository inwestRepo, InwestycjaForm inwestForm) {
+            InwestycjaRepository inwestRepo) {
 
         add(new Button("Powrót", event -> {
             getUI().ifPresent(ui -> ui.navigate("main"));
@@ -66,7 +65,6 @@ public class FirmyView extends VerticalLayout {
 
         this.firmaRepository = firmaRepo;
         this.firmaForm = new FirmaForm(firmaRepo);
-        this.inwestForm = new InwestycjaForm(inwestRepo);
         firmaGrid = new Grid<>(Firma.class);
 
         this.filtrFirma = new TextField();
@@ -91,12 +89,6 @@ public class FirmyView extends VerticalLayout {
         dialogFirma.setHeight("400px");
         dialogFirma.setCloseOnEsc(false);
         dialogFirma.setCloseOnOutsideClick(false);
-
-        dialogInwestycja.add(this.inwestForm);
-        dialogInwestycja.setWidth("600px");
-        dialogInwestycja.setHeight("400px");
-        dialogInwestycja.setCloseOnEsc(false);
-        dialogInwestycja.setCloseOnOutsideClick(false);
 
         firmaGrid.setColumns("nazwaFirmy", "miasto", "kraj");
         firmaGrid.getColumnByKey("nazwaFirmy").setWidth("250px").setFlexGrow(0).setSortProperty("nazwaFirmy");
