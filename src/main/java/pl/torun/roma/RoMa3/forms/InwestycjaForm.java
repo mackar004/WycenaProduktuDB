@@ -62,11 +62,10 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
     final Grid inwestycjeGrid;
     
     @Autowired
-    public InwestycjaForm(InwestycjaRepository inwestycjaRepo){//), Firma firma) {
+    public InwestycjaForm(InwestycjaRepository inwestycjaRepo){//, Firma firma) {
         //dopisać przekazywanie do konstruktora inwestycji Stringa z nazwą firmy.
         this.inwestycjaRepo = inwestycjaRepo;
         //this.firma = firma;
-        
         delete.setEnabled(false);
         nazwaFirmy.setEnabled(false);
         //nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
@@ -118,11 +117,13 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
         void onChange();
     }
 
-    public final void editInwestycja(Inwestycja i) {
+    public final void editInwestycja(Inwestycja i, Firma firma) {
         if (i == null) {
             setVisible(false);
             return;
         }
+        this.firma = firma;
+        nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
         final boolean inwestycjaIstnieje = i.getInwestycja_id() != null;
         if (inwestycjaIstnieje) {
             inwestycja = inwestycjaRepo.findById(i.getInwestycja_id()).get();

@@ -64,7 +64,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
 
         this.firmaRepository = firmaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
-        this.inwestycjaForm = new InwestycjaForm(inwestycjaRepository);//,firma);
+        this.inwestycjaForm = new InwestycjaForm(inwestycjaRepository);//, firma);
         inwestycjaGrid = new Grid<>(Inwestycja.class);
 
         aktualnaFirma.setLabel("Aktualna firma:");
@@ -111,14 +111,13 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         // Stworzenie i edytowanie nowej firmy po kliknięciu przycisku Nowa Inwestycja
         nowaInwestycja.addClickListener(e -> {
             dialogInwestycja.open();
-            this.inwestycjaForm.editInwestycja(new Inwestycja("", "", this.firma));
-        
+            this.inwestycjaForm.editInwestycja(new Inwestycja("", "", this.firma),this.firma);
         });
 
         inwestycjaGrid.asSingleSelect().addValueChangeListener(e -> {
             nowaInwestycja.setEnabled(false);
             edytuj.setEnabled(true);
-            this.inwestycjaForm.editInwestycja((Inwestycja) e.getValue());
+            //this.inwestycjaForm.editInwestycja((Inwestycja) e.getValue());
         });
         
         // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych
@@ -152,7 +151,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             aktualnaFirma.setPlaceholder("---");
             anulujFirme.setEnabled(false);
         } else {
-            firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
+            this.firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
             filtrInwestycja.setPlaceholder(this.firma.toString());
             anulujFirme.setEnabled(true);
             aktualnaFirma.setReadOnly(false);
