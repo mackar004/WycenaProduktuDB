@@ -38,12 +38,12 @@ public class Inwestycja {
     private List<Wycena> wycena;
     
     @ManyToOne
-    @MapsId
-    @JoinColumn(name = "firma_id", nullable = false)
+    //@MapsId
+    @JoinColumn(name = "firma_id")//, nullable = false)
     private Firma firma;
     
     
-    private Inwestycja() {
+    protected Inwestycja() {
     }
 
     public Inwestycja(String inwestycjaNazwa, String inwestycjaMiasto, Firma firma) {

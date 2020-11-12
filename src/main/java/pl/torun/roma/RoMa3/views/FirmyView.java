@@ -47,12 +47,16 @@ public class FirmyView extends VerticalLayout {
     private TextField nazwaFirmy = new TextField("Nazwa");
     private TextField miasto = new TextField("Miasto");
     private TextField kraj = new TextField("Kraj");
+
     final Grid firmaGrid;
 
     private final Button nowaFirma;
     private final Button edytuj;
     private final Button pokazInwestycje;
+    private final Button dodajInwestycje;
+
     final TextField filtrFirma;
+
     final Dialog dialogFirma;
     final Dialog dialogInwestycja;
 
@@ -64,7 +68,7 @@ public class FirmyView extends VerticalLayout {
         }));
 
         this.firmaRepository = firmaRepo;
-        this.firmaForm = new FirmaForm(firmaRepo);
+        this.firmaForm = new FirmaForm(firmaRepo,inwestRepo);
         firmaGrid = new Grid<>(Firma.class);
 
         this.filtrFirma = new TextField();
@@ -74,11 +78,12 @@ public class FirmyView extends VerticalLayout {
         nowaFirma = new Button("Nowa", VaadinIcon.PLUS.create());
         edytuj = new Button("Edytuj");
         pokazInwestycje = new Button("Wyświetl inwestycje");
+        dodajInwestycje = new Button("Dodaj inwestycję");
 
         edytuj.setEnabled(false);
         pokazInwestycje.setEnabled(false);
 
-        HorizontalLayout filterBar = new HorizontalLayout(filtrFirma, nowaFirma, edytuj, pokazInwestycje);
+        HorizontalLayout filterBar = new HorizontalLayout(filtrFirma, nowaFirma, edytuj, pokazInwestycje, dodajInwestycje);
 
         filtrFirma.setPlaceholder("Szukaj w bazie");
         filtrFirma.setValueChangeMode(ValueChangeMode.EAGER);
@@ -98,7 +103,9 @@ public class FirmyView extends VerticalLayout {
             //dialog.open();
             edytuj.setEnabled(true);
             pokazInwestycje.setEnabled(true);
-            this.firmaForm.editFirma((Firma) e.getValue());
+            dodajInwestycje.setEnabled(true);
+            this.firma = (Firma) e.getValue();
+            this.firmaForm.editFirma((Firma) e.getValue(),false);
         });
 
         nowaFirma.addClickListener(e -> {
@@ -126,7 +133,14 @@ public class FirmyView extends VerticalLayout {
         // Stworzenie i edytowanie nowej firmy po kliknięciu przycisku Nowy
         nowaFirma.addClickListener(e -> {
             dialogFirma.open();
-            this.firmaForm.editFirma(new Firma("", "", ""));
+            this.firmaForm.editFirma(new Firma("", "", ""),false);
+        });
+
+        dodajInwestycje.addClickListener(e -> {
+            dialogFirma.open();
+            edytuj.setEnabled(false);
+            pokazInwestycje.setEnabled(false);
+            this.firmaForm.editFirma(this.firma,true);
         });
 
         // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych

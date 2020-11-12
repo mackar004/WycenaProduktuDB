@@ -38,7 +38,7 @@ public class Firma {
     private Integer osobaTelefon;
     private String osobaEmail;
 
-    @OneToMany(mappedBy = "firma", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "firma", fetch = FetchType.EAGER)
     private List<Inwestycja> inwestycja;
 
     public Firma() {
