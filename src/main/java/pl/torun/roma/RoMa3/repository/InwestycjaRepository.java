@@ -19,5 +19,7 @@ public interface InwestycjaRepository extends JpaRepository<Inwestycja, Long> {
     
     List<Inwestycja> findById(long id);
     List<Inwestycja> findByInwestycjaNazwaContainsIgnoreCase(String nazwaInwestycji);
+    List<Inwestycja> findByInwestycjaNazwaContainsIgnoreCaseOrInwestycjaMiastoContainsIgnoreCase(String nazwaInwestycji, String miastoInwestycji);
+    //List<Inwestycja> findByInwestycjaNazwaContainsIgnoreCaseOrFirma(String nazwaInwestycji, Firma firma);
     List<Inwestycja> findByFirma(Firma firma);
 }

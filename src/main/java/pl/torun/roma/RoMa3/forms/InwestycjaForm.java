@@ -62,13 +62,10 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
     final Grid inwestycjeGrid;
     
     @Autowired
-    public InwestycjaForm(InwestycjaRepository inwestycjaRepo){//, Firma firma) {
-        //dopisać przekazywanie do konstruktora inwestycji Stringa z nazwą firmy.
+    public InwestycjaForm(InwestycjaRepository inwestycjaRepo){
         this.inwestycjaRepo = inwestycjaRepo;
-        //this.firma = firma;
         delete.setEnabled(false);
         nazwaFirmy.setEnabled(false);
-        //nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
 
         this.inwestycjeGrid = new Grid<>(Inwestycja.class);
         inwestycjeGrid.setColumns("inwestycjaNazwa","inwestycjaMiasto");

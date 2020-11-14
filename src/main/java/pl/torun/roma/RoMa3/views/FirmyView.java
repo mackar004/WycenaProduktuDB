@@ -68,7 +68,7 @@ public class FirmyView extends VerticalLayout {
         }));
 
         this.firmaRepository = firmaRepo;
-        this.firmaForm = new FirmaForm(firmaRepo,inwestRepo);
+        this.firmaForm = new FirmaForm(firmaRepo, inwestRepo);
         firmaGrid = new Grid<>(Firma.class);
 
         this.filtrFirma = new TextField();
@@ -99,13 +99,21 @@ public class FirmyView extends VerticalLayout {
         firmaGrid.getColumnByKey("nazwaFirmy").setWidth("250px").setFlexGrow(0).setSortProperty("nazwaFirmy");
 
         firmaGrid.asSingleSelect().addValueChangeListener(e -> {
-            nowaFirma.setEnabled(false);
-            //dialog.open();
-            edytuj.setEnabled(true);
-            pokazInwestycje.setEnabled(true);
-            dodajInwestycje.setEnabled(true);
-            this.firma = (Firma) e.getValue();
-            this.firmaForm.editFirma((Firma) e.getValue(),false);
+            //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
+            if (firmaGrid.getSelectedItems().isEmpty()) {
+                nowaFirma.setEnabled(true);
+                edytuj.setEnabled(false);
+                pokazInwestycje.setEnabled(false);
+                dodajInwestycje.setEnabled(false);
+                this.firma = null;
+            } else {
+                nowaFirma.setEnabled(false);
+                edytuj.setEnabled(true);
+                pokazInwestycje.setEnabled(true);
+                dodajInwestycje.setEnabled(true);
+                this.firma = (Firma) e.getValue();
+                this.firmaForm.editFirma((Firma) e.getValue(), false);
+            }
         });
 
         nowaFirma.addClickListener(e -> {
@@ -133,14 +141,14 @@ public class FirmyView extends VerticalLayout {
         // Stworzenie i edytowanie nowej firmy po kliknięciu przycisku Nowy
         nowaFirma.addClickListener(e -> {
             dialogFirma.open();
-            this.firmaForm.editFirma(new Firma("", "", ""),false);
+            this.firmaForm.editFirma(new Firma("", "", ""), false);
         });
 
         dodajInwestycje.addClickListener(e -> {
             dialogFirma.open();
             edytuj.setEnabled(false);
             pokazInwestycje.setEnabled(false);
-            this.firmaForm.editFirma(this.firma,true);
+            this.firmaForm.editFirma(this.firma, true);
         });
 
         // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych
