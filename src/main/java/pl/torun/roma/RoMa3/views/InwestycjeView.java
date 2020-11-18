@@ -52,6 +52,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
     private final Button nowaInwestycja;
     private final Button anulujFirme;
     private final Button edytuj;
+    private final Button dodajWycene;
 
     final TextField filtrInwestycja;
     final Dialog dialogInwestycja;
@@ -84,10 +85,11 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         anulujFirme = new Button("Anuluj wybór", VaadinIcon.CLOSE_CIRCLE_O.create());
         anulujFirme.setHeight("68px");
         edytuj = new Button("Edytuj");
+        dodajWycene = new Button("Dodaj wycenę");
 
         anulujFirme.setEnabled(false);
 
-        HorizontalLayout filterBar = new HorizontalLayout(filtrInwestycja, nowaInwestycja, edytuj);
+        HorizontalLayout filterBar = new HorizontalLayout(filtrInwestycja, nowaInwestycja, edytuj, dodajWycene);
         HorizontalLayout aktualnaFirmaBar = new HorizontalLayout(aktualnaFirma, anulujFirme);
 
         filtrInwestycja.setPlaceholder("Szukaj w bazie");
@@ -112,6 +114,15 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         nowaInwestycja.addClickListener(e -> {
             dialogInwestycja.open();
             this.inwestycjaForm.editInwestycja(new Inwestycja("", "", this.firma), this.firma);
+        });
+
+        dodajWycene.addClickListener(e -> {
+/*
+            dialogWycena.open();
+            edytuj.setEnabled(false);
+            pokazInwestycje.setEnabled(false);
+            this.firmaForm.editWycena(this.wycena);
+            */
         });
 
         inwestycjaGrid.asSingleSelect().addValueChangeListener(e -> {
