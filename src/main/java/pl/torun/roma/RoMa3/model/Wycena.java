@@ -30,6 +30,7 @@ public class Wycena {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String typPrzekrycia;
     //ksztalt
     private Double srednica;
     private Double dlugosc;
@@ -52,10 +53,11 @@ public class Wycena {
     private Wycena() {
     }
 
-    private Wycena(Long id, Double srednica, Integer iloscElementow,
+    public Wycena(Long id, String typPrzekrycia, Double srednica, Integer iloscElementow,
             Double cenaKoncowa, Double marza, Time dataWyceny,
             Boolean zaakceptowano, List<MaterialyUzyte> materialyUzyte) {
         this.id = id;
+        this.typPrzekrycia = typPrzekrycia;
         this.srednica = srednica;
         this.iloscElementow = iloscElementow;
         this.cenaKoncowa = cenaKoncowa;
@@ -65,11 +67,12 @@ public class Wycena {
         this.materialyUzyte = materialyUzyte;
     }
 
-    public Wycena(Long id, Double dlugosc, Double szerokosc,
+    public Wycena(Long id, String typPrzekrycia, Double dlugosc, Double szerokosc,
             Integer iloscElementow, Double cenaKoncowa, Double marza,
             Time dataWyceny, Boolean zaakceptowano,
             List<MaterialyUzyte> materialyUzyte) {
         this.id = id;
+        this.typPrzekrycia = typPrzekrycia;
         this.dlugosc = dlugosc;
         this.szerokosc = szerokosc;
         this.iloscElementow = iloscElementow;
@@ -86,6 +89,14 @@ public class Wycena {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTypPrzekrycia() {
+        return typPrzekrycia;
+    }
+
+    public void setTypPrzekrycia(String typPrzekrycia) {
+        this.typPrzekrycia = typPrzekrycia;
     }
 
     public Double getSrednica() {
