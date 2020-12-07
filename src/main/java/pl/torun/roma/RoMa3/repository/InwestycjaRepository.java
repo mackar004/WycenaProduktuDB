@@ -18,8 +18,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface InwestycjaRepository extends JpaRepository<Inwestycja, Long> {
     
     List<Inwestycja> findById(long id);
+    List<Inwestycja> findByFirma(Firma firma);
     List<Inwestycja> findByInwestycjaNazwaContainsIgnoreCase(String nazwaInwestycji);
     List<Inwestycja> findByInwestycjaNazwaContainsIgnoreCaseOrInwestycjaMiastoContainsIgnoreCase(String nazwaInwestycji, String miastoInwestycji);
+//    List<Inwestycja> findByInwestycjaNazwaContainsIgnoreCaseOrInwestycjaMiastoContainsIgnoreCaseOrFirmaContainsIgnoreCase(String nazwaInwestycji, String miastoInwestycji, String firma);
     //List<Inwestycja> findByInwestycjaNazwaContainsIgnoreCaseOrFirma(String nazwaInwestycji, Firma firma);
-    List<Inwestycja> findByFirma(Firma firma);
 }

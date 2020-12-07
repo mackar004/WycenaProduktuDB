@@ -94,7 +94,6 @@ public class FirmaForm extends VerticalLayout implements KeyNotifier {
 
     void save() {
         firmaRepo.save(firma);
-        //firmaGrid.select(null);
         changeHandler.onChange();
     }
 

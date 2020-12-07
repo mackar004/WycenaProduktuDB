@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import pl.torun.roma.RoMa3.model.dane.TypPrzekrycia;
 
 /**
  *
@@ -30,12 +31,13 @@ public class Wycena {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String typPrzekrycia;
+    private TypPrzekrycia typPrzekrycia;
     //ksztalt
     private Double srednica;
-    private Double dlugosc;
+    private String dlugosc;
     private Double szerokosc;
-    private Integer iloscElementow;
+    private Integer iloscSandwich;
+    private Integer iloscLaminat;
 
     private Double cenaKoncowa;
     private Double marza;
@@ -53,13 +55,14 @@ public class Wycena {
     private Wycena() {
     }
 
-    public Wycena(Long id, String typPrzekrycia, Double srednica, Integer iloscElementow,
-            Double cenaKoncowa, Double marza, Time dataWyceny,
+    public Wycena(Long id, TypPrzekrycia typPrzekrycia, Double srednica, Integer iloscSandwich,
+            Integer iloscLaminat, Double cenaKoncowa, Double marza, Time dataWyceny,
             Boolean zaakceptowano, List<MaterialyUzyte> materialyUzyte) {
         this.id = id;
         this.typPrzekrycia = typPrzekrycia;
         this.srednica = srednica;
-        this.iloscElementow = iloscElementow;
+        this.iloscSandwich = iloscSandwich;
+        this.iloscLaminat = iloscLaminat;
         this.cenaKoncowa = cenaKoncowa;
         this.marza = marza;
         this.dataWyceny = dataWyceny;
@@ -67,20 +70,38 @@ public class Wycena {
         this.materialyUzyte = materialyUzyte;
     }
 
-    public Wycena(Long id, String typPrzekrycia, Double dlugosc, Double szerokosc,
-            Integer iloscElementow, Double cenaKoncowa, Double marza,
+    public Wycena(Long id, TypPrzekrycia typPrzekrycia, String dlugosc, Double szerokosc,
+            Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa, Double marza,
             Time dataWyceny, Boolean zaakceptowano,
             List<MaterialyUzyte> materialyUzyte) {
         this.id = id;
         this.typPrzekrycia = typPrzekrycia;
         this.dlugosc = dlugosc;
         this.szerokosc = szerokosc;
-        this.iloscElementow = iloscElementow;
+        this.iloscSandwich = iloscSandwich;
+        this.iloscLaminat = iloscLaminat;
         this.cenaKoncowa = cenaKoncowa;
         this.marza = marza;
         this.dataWyceny = dataWyceny;
         this.zaakceptowano = zaakceptowano;
         this.materialyUzyte = materialyUzyte;
+    }
+
+    public Wycena(TypPrzekrycia typPrzekrycia, Integer iloscSandwich,
+            Integer iloscLaminat, Double cenaKoncowa, Double marza) {
+        this.typPrzekrycia = typPrzekrycia;
+        this.iloscSandwich = iloscSandwich;
+        this.iloscLaminat = iloscLaminat;
+        this.cenaKoncowa = cenaKoncowa;
+        this.marza = marza;
+    }
+
+    public Wycena(Integer iloscSandwich, Integer iloscLaminat,
+            Double cenaKoncowa, Double marza) {
+        this.iloscSandwich = iloscSandwich;
+        this.iloscLaminat = iloscLaminat;
+        this.cenaKoncowa = cenaKoncowa;
+        this.marza = marza;
     }
 
     public Long getId() {
@@ -91,11 +112,11 @@ public class Wycena {
         this.id = id;
     }
 
-    public String getTypPrzekrycia() {
+    public TypPrzekrycia getTypPrzekrycia() {
         return typPrzekrycia;
     }
 
-    public void setTypPrzekrycia(String typPrzekrycia) {
+    public void setTypPrzekrycia(TypPrzekrycia typPrzekrycia) {
         this.typPrzekrycia = typPrzekrycia;
     }
 
@@ -107,11 +128,11 @@ public class Wycena {
         this.srednica = srednica;
     }
 
-    public Double getDlugosc() {
+    public String getDlugosc() {
         return dlugosc;
     }
 
-    public void setDlugosc(Double dlugosc) {
+    public void setDlugosc(String dlugosc) {
         this.dlugosc = dlugosc;
     }
 
@@ -123,12 +144,20 @@ public class Wycena {
         this.szerokosc = szerokosc;
     }
 
-    public Integer getIloscElementow() {
-        return iloscElementow;
+    public Integer getIloscSandwich() {
+        return iloscSandwich;
     }
 
-    public void setIloscElementow(Integer iloscElementow) {
-        this.iloscElementow = iloscElementow;
+    public void setIloscSandwich(Integer iloscSandwich) {
+        this.iloscSandwich = iloscSandwich;
+    }
+
+    public Integer getIloscLaminat() {
+        return iloscLaminat;
+    }
+
+    public void setIloscLaminat(Integer iloscLaminat) {
+        this.iloscLaminat = iloscLaminat;
     }
 
     public Double getCenaKoncowa() {

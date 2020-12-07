@@ -41,9 +41,8 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
 
     private Firma firma;
     private Inwestycja inwestycja;
-    
-    //private final String firmaNazwa;
 
+    //private final String firmaNazwa;
     private final TextField inwestycjaNazwa = new TextField("Nazwa");
     private final TextField inwestycjaMiasto = new TextField("Miasto");
     private final TextField nazwaFirmy = new TextField("Firma");
@@ -60,18 +59,18 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
     private InwestycjaForm.ChangeHandler changeHandler;
 
     final Grid inwestycjeGrid;
-    
+
     @Autowired
-    public InwestycjaForm(InwestycjaRepository inwestycjaRepo){
+    public InwestycjaForm(InwestycjaRepository inwestycjaRepo) {
         this.inwestycjaRepo = inwestycjaRepo;
         delete.setEnabled(false);
         nazwaFirmy.setEnabled(false);
 
         this.inwestycjeGrid = new Grid<>(Inwestycja.class);
-        inwestycjeGrid.setColumns("inwestycjaNazwa","inwestycjaMiasto");
+        inwestycjeGrid.setColumns("inwestycjaNazwa", "inwestycjaMiasto");
         inwestycjeGrid.getColumnByKey("inwestycjaNazwa").setHeader("Nazwa");
         inwestycjeGrid.getColumnByKey("inwestycjaMiasto").setHeader("Miasto");
-        
+
         add(buttonBar, formularz, inwestycjeGrid);
 
         binderInwestycja.bindInstanceFields(this);
@@ -91,8 +90,8 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
         cancel.addClickListener(e -> cancel());
         setVisible(false);
     }
-    
-        void save() {
+
+    void save() {
         inwestycjaRepo.save(inwestycja);
         inwestycjeGrid.select(null);
         changeHandler.onChange();
@@ -129,7 +128,6 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
             inwestycja = i;
             inwestycjaNazwa.focus();
         }
-
         binderInwestycja.setBean(inwestycja);
         setVisible(true);
 

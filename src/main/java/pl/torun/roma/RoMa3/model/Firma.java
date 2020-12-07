@@ -38,7 +38,17 @@ public class Firma {
     private Integer osobaTelefon;
     private String osobaEmail;
 
-    @OneToMany(mappedBy = "firma", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "firma", fetch = FetchType.EAGER)
+    //orphanRemoval=true
+    
+    /*
+    fetch main row to be deleted
+    fetch child elements
+    delete all child elements
+    delete main row
+    close session
+    */
+    
     private List<Inwestycja> inwestycja;
 
     public Firma() {

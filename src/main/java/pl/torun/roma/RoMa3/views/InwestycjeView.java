@@ -52,7 +52,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
     private final Button nowaInwestycja;
     private final Button anulujFirme;
     private final Button edytuj;
-    private final Button dodajWycene;
+    private final Button wyswietlWyceny;
 
     final TextField filtrInwestycja;
     final Dialog dialogInwestycja;
@@ -70,6 +70,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
 
         aktualnaFirma.setLabel("Aktualna firma:");
         aktualnaFirma.setReadOnly(true);
+        
 
         this.filtrInwestycja = new TextField();
         this.dialogInwestycja = new Dialog();
@@ -85,13 +86,16 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         anulujFirme = new Button("Anuluj wybór", VaadinIcon.CLOSE_CIRCLE_O.create());
         anulujFirme.setHeight("68px");
         edytuj = new Button("Edytuj");
-        dodajWycene = new Button("Dodaj wycenę");
+        wyswietlWyceny = new Button("WYCENY");
 
         anulujFirme.setEnabled(false);
 
-        HorizontalLayout filterBar = new HorizontalLayout(filtrInwestycja, nowaInwestycja, edytuj, dodajWycene);
+        HorizontalLayout filterBar = new HorizontalLayout(filtrInwestycja);
+        HorizontalLayout editBar = new HorizontalLayout(nowaInwestycja, edytuj, wyswietlWyceny);
         HorizontalLayout aktualnaFirmaBar = new HorizontalLayout(aktualnaFirma, anulujFirme);
 
+        filterBar.setVisible(false);
+        
         filtrInwestycja.setPlaceholder("Szukaj w bazie");
         filtrInwestycja.setValueChangeMode(ValueChangeMode.EAGER);
         filtrInwestycja.addValueChangeListener(e -> listInwestycje(e.getValue()));
@@ -104,9 +108,12 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             this.firma = null;
             anulujFirme.setEnabled(false);
             filtrInwestycja.setPlaceholder("");
-            aktualnaFirma.setReadOnly(false);
-            aktualnaFirma.setValue("---");
-            aktualnaFirma.setReadOnly(true);
+            aktualnaFirma.setVisible(false);
+            anulujFirme.setVisible(false);
+            filterBar.setVisible(true);
+//            aktualnaFirma.setReadOnly(false);
+//            aktualnaFirma.setValue("---");
+//            aktualnaFirma.setReadOnly(true);
             inwestycjaGrid.setItems(inwestycjaRepository.findAll());
         });
 
@@ -115,14 +122,24 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             dialogInwestycja.open();
             this.inwestycjaForm.editInwestycja(new Inwestycja("", "", this.firma), this.firma);
         });
+        
+        edytuj.addClickListener(e -> {
+            dialogInwestycja.open();
+            edytuj.setEnabled(false);
+        });
 
-        dodajWycene.addClickListener(e -> {
-/*
-            dialogWycena.open();
+        wyswietlWyceny.addClickListener(e -> {
+           getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"));
+//                        getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"
+//                    + inwestycjaGrid.getSelectedItems().toString().replace("[", "").replace("]", "")));
+ /*
             edytuj.setEnabled(false);
             pokazInwestycje.setEnabled(false);
-            this.firmaForm.editWycena(this.wycena);
-            */
+   */         
+//            dialogWycena.open();
+//            edytuj.setEnabled(false);
+//            pokazInwestycje.setEnabled(false);
+//            this.firmaForm.editWycena(this.wycena);
         });
 
         inwestycjaGrid.asSingleSelect().addValueChangeListener(e -> {
@@ -135,7 +152,8 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
                 nowaInwestycja.setEnabled(false);
                 edytuj.setEnabled(true);
                 this.inwestycja = (Inwestycja) e.getValue();
-                //this.inwestycjaForm.editInwestycja((Inwestycja) e.getValue());
+                this.firma = (Firma) firmaRepository.findByNazwaFirmy(this.inwestycja.getFirma().getNazwaFirmy());
+                this.inwestycjaForm.editInwestycja(this.inwestycja,this.firma);
             }
         });
 
@@ -148,8 +166,8 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             dialogInwestycja.close();
         });
 
-        add(filterBar, aktualnaFirmaBar, inwestycjaGrid);
-
+        add(filterBar, aktualnaFirmaBar, editBar, inwestycjaGrid);
+        
         listInwestycje(filtrInwestycja.getValue());
 
     }
@@ -161,6 +179,14 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             inwestycjaGrid.setItems(inwestycjaRepository.findByInwestycjaNazwaContainsIgnoreCaseOrInwestycjaMiastoContainsIgnoreCase(filterText, filterText));
         }
     }
+    
+        private void listInwestycje(Firma firma) {
+        if (StringUtils.isEmpty(firma)) {
+            inwestycjaGrid.setItems(inwestycjaRepository.findAll());
+        } else {
+            inwestycjaGrid.setItems(inwestycjaRepository.findByFirma(firma));
+        }
+    }
 
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
@@ -170,11 +196,12 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             anulujFirme.setEnabled(false);
         } else {
             this.firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
-            filtrInwestycja.setPlaceholder(this.firma.toString());
+            //filtrInwestycja.setValue(this.firma.toString());
             anulujFirme.setEnabled(true);
             aktualnaFirma.setReadOnly(false);
             aktualnaFirma.setValue(this.firma.toString());
             aktualnaFirma.setReadOnly(true);
+            listInwestycje(this.firma);
         }
     }
 }
