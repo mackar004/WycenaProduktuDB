@@ -41,12 +41,13 @@ public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<St
     private Wycena wycena;
 
     private Inwestycja inwestycja = null;
-    private final WycenaForm wycenaForm;
+    final WycenaForm wycenaForm;
 
     private final Grid wycenaGrid;
 
     private final Button nowaWycena;
     private final Button wyswietlWycene;
+//    private final Button cancel;
 
     final Dialog dialogWycena;
 
@@ -71,10 +72,11 @@ public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<St
         nowaWycena = new Button("Nowa", VaadinIcon.PLUS.create());
         //TYMCZASOWA FUNKCJA - Wyświetlanie zapisanych wycen testowych
         wyswietlWycene = new Button("Wyświetl");
+//        cancel = new Button("Cancel");
 
         wyswietlWycene.setEnabled(true);
 
-        dialogWycena.add(this.wycenaForm);
+        dialogWycena.add(this.wycenaForm);//,cancel);
         dialogWycena.setWidth("600px");
         dialogWycena.setHeight("400px");
         dialogWycena.setCloseOnEsc(false);
@@ -100,6 +102,10 @@ public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<St
         wyswietlWycene.addClickListener(e -> {
             System.out.println(wycenaRepository.findAll());
         });
+        
+//        cancel.addClickListener(e -> {
+//           dialogWycena.close();
+//        });
 
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
             //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
@@ -113,6 +119,17 @@ public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<St
                 this.wycena = (Wycena) e.getValue();
                 //         this.wycenaForm.editWycena((Wycena) e.getValue());
             }
+        });
+        
+
+                // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych
+        this.wycenaForm.setChangeHandler(() -> {
+            this.wycenaForm.setVisible(false);
+            wycenaGrid.setItems(wycenaRepository.findAll());
+            //nowaFirma.setEnabled(true);
+            //edytuj.setEnabled(false);
+            //pokazInwestycje.setEnabled(false);
+            dialogWycena.close();
         });
 
         add(menuBar, wycenaGrid);

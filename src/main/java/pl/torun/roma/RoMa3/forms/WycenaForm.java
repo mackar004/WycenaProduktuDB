@@ -18,6 +18,7 @@ import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.model.Wycena;
@@ -65,6 +66,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
     //private final Grid materialy;
+    
     private WycenaForm.ChangeHandler changeHandler;
 
     @Autowired
@@ -74,7 +76,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
         add(laminatSztuki,sandwichSztuki,marzaCena);
-        
+        add(save, cancel);
         //binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
         //binderWycena.bind(dlugosc, Wycena::getDlugosc, Wycena::setDlugosc);
         //binderWycena.forField(szerokosc)
@@ -95,7 +97,9 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         binderWycena.forField(cenaKoncowa)
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
-
+        
+        save.addClickListener(e -> save());
+        cancel.addClickListener(e -> cancel());
         //Czy to potrzebne?
         //https://vaadin.com/forum/thread/15385912/15640053
         //binderWycena.bindInstanceFields(this);

@@ -154,7 +154,8 @@ public class FirmyView extends VerticalLayout {
         // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych
         this.firmaForm.setChangeHandler(() -> {
             this.firmaForm.setVisible(false);
-            listFirmy(filtrFirma.getValue());
+            listFirmy("");
+            filtrFirma.setValue("");
             nowaFirma.setEnabled(true);
             edytuj.setEnabled(false);
             pokazInwestycje.setEnabled(false);
