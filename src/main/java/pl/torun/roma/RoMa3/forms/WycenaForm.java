@@ -15,6 +15,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToDoubleConverter;
+import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +54,14 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final TextField sandwich = new TextField("Sandwich");
     private final TextField laminatSztuki = new TextField("Elementy laminat");
     private final TextField sandwichSztuki = new TextField("Elementy sandwich");
+    
+    private final TextField marza = new TextField("Marża");
+    private final TextField cenaKoncowa = new TextField("Cena końcowa");
 
     private final HorizontalLayout typWymiary = new HorizontalLayout(typPrzekrycia, srednica, dlugosc, szerokosc);
     private final HorizontalLayout laminatIlosc = new HorizontalLayout(laminat, laminatSztuki);
     private final HorizontalLayout sandwichIlosc = new HorizontalLayout(sandwich, sandwichSztuki);
+    private final HorizontalLayout marzaCena = new HorizontalLayout(marza, cenaKoncowa);
 
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
     //private final Grid materialy;
@@ -67,19 +72,30 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
 
-        add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki);//, materialyGrid);
+        //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
+        add(laminatSztuki,sandwichSztuki,marzaCena);
+        
+        //binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
+        //binderWycena.bind(dlugosc, Wycena::getDlugosc, Wycena::setDlugosc);
+        //binderWycena.forField(szerokosc)
+        //        .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
+        //        .bind(Wycena::getSzerokosc, Wycena::setSzerokosc);
+        //binderWycena.forField(srednica)
+        //        .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
+        //        .bind(Wycena::getSrednica, Wycena::setSrednica);
+        binderWycena.forField(laminatSztuki)
+                .withConverter(new StringToIntegerConverter("Potrzebna liczba!"))
+                .bind(Wycena::getIloscLaminat, Wycena::setIloscLaminat);
+        binderWycena.forField(sandwichSztuki)
+                .withConverter(new StringToIntegerConverter("Potrzebna liczba!"))
+                .bind(Wycena::getIloscSandwich, Wycena::setIloscSandwich);
+        binderWycena.forField(marza)
+                .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
+                .bind(Wycena::getMarza, Wycena::setMarza);
+        binderWycena.forField(cenaKoncowa)
+                .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
+                .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
 
-        
-        binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
-        binderWycena.bind(dlugosc, Wycena::getDlugosc, Wycena::setDlugosc);
-        binderWycena.forField(szerokosc)
-                .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
-                .bind(Wycena::getSzerokosc, Wycena::setSzerokosc);
-        binderWycena.forField(srednica)
-                .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
-                .bind(Wycena::getSrednica, Wycena::setSrednica);
-        
-        
         //Czy to potrzebne?
         //https://vaadin.com/forum/thread/15385912/15640053
         //binderWycena.bindInstanceFields(this);
@@ -108,12 +124,34 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         void onChange();
     }
 
-    public final void editWycena(Wycena w, Inwestycja inwestycja) {
+//    public final void editWycena(Wycena w, Inwestycja inwestycja) {
+//        if (w == null) {
+//            setVisible(false);
+//            return;
+//        }
+//        this.inwestycja = inwestycja;
+//        //nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
+//        final boolean wycenaIstnieje = w.getId() != null;
+//        if (wycenaIstnieje) {
+//            wycena = wycenaRepository.findById(w.getId()).get();
+//            delete.setEnabled(true);
+//        } else {
+//            wycena = w;
+//        }
+//
+//        binderWycena.setBean(wycena);
+//        setVisible(true);
+//
+//    }
+
+    /*
+    TYMCZASOWY KONSTRUKTOR WYCENY NIEPOWIĄZANEJ Z INWESTYCJĄ
+     */
+    public final void editWycena(Wycena w) {
         if (w == null) {
             setVisible(false);
             return;
         }
-        this.inwestycja = inwestycja;
         //nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
         final boolean wycenaIstnieje = w.getId() != null;
         if (wycenaIstnieje) {

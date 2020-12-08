@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -32,20 +33,20 @@ import pl.torun.roma.RoMa3.repository.WycenaRepository;
 @Route("user/firmy/inwestycje/wyceny")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @PageTitle("RoMa - Wyceny")
-public class WycenyView extends VerticalLayout implements HasUrlParameter<String> {
+public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<String> {
 
     private final WycenaRepository wycenaRepository;
     private final InwestycjaRepository inwestycjaRepository;
 
     private Wycena wycena;
-    
+
     private Inwestycja inwestycja = null;
     private final WycenaForm wycenaForm;
 
     private final Grid wycenaGrid;
 
     private final Button nowaWycena;
-    private final Button edytuj;
+    private final Button wyswietlWycene;
 
     final Dialog dialogWycena;
 
@@ -68,9 +69,10 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         this.dialogWycena = new Dialog();
 
         nowaWycena = new Button("Nowa", VaadinIcon.PLUS.create());
-        edytuj = new Button("Edytuj");
+        //TYMCZASOWA FUNKCJA - Wyświetlanie zapisanych wycen testowych
+        wyswietlWycene = new Button("Wyświetl");
 
-        edytuj.setEnabled(false);
+        wyswietlWycene.setEnabled(true);
 
         dialogWycena.add(this.wycenaForm);
         dialogWycena.setWidth("600px");
@@ -80,48 +82,59 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
         wycenaGrid.setColumns("id", "typPrzekrycia", "cenaKoncowa");
         wycenaGrid.getColumnByKey("id").setWidth("250px").setFlexGrow(0).setSortProperty("id");
-        
-                // Stworzenie i edytowanie nowej firmy po kliknięciu przycisku Nowa Inwestycja
+
+        HorizontalLayout menuBar = new HorizontalLayout(nowaWycena, wyswietlWycene);
+
+        // Stworzenie i edytowanie nowej wyceny po kliknięciu przycisku Nowa
         nowaWycena.addClickListener(e -> {
             dialogWycena.open();
-           // this.wycenaForm.editWycena(new Wycena("", 0, 0.0, 0.0), this.inwestycja);
-           //Tymczasowa wycena przez przekazywania TypuPrzekrycia do kostruktora
-            this.wycenaForm.editWycena(new Wycena(0, 0, 0.0, 0.0), this.inwestycja);
+            // this.wycenaForm.editWycena(new Wycena("", 0, 0.0, 0.0), this.inwestycja);
+      //Tymczasowa wycena przez przekazywania TypuPrzekrycia do kostruktora
+            //this.wycenaForm.editWycena(new Wycena(0, 0, 0.0, 0.0), this.inwestycja);
+            /*
+            TEST WYCENA BEZ PRZYPISANEJ INWESTYCJI
+            */
+            this.wycenaForm.editWycena(new Wycena(0, 0, 0.0, 0.0));
         });
-        
-        edytuj.addClickListener(e -> {
-            
+
+        wyswietlWycene.addClickListener(e -> {
+            System.out.println(wycenaRepository.findAll());
         });
 
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
             //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
             if (wycenaGrid.getSelectedItems().isEmpty()) {
                 nowaWycena.setEnabled(true);
-                edytuj.setEnabled(false);
+                wyswietlWycene.setEnabled(false);
                 this.wycena = null;
             } else {
                 nowaWycena.setEnabled(false);
-                edytuj.setEnabled(true);
+                wyswietlWycene.setEnabled(true);
                 this.wycena = (Wycena) e.getValue();
                 //         this.wycenaForm.editWycena((Wycena) e.getValue());
             }
         });
-        
-        add(wycenaGrid);
+
+        add(menuBar, wycenaGrid);
 
     }
 
-    @Override
-    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-        if (parameter == null) {
-             this.inwestycja = null;
-    //        anulujFirme.setEnabled(false);
-        } else {
-             this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.parseLong(parameter));
-//            anulujFirme.setEnabled(true);
-//            aktualnaFirma.setReadOnly(false);
-//            aktualnaFirma.setValue(this.firma.toString());
-//            aktualnaFirma.setReadOnly(true);
-        }
-    }
+//    @Override
+//    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+//        if (parameter == null || parameter.isEmpty() || parameter.equals("")) {
+//
+//            System.out.println('1' + parameter);
+//            this.inwestycja = null;
+////  Nie działą poniższe przekierowanie gdy nie jest przekazywany żaden parametr
+//            //getUI().ifPresent(ui -> ui.navigate("main"));
+//            //getUI().get().navigate("main");
+//            //        anulujFirme.setEnabled(false);
+//        } else {
+//            this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.parseLong(parameter));
+////            anulujFirme.setEnabled(true);
+////            aktualnaFirma.setReadOnly(false);
+////            aktualnaFirma.setValue(this.firma.toString());
+////            aktualnaFirma.setReadOnly(true);
+//        }
+//    }
 }
