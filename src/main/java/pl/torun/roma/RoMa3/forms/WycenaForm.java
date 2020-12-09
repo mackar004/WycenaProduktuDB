@@ -76,9 +76,9 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 //        dlugosc.setPlaceholder("Wymiar w milimetrach");
 //        szerokosc.setPlaceholder("Wymiar w milimetrach");
 //        srednica.setPlaceholder("Wymiar w milimetrach");
-//        dlugosc.setVisible(false);
-//        szerokosc.setVisible(false);
-//        srednica.setVisible(false);
+        dlugosc.setVisible(false);
+        szerokosc.setVisible(false);
+        srednica.setVisible(false);
 
         //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
 //        add(typPrzekrycia);
@@ -112,33 +112,65 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         save.addClickListener(e -> save());
         cancel.addClickListener(e -> cancel());
-//        typPrzekrycia.addCustomValueSetListener(e -> {
-//            switch (e.toString()) {
-//                case ("Korytkowo_Zbieżne"):
-//                    System.out.println("Korytkowo_Zbieżne");
-//                    srednica.setVisible(true);
-//                    break;
-//                case ("Kopuła_samonośna"):
-//                    srednica.setVisible(true);
-//                    break;
-//                case ("Korytkowo_proste"):
-//                    dlugosc.setVisible(true);
-//                    szerokosc.setVisible(true);
-//                    break;
-//                case ("Sandwich"):
-//                    dlugosc.setVisible(true);
-//                    szerokosc.setVisible(true);
-//                    break;
-//                case ("Inne"):
-//                    srednica.setVisible(true);
-//                    break;
-//                default:
-//                    dlugosc.setVisible(false);
-//                    szerokosc.setVisible(false);
-//                    srednica.setVisible(false);
-//            }
-//
-//        });
+
+        /*
+        Listener dla combobox (https://vaadin.com/components/vaadin-combo-box/java-examples) :
+                    ComboBox<String> comboBox = new ComboBox<>();
+                    comboBox.setLabel("Label");
+                    comboBox.setItems("Option one", "Option two");
+                    comboBox.setClearButtonVisible(true);
+
+                    Div value = new Div();
+                    value.setText("Select a value");
+                    comboBox.addValueChangeListener(event -> {
+                        if (event.getValue() == null) {
+                            value.setText("No option selected");
+                        } else {
+                            value.setText("Selected: " + event.getValue());
+                        }
+                    });
+                    add(comboBox, value);
+         */
+        typPrzekrycia.addValueChangeListener(e -> {
+            if (e.getValue() == null) {
+                dlugosc.setVisible(false);
+                szerokosc.setVisible(false);
+                srednica.setVisible(false);
+            } else {
+                switch (e.getSource().getValue().toString()) {
+                    case ("Korytkowo_Zbieżne"):
+                        System.out.println("Korytkowo_Zbieżne");
+                        dlugosc.setVisible(false);
+                        szerokosc.setVisible(false);
+                        srednica.setVisible(true);
+                        break;
+                    case ("Kopuła_samonośna"):
+                        dlugosc.setVisible(false);
+                        szerokosc.setVisible(false);
+                        srednica.setVisible(true);
+                        break;
+                    case ("Korytkowo_proste"):
+                        dlugosc.setVisible(true);
+                        szerokosc.setVisible(true);
+                        srednica.setVisible(false);
+                        break;
+                    case ("Sandwich"):
+                        dlugosc.setVisible(true);
+                        szerokosc.setVisible(true);
+                        srednica.setVisible(false);
+                        break;
+                    case ("Inne"):
+                        dlugosc.setVisible(false);
+                        szerokosc.setVisible(false);
+                        srednica.setVisible(true);
+                        break;
+                    default:
+                        dlugosc.setVisible(false);
+                        szerokosc.setVisible(false);
+                        srednica.setVisible(false);
+                }
+            }
+        });
 
         //Czy to potrzebne?
         //https://vaadin.com/forum/thread/15385912/15640053
