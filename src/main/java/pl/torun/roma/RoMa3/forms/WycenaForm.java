@@ -18,7 +18,6 @@ import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.ui.UI;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.model.Wycena;
@@ -55,7 +54,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final TextField sandwich = new TextField("Sandwich");
     private final TextField laminatSztuki = new TextField("Elementy laminat");
     private final TextField sandwichSztuki = new TextField("Elementy sandwich");
-    
+
     private final TextField marza = new TextField("Marża");
     private final TextField cenaKoncowa = new TextField("Cena końcowa");
 
@@ -66,7 +65,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
     //private final Grid materialy;
-    
+
     private WycenaForm.ChangeHandler changeHandler;
 
     @Autowired
@@ -74,17 +73,30 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
 
+//        dlugosc.setPlaceholder("Wymiar w milimetrach");
+//        szerokosc.setPlaceholder("Wymiar w milimetrach");
+//        srednica.setPlaceholder("Wymiar w milimetrach");
+//        dlugosc.setVisible(false);
+//        szerokosc.setVisible(false);
+//        srednica.setVisible(false);
+
         //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
-        add(laminatSztuki,sandwichSztuki,marzaCena);
+//        add(typPrzekrycia);
+//        add(laminatSztuki, sandwichSztuki, marzaCena);
+//        add(dlugosc);
+        add(typWymiary, laminatSztuki, sandwichSztuki, marzaCena);
         add(save, cancel);
-        //binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
-        //binderWycena.bind(dlugosc, Wycena::getDlugosc, Wycena::setDlugosc);
-        //binderWycena.forField(szerokosc)
-        //        .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
-        //        .bind(Wycena::getSzerokosc, Wycena::setSzerokosc);
-        //binderWycena.forField(srednica)
-        //        .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
-        //        .bind(Wycena::getSrednica, Wycena::setSrednica);
+//
+        binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
+        binderWycena.forField(dlugosc)
+                .withConverter(new StringToIntegerConverter("Potrzebna liczba!"))
+                .bind(Wycena::getDlugosc, Wycena::setDlugosc);
+        binderWycena.forField(szerokosc)
+                .withConverter(new StringToIntegerConverter("Potrzebna liczba!"))
+                .bind(Wycena::getSzerokosc, Wycena::setSzerokosc);
+        binderWycena.forField(srednica)
+                .withConverter(new StringToIntegerConverter("Potrzebna liczba!"))
+                .bind(Wycena::getSrednica, Wycena::setSrednica);
         binderWycena.forField(laminatSztuki)
                 .withConverter(new StringToIntegerConverter("Potrzebna liczba!"))
                 .bind(Wycena::getIloscLaminat, Wycena::setIloscLaminat);
@@ -97,9 +109,37 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         binderWycena.forField(cenaKoncowa)
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
-        
+
         save.addClickListener(e -> save());
         cancel.addClickListener(e -> cancel());
+//        typPrzekrycia.addCustomValueSetListener(e -> {
+//            switch (e.toString()) {
+//                case ("Korytkowo_Zbieżne"):
+//                    System.out.println("Korytkowo_Zbieżne");
+//                    srednica.setVisible(true);
+//                    break;
+//                case ("Kopuła_samonośna"):
+//                    srednica.setVisible(true);
+//                    break;
+//                case ("Korytkowo_proste"):
+//                    dlugosc.setVisible(true);
+//                    szerokosc.setVisible(true);
+//                    break;
+//                case ("Sandwich"):
+//                    dlugosc.setVisible(true);
+//                    szerokosc.setVisible(true);
+//                    break;
+//                case ("Inne"):
+//                    srednica.setVisible(true);
+//                    break;
+//                default:
+//                    dlugosc.setVisible(false);
+//                    szerokosc.setVisible(false);
+//                    srednica.setVisible(false);
+//            }
+//
+//        });
+
         //Czy to potrzebne?
         //https://vaadin.com/forum/thread/15385912/15640053
         //binderWycena.bindInstanceFields(this);

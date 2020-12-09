@@ -33,10 +33,10 @@ public class Wycena {
 
     private TypPrzekrycia typPrzekrycia;
     //ksztalt
-    private Double srednica;
-    private String dlugosc;
-    private Double szerokosc;
-    
+    private Integer srednica;
+    private Integer dlugosc;
+    private Integer szerokosc;
+
     private Integer iloscSandwich;
     private Integer iloscLaminat;
 
@@ -96,9 +96,20 @@ public class Wycena {
 //        this.cenaKoncowa = cenaKoncowa;
 //        this.marza = marza;
 //    }
-
     public Wycena(Integer iloscSandwich, Integer iloscLaminat,
             Double cenaKoncowa, Double marza) {
+        this.iloscSandwich = iloscSandwich;
+        this.iloscLaminat = iloscLaminat;
+        this.cenaKoncowa = cenaKoncowa;
+        this.marza = marza;
+    }
+
+    public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
+            Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,
+            Double marza) {
+        this.dlugosc = dlugosc;
+        this.szerokosc = szerokosc;
+        this.srednica = srednica;
         this.iloscSandwich = iloscSandwich;
         this.iloscLaminat = iloscLaminat;
         this.cenaKoncowa = cenaKoncowa;
@@ -121,27 +132,27 @@ public class Wycena {
         this.typPrzekrycia = typPrzekrycia;
     }
 
-    public Double getSrednica() {
+    public Integer getSrednica() {
         return srednica;
     }
 
-    public void setSrednica(Double srednica) {
+    public void setSrednica(Integer srednica) {
         this.srednica = srednica;
     }
 
-    public String getDlugosc() {
+    public Integer getDlugosc() {
         return dlugosc;
     }
 
-    public void setDlugosc(String dlugosc) {
+    public void setDlugosc(Integer dlugosc) {
         this.dlugosc = dlugosc;
     }
 
-    public Double getSzerokosc() {
+    public Integer getSzerokosc() {
         return szerokosc;
     }
 
-    public void setSzerokosc(Double szerokosc) {
+    public void setSzerokosc(Integer szerokosc) {
         this.szerokosc = szerokosc;
     }
 

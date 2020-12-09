@@ -96,7 +96,7 @@ public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<St
             /*
             TEST WYCENA BEZ PRZYPISANEJ INWESTYCJI
             */
-            this.wycenaForm.editWycena(new Wycena(0, 0, 0.0, 0.0));
+            this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0));
         });
 
         wyswietlWycene.addClickListener(e -> {
