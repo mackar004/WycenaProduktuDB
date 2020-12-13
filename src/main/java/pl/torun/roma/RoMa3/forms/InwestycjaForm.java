@@ -58,7 +58,7 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
 
     private InwestycjaForm.ChangeHandler changeHandler;
 
-    final Grid inwestycjeGrid;
+//    final Grid inwestycjeGrid;
 
     @Autowired
     public InwestycjaForm(InwestycjaRepository inwestycjaRepo) {
@@ -66,12 +66,12 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
         delete.setEnabled(false);
         nazwaFirmy.setEnabled(false);
 
-        this.inwestycjeGrid = new Grid<>(Inwestycja.class);
-        inwestycjeGrid.setColumns("inwestycjaNazwa", "inwestycjaMiasto");
-        inwestycjeGrid.getColumnByKey("inwestycjaNazwa").setHeader("Nazwa");
-        inwestycjeGrid.getColumnByKey("inwestycjaMiasto").setHeader("Miasto");
+//        this.inwestycjeGrid = new Grid<>(Inwestycja.class);
+//        inwestycjeGrid.setColumns("inwestycjaNazwa", "inwestycjaMiasto");
+//        inwestycjeGrid.getColumnByKey("inwestycjaNazwa").setHeader("Nazwa");
+//        inwestycjeGrid.getColumnByKey("inwestycjaMiasto").setHeader("Miasto");
 
-        add(buttonBar, formularz, inwestycjeGrid);
+        add(buttonBar, formularz); //, inwestycjeGrid);
 
         binderInwestycja.bindInstanceFields(this);
         //binderInwestycja.bind(inwestycjaNazwa, Inwestycja::getInwestycjaNazwa, Inwestycja::setInwestycjaNazwa);
@@ -93,18 +93,18 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
 
     void save() {
         inwestycjaRepo.save(inwestycja);
-        inwestycjeGrid.select(null);
+//        inwestycjeGrid.select(null);
         changeHandler.onChange();
     }
 
     void delete() {
-        inwestycjeGrid.select(null);
+//        inwestycjeGrid.select(null);
         inwestycjaRepo.delete(inwestycja);
         changeHandler.onChange();
     }
 
     void cancel() {
-        inwestycjeGrid.select(null);
+//        inwestycjeGrid.select(null);
         changeHandler.onChange();
     }
 

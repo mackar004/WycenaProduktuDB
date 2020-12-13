@@ -21,6 +21,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.util.StringUtils;
 import pl.torun.roma.RoMa3.forms.InwestycjaForm;
 import pl.torun.roma.RoMa3.model.Firma;
@@ -70,7 +72,6 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
 
         aktualnaFirma.setLabel("Aktualna firma:");
         aktualnaFirma.setReadOnly(true);
-        
 
         this.filtrInwestycja = new TextField();
         this.dialogInwestycja = new Dialog();
@@ -95,13 +96,14 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         HorizontalLayout aktualnaFirmaBar = new HorizontalLayout(aktualnaFirma, anulujFirme);
 
         filterBar.setVisible(false);
-        
+
         filtrInwestycja.setPlaceholder("Szukaj w bazie");
         filtrInwestycja.setValueChangeMode(ValueChangeMode.EAGER);
         filtrInwestycja.addValueChangeListener(e -> listInwestycje(e.getValue()));
 
-        inwestycjaGrid.setColumns("inwestycjaNazwa", "inwestycjaMiasto", "firma");
-        inwestycjaGrid.getColumnByKey("inwestycjaNazwa").setWidth("250px").setFlexGrow(0).setSortProperty("inwestycjaNazwa");
+        inwestycjaGrid.setColumns("inwestycja_id", "inwestycjaNazwa", "inwestycjaMiasto", "firma");
+        //inwestycjaGrid.getColumnByKey("inwestycjaNazwa").setWidth("250px").setFlexGrow(0).setSortProperty("inwestycjaNazwa");
+        inwestycjaGrid.getColumnByKey("inwestycja_id").setWidth("250px").setFlexGrow(0).setSortProperty("inwestycja_id");
 
         //Listenery
         anulujFirme.addClickListener(e -> {
@@ -122,20 +124,23 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             dialogInwestycja.open();
             this.inwestycjaForm.editInwestycja(new Inwestycja("", "", this.firma), this.firma);
         });
-        
+
         edytuj.addClickListener(e -> {
             dialogInwestycja.open();
             edytuj.setEnabled(false);
         });
 
         wyswietlWyceny.addClickListener(e -> {
-           getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"));
-//                        getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"
-//                    + inwestycjaGrid.getSelectedItems().toString().replace("[", "").replace("]", "")));
- /*
-            edytuj.setEnabled(false);
-            pokazInwestycje.setEnabled(false);
-   */         
+            //getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"));
+            //inwestycjaGrid.getSelectedItems().
+            //getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"
+            getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny/"
+                    + this.inwestycja.getInwestycja_id().toString().replace("[", "").replace("]", "")));
+//+ inwestycjaGrid.getSelectedItems().toString().replace("[", "").replace("]", "")));
+/*
+edytuj.setEnabled(false);
+pokazInwestycje.setEnabled(false);
+             */
 //            dialogWycena.open();
 //            edytuj.setEnabled(false);
 //            pokazInwestycje.setEnabled(false);
@@ -153,7 +158,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
                 edytuj.setEnabled(true);
                 this.inwestycja = (Inwestycja) e.getValue();
                 this.firma = (Firma) firmaRepository.findByNazwaFirmy(this.inwestycja.getFirma().getNazwaFirmy());
-                this.inwestycjaForm.editInwestycja(this.inwestycja,this.firma);
+                this.inwestycjaForm.editInwestycja(this.inwestycja, this.firma);
             }
         });
 
@@ -167,7 +172,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         });
 
         add(filterBar, aktualnaFirmaBar, editBar, inwestycjaGrid);
-        
+
         listInwestycje(filtrInwestycja.getValue());
 
     }
@@ -179,8 +184,8 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             inwestycjaGrid.setItems(inwestycjaRepository.findByInwestycjaNazwaContainsIgnoreCaseOrInwestycjaMiastoContainsIgnoreCase(filterText, filterText));
         }
     }
-    
-        private void listInwestycje(Firma firma) {
+
+    private void listInwestycje(Firma firma) {
         if (StringUtils.isEmpty(firma)) {
             inwestycjaGrid.setItems(inwestycjaRepository.findAll());
         } else {

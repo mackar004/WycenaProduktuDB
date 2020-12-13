@@ -115,6 +115,19 @@ public class Wycena {
         this.cenaKoncowa = cenaKoncowa;
         this.marza = marza;
     }
+    
+        public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
+            Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,
+            Double marza, Inwestycja inwestycja) {
+        this.dlugosc = dlugosc;
+        this.szerokosc = szerokosc;
+        this.srednica = srednica;
+        this.iloscSandwich = iloscSandwich;
+        this.iloscLaminat = iloscLaminat;
+        this.cenaKoncowa = cenaKoncowa;
+        this.marza = marza;
+        this.inwestycja = inwestycja;
+    }
 
     public Long getId() {
         return id;

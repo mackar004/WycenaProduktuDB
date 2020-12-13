@@ -116,6 +116,10 @@ public class Inwestycja {
         this.firma = firma;
     }
 
-    
+        @Override
+    public String toString() {
+        //return String.format("%s", nazwaFirmy);
+        return this.inwestycjaNazwa;
+    }
     
 }

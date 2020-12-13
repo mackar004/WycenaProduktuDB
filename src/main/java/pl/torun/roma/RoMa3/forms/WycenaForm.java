@@ -113,24 +113,6 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         save.addClickListener(e -> save());
         cancel.addClickListener(e -> cancel());
 
-        /*
-        Listener dla combobox (https://vaadin.com/components/vaadin-combo-box/java-examples) :
-                    ComboBox<String> comboBox = new ComboBox<>();
-                    comboBox.setLabel("Label");
-                    comboBox.setItems("Option one", "Option two");
-                    comboBox.setClearButtonVisible(true);
-
-                    Div value = new Div();
-                    value.setText("Select a value");
-                    comboBox.addValueChangeListener(event -> {
-                        if (event.getValue() == null) {
-                            value.setText("No option selected");
-                        } else {
-                            value.setText("Selected: " + event.getValue());
-                        }
-                    });
-                    add(comboBox, value);
-         */
         typPrzekrycia.addValueChangeListener(e -> {
             if (e.getValue() == null) {
                 dlugosc.setVisible(false);
@@ -139,7 +121,6 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
             } else {
                 switch (e.getSource().getValue().toString()) {
                     case ("Korytkowo_Zbieżne"):
-                        System.out.println("Korytkowo_Zbieżne");
                         dlugosc.setVisible(false);
                         szerokosc.setVisible(false);
                         srednica.setVisible(true);

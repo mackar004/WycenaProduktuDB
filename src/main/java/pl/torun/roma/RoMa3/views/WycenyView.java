@@ -33,14 +33,14 @@ import pl.torun.roma.RoMa3.repository.WycenaRepository;
 @Route("user/firmy/inwestycje/wyceny")
 @Theme(value = Lumo.class, variant = Lumo.DARK)
 @PageTitle("RoMa - Wyceny")
-public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<String> {
+public class WycenyView extends VerticalLayout implements HasUrlParameter<String> {
 
     private final WycenaRepository wycenaRepository;
     private final InwestycjaRepository inwestycjaRepository;
 
     private Wycena wycena;
 
-    private Inwestycja inwestycja = null;
+    private Inwestycja inwestycja;
     final WycenaForm wycenaForm;
 
     private final Grid wycenaGrid;
@@ -91,22 +91,24 @@ public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<St
         nowaWycena.addClickListener(e -> {
             dialogWycena.open();
             // this.wycenaForm.editWycena(new Wycena("", 0, 0.0, 0.0), this.inwestycja);
-      //Tymczasowa wycena przez przekazywania TypuPrzekrycia do kostruktora
+            //Tymczasowa wycena przez przekazywania TypuPrzekrycia do kostruktora
             //this.wycenaForm.editWycena(new Wycena(0, 0, 0.0, 0.0), this.inwestycja);
             /*
             TEST WYCENA BEZ PRZYPISANEJ INWESTYCJI
-            */
-            this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0));
+             */
+            this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0, this.inwestycja));
         });
 
         wyswietlWycene.addClickListener(e -> {
+//            dialogWycena.open();
+//            wyswietlWycene.setEnabled(false);
             System.out.println(wycenaRepository.findAll());
+            listWyceny();
         });
-        
+
 //        cancel.addClickListener(e -> {
 //           dialogWycena.close();
 //        });
-
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
             //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
             if (wycenaGrid.getSelectedItems().isEmpty()) {
@@ -120,38 +122,42 @@ public class WycenyView extends VerticalLayout{ // implements HasUrlParameter<St
                 //         this.wycenaForm.editWycena((Wycena) e.getValue());
             }
         });
-        
 
-                // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych
+        // Zamykanie okna po kliknięciu na przycisk i odświeżenie danych
         this.wycenaForm.setChangeHandler(() -> {
             this.wycenaForm.setVisible(false);
-            wycenaGrid.setItems(wycenaRepository.findAll());
-            //nowaFirma.setEnabled(true);
-            //edytuj.setEnabled(false);
-            //pokazInwestycje.setEnabled(false);
+            listWyceny();
+            wyswietlWycene.setEnabled(true);
             dialogWycena.close();
         });
 
         add(menuBar, wycenaGrid);
 
+        listWyceny();
     }
 
-//    @Override
-//    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-//        if (parameter == null || parameter.isEmpty() || parameter.equals("")) {
-//
-//            System.out.println('1' + parameter);
-//            this.inwestycja = null;
-////  Nie działą poniższe przekierowanie gdy nie jest przekazywany żaden parametr
-//            //getUI().ifPresent(ui -> ui.navigate("main"));
-//            //getUI().get().navigate("main");
-//            //        anulujFirme.setEnabled(false);
-//        } else {
-//            this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.parseLong(parameter));
-////            anulujFirme.setEnabled(true);
-////            aktualnaFirma.setReadOnly(false);
-////            aktualnaFirma.setValue(this.firma.toString());
-////            aktualnaFirma.setReadOnly(true);
+    private void listWyceny() {
+        wycenaGrid.setItems(wycenaRepository.findByInwestycja(this.inwestycja));
 //        }
-//    }
+    }
+
+    @Override
+    public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
+        if (parameter == null || parameter.isEmpty() || parameter.equals("")) {
+            this.inwestycja = null;
+//  Nie działą poniższe przekierowanie gdy nie jest przekazywany żaden parametr
+            //getUI().ifPresent(ui -> ui.navigate("main"));
+            //getUI().get().navigate("main");
+            //        anulujFirme.setEnabled(false);
+        } else {
+            //System.out.println(inwestycjaRepository.findById(Long.parseLong(parameter)).replace("[", "").replace("]", ""));
+            this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.parseLong(parameter));
+            listWyceny();
+            //this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.valueOf(parameter).longValue());
+//            anulujFirme.setEnabled(true);
+//            aktualnaFirma.setReadOnly(false);
+//            aktualnaFirma.setValue(this.firma.toString());
+//            aktualnaFirma.setReadOnly(true);
+        }
+    }
 }
