@@ -117,9 +117,6 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             aktualnaFirma.setVisible(false);
             anulujFirme.setVisible(false);
             filterBar.setVisible(true);
-//            aktualnaFirma.setReadOnly(false);
-//            aktualnaFirma.setValue("---");
-//            aktualnaFirma.setReadOnly(true);
             inwestycjaGrid.setItems(inwestycjaRepository.findAll());
         });
 
@@ -135,20 +132,8 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         });
 
         wyswietlWyceny.addClickListener(e -> {
-            //getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"));
-            //inwestycjaGrid.getSelectedItems().
-            //getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny"
             getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/wyceny/"
                     + this.inwestycja.getInwestycja_id().toString().replace("[", "").replace("]", "")));
-//+ inwestycjaGrid.getSelectedItems().toString().replace("[", "").replace("]", "")));
-/*
-edytuj.setEnabled(false);
-pokazInwestycje.setEnabled(false);
-             */
-//            dialogWycena.open();
-//            edytuj.setEnabled(false);
-//            pokazInwestycje.setEnabled(false);
-//            this.firmaForm.editWycena(this.wycena);
         });
 
         inwestycjaGrid.asSingleSelect().addValueChangeListener(e -> {
