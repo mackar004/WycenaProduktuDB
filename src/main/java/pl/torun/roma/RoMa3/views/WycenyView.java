@@ -47,7 +47,6 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
     private final Button nowaWycena;
     private final Button wyswietlWycene;
-//    private final Button cancel;
 
     final Dialog dialogWycena;
 
@@ -72,11 +71,10 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         nowaWycena = new Button("Nowa", VaadinIcon.PLUS.create());
         //TYMCZASOWA FUNKCJA - Wyświetlanie zapisanych wycen testowych
         wyswietlWycene = new Button("Wyświetl");
-//        cancel = new Button("Cancel");
 
         wyswietlWycene.setEnabled(true);
 
-        dialogWycena.add(this.wycenaForm);//,cancel);
+        dialogWycena.add(this.wycenaForm);
         dialogWycena.setWidth("600px");
         dialogWycena.setHeight("400px");
         dialogWycena.setCloseOnEsc(false);
@@ -90,12 +88,6 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         // Stworzenie i edytowanie nowej wyceny po kliknięciu przycisku Nowa
         nowaWycena.addClickListener(e -> {
             dialogWycena.open();
-            // this.wycenaForm.editWycena(new Wycena("", 0, 0.0, 0.0), this.inwestycja);
-            //Tymczasowa wycena przez przekazywania TypuPrzekrycia do kostruktora
-            //this.wycenaForm.editWycena(new Wycena(0, 0, 0.0, 0.0), this.inwestycja);
-            /*
-            TEST WYCENA BEZ PRZYPISANEJ INWESTYCJI
-             */
             this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0, this.inwestycja));
         });
 
@@ -106,9 +98,6 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
             listWyceny();
         });
 
-//        cancel.addClickListener(e -> {
-//           dialogWycena.close();
-//        });
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
             //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
             if (wycenaGrid.getSelectedItems().isEmpty()) {

@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import pl.torun.roma.RoMa3.model.dane.TypMaterialu;
 
 /**
  *
@@ -30,6 +31,8 @@ public class Materialy {
     private String nazwa;
     private String cena;
     private LocalDate dataWprowadzenia;
+
+    private TypMaterialu typMaterialu;
 
     @OneToMany(mappedBy = "materialy", fetch = FetchType.LAZY)
     private List<MaterialyUzyte> materialyUzyte;
@@ -82,4 +85,13 @@ public class Materialy {
     public void setDataWprowadzenia(LocalDate dataWprowadzenia) {
         this.dataWprowadzenia = dataWprowadzenia;
     }
+
+    public TypMaterialu getTypMaterialu() {
+        return typMaterialu;
+    }
+
+    public void setTypMaterialu(TypMaterialu typMaterialu) {
+        this.typMaterialu = typMaterialu;
+    }
+
 }
