@@ -7,6 +7,7 @@ package pl.torun.roma.RoMa3.forms;
 
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -17,6 +18,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.torun.roma.RoMa3.model.Materialy;
+import pl.torun.roma.RoMa3.model.dane.TypMaterialu;
 import pl.torun.roma.RoMa3.repository.MaterialyRepository;
 
 /**
@@ -35,13 +37,15 @@ public class MaterialForm extends VerticalLayout implements KeyNotifier {
 
     private final TextField nazwaMaterialu = new TextField("Nazwa");
     private final TextField cena = new TextField("Cena");
+    
+    ComboBox<TypMaterialu> typMaterialu = new ComboBox<>("Typ Materialu", TypMaterialu.values());
 
     private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
     private final Button cancel = new Button("Anuluj");
     private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
     private final Button edit = new Button("Edytuj");
     private final HorizontalLayout buttonBar = new HorizontalLayout(save, cancel, delete);
-    private final HorizontalLayout formularz = new HorizontalLayout(nazwaMaterialu, cena);
+    private final VerticalLayout formularz = new VerticalLayout(nazwaMaterialu, cena, typMaterialu);
 
     Binder<Materialy> binderMaterialy = new Binder<>(Materialy.class);
 
@@ -58,6 +62,7 @@ public class MaterialForm extends VerticalLayout implements KeyNotifier {
 
         binderMaterialy.bind(nazwaMaterialu, Materialy::getNazwa, Materialy::setNazwa);
         binderMaterialy.bind(cena, Materialy::getCena, Materialy::setCena);
+        binderMaterialy.bind(typMaterialu, Materialy::getTypMaterialu, Materialy::setTypMaterialu);
 
         setSpacing(false);
 
