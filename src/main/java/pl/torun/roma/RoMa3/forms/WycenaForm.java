@@ -39,7 +39,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     private final WycenaRepository wycenaRepository;
     private final InwestycjaRepository inwestycjaRepository;
-    MaterialyRepository materialyRepository;
+    private final MaterialyRepository materialyRepository;
 
     private Inwestycja inwestycja;
     private Wycena wycena;
@@ -50,15 +50,19 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button edit = new Button("Edytuj");
 
     ComboBox<TypPrzekrycia> typPrzekrycia = new ComboBox<>("Typ przekrycia", TypPrzekrycia.values());
+    
+    //wyszukać wartości dla poniższych pól
     private final TextField nazwaInwestycji = new TextField("Inwestycja");
-    private final TextField dlugosc = new TextField("Długość");
-    private final TextField szerokosc = new TextField("Szerokość");
-    private final TextField srednica = new TextField("Średnica");
+    private final TextField miastoInwestycji = new TextField("Miasto");
+
+    private final TextField dlugosc = new TextField("Długość [mm]");
+    private final TextField szerokosc = new TextField("Szerokość [mm]");
+    private final TextField srednica = new TextField("Średnica [mm]");
 
     private final TextField laminat = new TextField("Laminat");
     private final TextField sandwich = new TextField("Sandwich");
-    private final TextField laminatSztuki = new TextField("Elementy laminat", "0");
-    private final TextField sandwichSztuki = new TextField("Elementy sandwich", "0");
+    private final TextField laminatSztuki = new TextField("Elementy laminat");
+    private final TextField sandwichSztuki = new TextField("Elementy sandwich");
 
     private final TextField marza = new TextField("Marża");
     private final TextField cenaKoncowa = new TextField("Cena końcowa");
@@ -82,25 +86,26 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.materialyRepository = materialyRepository;
 
         List<Materialy> listaZywic = this.materialyRepository.findByTypMaterialu(Żywica);
-        System.out.println("Żywice dostępne: " + listaZywic);
-        //zywicaPole = new TextField("Zywica");
-        //zywicaPole = new ComboBox<>("Żywica", materialyRepository.findAll());
+        List<Materialy> listaMat = this.materialyRepository.findByTypMaterialuOrTypMaterialu(Mata, Matotkanina);
+
         ComboBox<Materialy> zywicaPole = new ComboBox<>("Żywica", listaZywic);
-//        dlugosc.setPlaceholder("Wymiar w milimetrach");
-//        szerokosc.setPlaceholder("Wymiar w milimetrach");
-//        srednica.setPlaceholder("Wymiar w milimetrach");
+        ComboBox<Materialy> mataPole = new ComboBox<>("Mata", listaMat);
+
         dlugosc.setVisible(false);
         szerokosc.setVisible(false);
         srednica.setVisible(false);
 
-        VerticalLayout pola1 = new VerticalLayout(zywicaPole);
+        VerticalLayout pola1 = new VerticalLayout(zywicaPole, mataPole);
 
         //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
 //        add(typPrzekrycia);
 //        add(laminatSztuki, sandwichSztuki, marzaCena);
 //        add(dlugosc);
-        add(typWymiary, laminatSztuki, sandwichSztuki, marzaCena);
+        cenaKoncowa.setReadOnly(true);
+
+        add(typWymiary, laminatSztuki, sandwichSztuki);
         add(pola1);
+        add(marzaCena);
         add(save, cancel);
 //
         binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);

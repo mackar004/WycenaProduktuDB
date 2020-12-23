@@ -66,9 +66,6 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
         this.materialyRepository = materialyRepository;
-
-        System.out.println(this.materialyRepository.findByTypMaterialu(Żywica).toString());
-        
         
         this.wycenaForm = new WycenaForm(wycenaRepository, inwestycjaRepository, materialyRepository);
         wycenaGrid = new Grid<>(Wycena.class);
