@@ -50,7 +50,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button edit = new Button("Edytuj");
 
     ComboBox<TypPrzekrycia> typPrzekrycia = new ComboBox<>("Typ przekrycia", TypPrzekrycia.values());
-    
+
     //wyszukać wartości dla poniższych pól
     private final TextField nazwaInwestycji = new TextField("Inwestycja");
     private final TextField miastoInwestycji = new TextField("Miasto");
@@ -87,15 +87,22 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         List<Materialy> listaZywic = this.materialyRepository.findByTypMaterialu(Żywica);
         List<Materialy> listaMat = this.materialyRepository.findByTypMaterialuOrTypMaterialu(Mata, Matotkanina);
+        List<Materialy> listaZelkotow = this.materialyRepository.findByTypMaterialu(Żelkot);
+        List<Materialy> listaTopkotow = this.materialyRepository.findByTypMaterialu(Topkot);
 
         ComboBox<Materialy> zywicaPole = new ComboBox<>("Żywica", listaZywic);
         ComboBox<Materialy> mataPole = new ComboBox<>("Mata", listaMat);
+        ComboBox<Materialy> zelkotPole = new ComboBox<>("Żelkot", listaZelkotow);
+        ComboBox<Materialy> topkotPole = new ComboBox<>("Topkot", listaTopkotow);
 
         dlugosc.setVisible(false);
         szerokosc.setVisible(false);
         srednica.setVisible(false);
-
-        VerticalLayout pola1 = new VerticalLayout(zywicaPole, mataPole);
+        
+        
+        VerticalLayout pola1 = new VerticalLayout(zywicaPole, mataPole, zelkotPole, topkotPole);
+        
+        pola1.setVisible(true);
 
         //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
 //        add(typPrzekrycia);
