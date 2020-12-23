@@ -18,10 +18,12 @@ import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.model.Materialy;
 import pl.torun.roma.RoMa3.model.Wycena;
+import static pl.torun.roma.RoMa3.model.dane.TypMaterialu.*;
 import pl.torun.roma.RoMa3.model.dane.TypPrzekrycia;
 import pl.torun.roma.RoMa3.repository.InwestycjaRepository;
 import pl.torun.roma.RoMa3.repository.MaterialyRepository;
@@ -55,20 +57,17 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     private final TextField laminat = new TextField("Laminat");
     private final TextField sandwich = new TextField("Sandwich");
-    private final TextField laminatSztuki = new TextField("Elementy laminat");
-    private final TextField sandwichSztuki = new TextField("Elementy sandwich");
+    private final TextField laminatSztuki = new TextField("Elementy laminat", "0");
+    private final TextField sandwichSztuki = new TextField("Elementy sandwich", "0");
 
     private final TextField marza = new TextField("Marża");
     private final TextField cenaKoncowa = new TextField("Cena końcowa");
-    
-    ComboBox<Materialy> zywicaPole;
-    
 
+    //private final TextField zywicaPole = new TextField("Zywica");
     private final HorizontalLayout typWymiary = new HorizontalLayout(typPrzekrycia, srednica, dlugosc, szerokosc);
     private final HorizontalLayout laminatIlosc = new HorizontalLayout(laminat, laminatSztuki);
     private final HorizontalLayout sandwichIlosc = new HorizontalLayout(sandwich, sandwichSztuki);
     private final HorizontalLayout marzaCena = new HorizontalLayout(marza, cenaKoncowa);
-    private final VerticalLayout pola1 = new VerticalLayout(zywicaPole);
 
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
     //private final Grid materialy;
@@ -76,19 +75,25 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private WycenaForm.ChangeHandler changeHandler;
 
     @Autowired
-    public WycenaForm(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository) {
+    public WycenaForm(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository, MaterialyRepository materialyRepository) {
 
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
-        
+        this.materialyRepository = materialyRepository;
 
-        zywicaPole = new ComboBox<>("Żywica", this.materialyRepository.findByTypMaterialu("Żywica"));
+        List<Materialy> listaZywic = this.materialyRepository.findByTypMaterialu(Żywica);
+        System.out.println("Żywice dostępne: " + listaZywic);
+        //zywicaPole = new TextField("Zywica");
+        //zywicaPole = new ComboBox<>("Żywica", materialyRepository.findAll());
+        ComboBox<Materialy> zywicaPole = new ComboBox<>("Żywica", listaZywic);
 //        dlugosc.setPlaceholder("Wymiar w milimetrach");
 //        szerokosc.setPlaceholder("Wymiar w milimetrach");
 //        srednica.setPlaceholder("Wymiar w milimetrach");
         dlugosc.setVisible(false);
         szerokosc.setVisible(false);
         srednica.setVisible(false);
+
+        VerticalLayout pola1 = new VerticalLayout(zywicaPole);
 
         //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
 //        add(typPrzekrycia);

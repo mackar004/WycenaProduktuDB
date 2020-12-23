@@ -94,4 +94,9 @@ public class Materialy {
         this.typMaterialu = typMaterialu;
     }
 
+    @Override
+    public String toString() {
+        return nazwa;
+    }
+
 }
