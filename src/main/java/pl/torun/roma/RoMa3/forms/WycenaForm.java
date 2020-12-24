@@ -67,11 +67,54 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final TextField marza = new TextField("Marża");
     private final TextField cenaKoncowa = new TextField("Cena końcowa");
 
+    private final Button sLewo = new Button(VaadinIcon.CHEVRON_CIRCLE_LEFT.create());
+    private final Button sPrawo = new Button(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create());
+
+    List<Materialy> listaZywic;
+    List<Materialy> listaMat;
+    List<Materialy> listaZelkotow;
+    List<Materialy> listaTopkotow;
+    List<Materialy> listaPianek;
+    List<Materialy> listaRBH;
+    List<Materialy> listaPodstawowych;
+    List<Materialy> listaPomocniczych;
+
+    ComboBox<Materialy> zywicaPole;
+    ComboBox<Materialy> mataPole;
+    ComboBox<Materialy> zelkotPole;
+    ComboBox<Materialy> topkotPole;
+    ComboBox<Materialy> piankaPole;
+    ComboBox<Materialy> rbhPole;
+    ComboBox<Materialy> podstawowePole;
+    ComboBox<Materialy> pomocniczePole;
+
+    private final TextField zywicaIlosc = new TextField("Ilość");
+    private final TextField mataIlosc = new TextField("Ilość");
+    private final TextField zelkotIlosc = new TextField("Ilość");
+    private final TextField topkotIlosc = new TextField("Ilość");
+    private final TextField piankaIlosc = new TextField("Ilość");
+    private final TextField rbhIlosc = new TextField("Ilość");
+    private final TextField podstawoweIlosc = new TextField("Ilość");
+    private final TextField pomocniczeIlosc = new TextField("Ilość");
+
     //private final TextField zywicaPole = new TextField("Zywica");
     private final HorizontalLayout typWymiary = new HorizontalLayout(typPrzekrycia, srednica, dlugosc, szerokosc);
     private final HorizontalLayout laminatIlosc = new HorizontalLayout(laminat, laminatSztuki);
     private final HorizontalLayout sandwichIlosc = new HorizontalLayout(sandwich, sandwichSztuki);
     private final HorizontalLayout marzaCena = new HorizontalLayout(marza, cenaKoncowa);
+
+    private final HorizontalLayout zywica = new HorizontalLayout();
+    private final HorizontalLayout mata = new HorizontalLayout();
+    private final HorizontalLayout zelkot = new HorizontalLayout();
+    private final HorizontalLayout topkot = new HorizontalLayout();
+    private final HorizontalLayout pianka = new HorizontalLayout();
+    private final HorizontalLayout rbh = new HorizontalLayout();
+    private final HorizontalLayout podstawowe = new HorizontalLayout();
+    private final HorizontalLayout pomocnicze = new HorizontalLayout();
+
+    private final VerticalLayout pola1 = new VerticalLayout();
+    private final VerticalLayout pola2 = new VerticalLayout();
+    private final HorizontalLayout strzalki = new HorizontalLayout(sLewo, sPrawo);
 
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
     //private final Grid materialy;
@@ -85,36 +128,69 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.inwestycjaRepository = inwestycjaRepository;
         this.materialyRepository = materialyRepository;
 
-        List<Materialy> listaZywic = this.materialyRepository.findByTypMaterialu(Żywica);
-        List<Materialy> listaMat = this.materialyRepository.findByTypMaterialuOrTypMaterialu(Mata, Matotkanina);
-        List<Materialy> listaZelkotow = this.materialyRepository.findByTypMaterialu(Żelkot);
-        List<Materialy> listaTopkotow = this.materialyRepository.findByTypMaterialu(Topkot);
+        this.listaZywic = this.materialyRepository.findByTypMaterialu(Żywica);
+        this.listaMat = this.materialyRepository.findByTypMaterialuOrTypMaterialu(Mata, Matotkanina);
+        this.listaZelkotow = this.materialyRepository.findByTypMaterialu(Żelkot);
+        this.listaTopkotow = this.materialyRepository.findByTypMaterialu(Topkot);
+        this.listaPianek = this.materialyRepository.findByTypMaterialu(Pianka);
+        this.listaRBH = this.materialyRepository.findByTypMaterialu(RBH);
+        this.listaPodstawowych = this.materialyRepository.findByTypMaterialu(Podstawowe);
+        this.listaPomocniczych = this.materialyRepository.findByTypMaterialu(Pomocnicze);
 
-        ComboBox<Materialy> zywicaPole = new ComboBox<>("Żywica", listaZywic);
-        ComboBox<Materialy> mataPole = new ComboBox<>("Mata", listaMat);
-        ComboBox<Materialy> zelkotPole = new ComboBox<>("Żelkot", listaZelkotow);
-        ComboBox<Materialy> topkotPole = new ComboBox<>("Topkot", listaTopkotow);
+        zywicaPole = new ComboBox<>("Żywica", listaZywic);
+        mataPole = new ComboBox<>("Mata", listaMat);
+        zelkotPole = new ComboBox<>("Żelkot", listaZelkotow);
+        topkotPole = new ComboBox<>("Topkot", listaTopkotow);
+        piankaPole = new ComboBox<>("Pianka", listaPianek);
+        rbhPole = new ComboBox<>("RBH", listaRBH);
+        podstawowePole = new ComboBox<>("Podstawowe", listaPodstawowych);
+        pomocniczePole = new ComboBox<>("Pomocnicze", listaPomocniczych);
+
+        zywica.add(zywicaPole, zywicaIlosc);
+        mata.add(mataPole, mataIlosc);
+        zelkot.add(zelkotPole, zelkotIlosc);
+        topkot.add(topkotPole, topkotIlosc);
+        pianka.add(piankaPole, piankaIlosc);
+        rbh.add(rbhPole, rbhIlosc);
+        podstawowe.add(podstawowePole, podstawoweIlosc);
+        pomocnicze.add(pomocniczePole, pomocniczeIlosc);
 
         dlugosc.setVisible(false);
         szerokosc.setVisible(false);
         srednica.setVisible(false);
-        
-        
-        VerticalLayout pola1 = new VerticalLayout(zywicaPole, mataPole, zelkotPole, topkotPole);
-        
+
+        pola1.add(zywica, mata, zelkot, topkot);
+        pola2.add(pianka, rbh, podstawowe, pomocnicze);
+
         pola1.setVisible(true);
+        pola2.setVisible(false);
+
+        sLewo.addClickListener(e -> {
+            pola1.setVisible(!pola1.isVisible());
+            pola2.setVisible(!pola2.isVisible());
+        });
+
+        sPrawo.addClickListener(e -> {
+            pola1.setVisible(!pola1.isVisible());
+            pola2.setVisible(!pola2.isVisible());
+        });
 
         //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
 //        add(typPrzekrycia);
 //        add(laminatSztuki, sandwichSztuki, marzaCena);
 //        add(dlugosc);
-        cenaKoncowa.setReadOnly(true);
+        cenaKoncowa.setReadOnly(
+                true);
 
         add(typWymiary, laminatSztuki, sandwichSztuki);
-        add(pola1);
+
+        add(strzalki, pola1, pola2);
+
         add(marzaCena);
+
         add(save, cancel);
 //
+
         binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
         binderWycena.forField(dlugosc)
                 .withConverter(new StringToIntegerConverter("Potrzebna liczba!"))
@@ -138,10 +214,13 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
 
-        save.addClickListener(e -> save());
-        cancel.addClickListener(e -> cancel());
+        save.addClickListener(e
+                -> save());
+        cancel.addClickListener(e
+                -> cancel());
 
-        typPrzekrycia.addValueChangeListener(e -> {
+        typPrzekrycia.addValueChangeListener(e
+                -> {
             if (e.getValue() == null) {
                 dlugosc.setVisible(false);
                 szerokosc.setVisible(false);
@@ -179,7 +258,8 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
                         srednica.setVisible(false);
                 }
             }
-        });
+        }
+        );
 
         //Czy to potrzebne?
         //https://vaadin.com/forum/thread/15385912/15640053
