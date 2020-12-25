@@ -23,7 +23,9 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import pl.torun.roma.RoMa3.forms.WycenaForm;
 import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.model.Wycena;
+import static pl.torun.roma.RoMa3.model.dane.TypMaterialu.*;
 import pl.torun.roma.RoMa3.repository.InwestycjaRepository;
+import pl.torun.roma.RoMa3.repository.MaterialyRepository;
 import pl.torun.roma.RoMa3.repository.WycenaRepository;
 
 /**
@@ -37,6 +39,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
     private final WycenaRepository wycenaRepository;
     private final InwestycjaRepository inwestycjaRepository;
+    private final MaterialyRepository materialyRepository;
 
     private Wycena wycena;
 
@@ -54,7 +57,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
     private WycenaForm.ChangeHandler changeHandler;
 
-    private WycenyView(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository) {
+    private WycenyView(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository, MaterialyRepository materialyRepository) {
 
         add(new Button("Powrót", event -> {
             getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje"));
@@ -62,8 +65,9 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
-
-        this.wycenaForm = new WycenaForm(wycenaRepository, inwestycjaRepository);
+        this.materialyRepository = materialyRepository;
+        
+        this.wycenaForm = new WycenaForm(wycenaRepository, inwestycjaRepository, materialyRepository);
         wycenaGrid = new Grid<>(Wycena.class);
 
         this.dialogWycena = new Dialog();
