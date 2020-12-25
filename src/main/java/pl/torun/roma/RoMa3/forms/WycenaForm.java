@@ -86,6 +86,8 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 //        add(dlugosc);
         add(typWymiary, laminatSztuki, sandwichSztuki, marzaCena);
         add(save, cancel);
+        
+        System.out.println("pusta linia");
 //
         binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
         binderWycena.forField(dlugosc)
