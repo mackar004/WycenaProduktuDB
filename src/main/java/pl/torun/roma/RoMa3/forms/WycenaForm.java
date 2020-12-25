@@ -18,7 +18,9 @@ import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.model.Materialy;
@@ -71,6 +73,8 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     private final Button sLewo = new Button(VaadinIcon.CHEVRON_CIRCLE_LEFT.create());
     private final Button sPrawo = new Button(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create());
+    
+    private final Map<String,Double> materialyTemp = new HashMap<String, Double>();
 
     List<Materialy> listaZywic;
     List<Materialy> listaMat;
@@ -183,8 +187,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 //        add(typPrzekrycia);
 //        add(laminatSztuki, sandwichSztuki, marzaCena);
 //        add(dlugosc);
-        cenaKoncowa.setReadOnly(
-                true);
+        cenaKoncowa.setReadOnly(true);
 
         add(typWymiary, laminatSztuki, sandwichSztuki);
 
@@ -193,9 +196,6 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         add(marzaCena);
 
         add(save, cancel);
-        
-        System.out.println("pusta linia");
-//
 
         binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
         binderWycena.forField(dlugosc)

@@ -82,6 +82,7 @@ public class FirmyView extends VerticalLayout {
 
         edytuj.setEnabled(false);
         pokazInwestycje.setEnabled(false);
+        dodajInwestycje.setEnabled(false);
 
         HorizontalLayout filterBar = new HorizontalLayout(filtrFirma, nowaFirma, edytuj, pokazInwestycje, dodajInwestycje);
 
