@@ -26,6 +26,7 @@ import pl.torun.roma.RoMa3.model.Wycena;
 import static pl.torun.roma.RoMa3.model.dane.TypMaterialu.*;
 import pl.torun.roma.RoMa3.repository.InwestycjaRepository;
 import pl.torun.roma.RoMa3.repository.MaterialyRepository;
+import pl.torun.roma.RoMa3.repository.MaterialyUzyteRepository;
 import pl.torun.roma.RoMa3.repository.WycenaRepository;
 
 /**
@@ -40,6 +41,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
     private final WycenaRepository wycenaRepository;
     private final InwestycjaRepository inwestycjaRepository;
     private final MaterialyRepository materialyRepository;
+    private final MaterialyUzyteRepository materialyUzyteRepository;
 
     private Wycena wycena;
 
@@ -57,7 +59,8 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
     private WycenaForm.ChangeHandler changeHandler;
 
-    private WycenyView(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository, MaterialyRepository materialyRepository) {
+    private WycenyView(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository,
+            MaterialyRepository materialyRepository, MaterialyUzyteRepository materialyUzyteRepository) {
 
         add(new Button("Powrót", event -> {
             getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje"));
@@ -66,8 +69,10 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
         this.materialyRepository = materialyRepository;
+        this.materialyUzyteRepository = materialyUzyteRepository;
         
-        this.wycenaForm = new WycenaForm(wycenaRepository, inwestycjaRepository, materialyRepository);
+        this.wycenaForm = new WycenaForm(wycenaRepository, inwestycjaRepository,
+                materialyRepository, materialyUzyteRepository);
         wycenaGrid = new Grid<>(Wycena.class);
 
         this.dialogWycena = new Dialog();
