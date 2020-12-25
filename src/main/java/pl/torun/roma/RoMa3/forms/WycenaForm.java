@@ -27,6 +27,7 @@ import static pl.torun.roma.RoMa3.model.dane.TypMaterialu.*;
 import pl.torun.roma.RoMa3.model.dane.TypPrzekrycia;
 import pl.torun.roma.RoMa3.repository.InwestycjaRepository;
 import pl.torun.roma.RoMa3.repository.MaterialyRepository;
+import pl.torun.roma.RoMa3.repository.MaterialyUzyteRepository;
 import pl.torun.roma.RoMa3.repository.WycenaRepository;
 
 /**
@@ -40,6 +41,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final WycenaRepository wycenaRepository;
     private final InwestycjaRepository inwestycjaRepository;
     private final MaterialyRepository materialyRepository;
+    private final MaterialyUzyteRepository materialyUzyteRepository;
 
     private Inwestycja inwestycja;
     private Wycena wycena;
@@ -122,11 +124,13 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private WycenaForm.ChangeHandler changeHandler;
 
     @Autowired
-    public WycenaForm(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository, MaterialyRepository materialyRepository) {
+    public WycenaForm(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository,
+            MaterialyRepository materialyRepository, MaterialyUzyteRepository materialyUzyteRepository) {
 
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
         this.materialyRepository = materialyRepository;
+        this.materialyUzyteRepository = materialyUzyteRepository;
 
         this.listaZywic = this.materialyRepository.findByTypMaterialu(Żywica);
         this.listaMat = this.materialyRepository.findByTypMaterialuOrTypMaterialu(Mata, Matotkanina);
