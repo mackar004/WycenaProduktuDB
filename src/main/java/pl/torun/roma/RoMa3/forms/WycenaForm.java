@@ -189,6 +189,8 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         add(marzaCena);
 
         add(save, cancel);
+        
+        System.out.println("pusta linia");
 //
 
         binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
