@@ -95,7 +95,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         // Stworzenie i edytowanie nowej wyceny po kliknięciu przycisku Nowa
         nowaWycena.addClickListener(e -> {
             dialogWycena.open();
-            this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0, this.inwestycja));
+            this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0, this.inwestycja), this.inwestycja);
         });
 
         wyswietlWycene.addClickListener(e -> {

@@ -53,6 +53,15 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
     private final Button edit = new Button("Edytuj");
 
+    private final Button zywicaDodaj = new Button("Dodaj");
+    private final Button mataDodaj = new Button("Dodaj");
+    private final Button zelkotDodaj = new Button("Dodaj");
+    private final Button topkotDodaj = new Button("Dodaj");
+    private final Button piankaDodaj = new Button("Dodaj");
+    private final Button rbhDodaj = new Button("Dodaj");
+    private final Button podstawoweDodaj = new Button("Dodaj");
+    private final Button pomocniczeDodaj = new Button("Dodaj");
+
     ComboBox<TypPrzekrycia> typPrzekrycia = new ComboBox<>("Typ przekrycia", TypPrzekrycia.values());
 
     //wyszukać wartości dla poniższych pól
@@ -73,8 +82,8 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     private final Button sLewo = new Button(VaadinIcon.CHEVRON_CIRCLE_LEFT.create());
     private final Button sPrawo = new Button(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create());
-    
-    private final Map<String,Double> materialyTemp = new HashMap<String, Double>();
+
+    private final Map<String, Double> materialyTemp = new HashMap<String, Double>();
 
     List<Materialy> listaZywic;
     List<Materialy> listaMat;
@@ -104,6 +113,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final TextField pomocniczeIlosc = new TextField("Ilość");
 
     //private final TextField zywicaPole = new TextField("Zywica");
+    private final HorizontalLayout daneInwestycji = new HorizontalLayout(miastoInwestycji, nazwaInwestycji);
     private final HorizontalLayout typWymiary = new HorizontalLayout(typPrzekrycia, srednica, dlugosc, szerokosc);
     private final HorizontalLayout laminatIlosc = new HorizontalLayout(laminat, laminatSztuki);
     private final HorizontalLayout sandwichIlosc = new HorizontalLayout(sandwich, sandwichSztuki);
@@ -145,6 +155,95 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.listaPodstawowych = this.materialyRepository.findByTypMaterialu(Podstawowe);
         this.listaPomocniczych = this.materialyRepository.findByTypMaterialu(Pomocnicze);
 
+        zywicaDodaj.addClickListener(e -> {
+            if ((zywicaPole.getValue() != null) || (zywicaIlosc.getValue() != null)) {
+                materialyTemp.put(zywicaPole.getValue().toString(), Double.parseDouble(zywicaIlosc.getValue()));
+                zywicaPole.clear();
+                zywicaPole.setPlaceholder("Dodano!");
+                zywicaIlosc.clear();
+            } else {
+                zywicaPole.setPlaceholder("Wybierz");
+                zywicaIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+        mataDodaj.addClickListener(e -> {
+            if ((mataPole.getValue() != null) || (mataIlosc.getValue() != null)) {
+                materialyTemp.put(mataPole.getValue().toString(), Double.parseDouble(mataIlosc.getValue()));
+                mataPole.clear();
+                mataPole.setPlaceholder("Dodano!");
+                mataIlosc.clear();
+            } else {
+                mataPole.setPlaceholder("Wybierz");
+                mataIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+        zelkotDodaj.addClickListener(e -> {
+            if ((zelkotPole.getValue() != null) || (zelkotIlosc.getValue() != null)) {
+                materialyTemp.put(zelkotPole.getValue().toString(), Double.parseDouble(zelkotIlosc.getValue()));
+                zelkotPole.clear();
+                zelkotPole.setPlaceholder("Dodano!");
+                zelkotIlosc.clear();
+            } else {
+                zelkotPole.setPlaceholder("Wybierz");
+                zelkotIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+        topkotDodaj.addClickListener(e -> {
+            if ((topkotPole.getValue() != null) || (topkotIlosc.getValue() != null)) {
+                materialyTemp.put(topkotPole.getValue().toString(), Double.parseDouble(topkotIlosc.getValue()));
+                topkotPole.clear();
+                topkotPole.setPlaceholder("Dodano!");
+                topkotIlosc.clear();
+            } else {
+                topkotPole.setPlaceholder("Wybierz");
+                topkotIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+        piankaDodaj.addClickListener(e -> {
+            if ((piankaPole.getValue() != null) || (piankaIlosc.getValue() != null)) {
+                materialyTemp.put(piankaPole.getValue().toString(), Double.parseDouble(piankaIlosc.getValue()));
+                piankaPole.clear();
+                piankaPole.setPlaceholder("Dodano!");
+                piankaIlosc.clear();
+            } else {
+                piankaPole.setPlaceholder("Wybierz");
+                piankaIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+        rbhDodaj.addClickListener(e -> {
+            if ((rbhPole.getValue() != null) || (rbhIlosc.getValue() != null)) {
+                materialyTemp.put(rbhPole.getValue().toString(), Double.parseDouble(rbhIlosc.getValue()));
+                rbhPole.clear();
+                rbhPole.setPlaceholder("Dodano!");
+                rbhIlosc.clear();
+            } else {
+                rbhPole.setPlaceholder("Wybierz");
+                rbhIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+        podstawoweDodaj.addClickListener(e -> {
+            if ((podstawowePole.getValue() != null) || (podstawoweIlosc.getValue() != null)) {
+                materialyTemp.put(podstawowePole.getValue().toString(), Double.parseDouble(podstawoweIlosc.getValue()));
+                podstawowePole.clear();
+                podstawowePole.setPlaceholder("Dodano!");
+                podstawoweIlosc.clear();
+            } else {
+                podstawowePole.setPlaceholder("Wybierz");
+                podstawoweIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+        pomocniczeDodaj.addClickListener(e -> {
+            if ((pomocniczePole.getValue() != null) || (pomocniczeIlosc.getValue() != null)) {
+                materialyTemp.put(pomocniczePole.getValue().toString(), Double.parseDouble(pomocniczeIlosc.getValue()));
+                pomocniczePole.clear();
+                pomocniczePole.setPlaceholder("Dodano!");
+                pomocniczeIlosc.clear();
+            } else {
+                pomocniczePole.setPlaceholder("Wybierz");
+                pomocniczeIlosc.setPlaceholder("Podaj ilość");
+            }
+        });
+
         zywicaPole = new ComboBox<>("Żywica", listaZywic);
         mataPole = new ComboBox<>("Mata", listaMat);
         zelkotPole = new ComboBox<>("Żelkot", listaZelkotow);
@@ -154,14 +253,14 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         podstawowePole = new ComboBox<>("Podstawowe", listaPodstawowych);
         pomocniczePole = new ComboBox<>("Pomocnicze", listaPomocniczych);
 
-        zywica.add(zywicaPole, zywicaIlosc);
-        mata.add(mataPole, mataIlosc);
-        zelkot.add(zelkotPole, zelkotIlosc);
-        topkot.add(topkotPole, topkotIlosc);
-        pianka.add(piankaPole, piankaIlosc);
-        rbh.add(rbhPole, rbhIlosc);
-        podstawowe.add(podstawowePole, podstawoweIlosc);
-        pomocnicze.add(pomocniczePole, pomocniczeIlosc);
+        zywica.add(zywicaPole, zywicaIlosc, zywicaDodaj);
+        mata.add(mataPole, mataIlosc, mataDodaj);
+        zelkot.add(zelkotPole, zelkotIlosc, zelkotDodaj);
+        topkot.add(topkotPole, topkotIlosc, topkotDodaj);
+        pianka.add(piankaPole, piankaIlosc, piankaDodaj);
+        rbh.add(rbhPole, rbhIlosc, rbhDodaj);
+        podstawowe.add(podstawowePole, podstawoweIlosc, podstawoweDodaj);
+        pomocnicze.add(pomocniczePole, pomocniczeIlosc, pomocniczeDodaj);
 
         dlugosc.setVisible(false);
         szerokosc.setVisible(false);
@@ -183,13 +282,9 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
             pola2.setVisible(!pola2.isVisible());
         });
 
-        //add(nazwaInwestycji, typWymiary, laminatSztuki, sandwichSztuki, marzaCena);//, materialyGrid);
-//        add(typPrzekrycia);
-//        add(laminatSztuki, sandwichSztuki, marzaCena);
-//        add(dlugosc);
         cenaKoncowa.setReadOnly(true);
 
-        add(typWymiary, laminatSztuki, sandwichSztuki);
+        add(daneInwestycji, typWymiary, laminatSztuki, sandwichSztuki);
 
         add(strzalki, pola1, pola2);
 
@@ -286,6 +381,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     void cancel() {
         //      inwestycjeGrid.select(null);
+        this.materialyTemp.clear();
         changeHandler.onChange();
 
     }
@@ -318,12 +414,18 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     /*
     TYMCZASOWY KONSTRUKTOR WYCENY NIEPOWIĄZANEJ Z INWESTYCJĄ
      */
-    public final void editWycena(Wycena w) {
+    public final void editWycena(Wycena w, Inwestycja inwestycja) {
         if (w == null) {
             setVisible(false);
             return;
         }
         //nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
+        this.inwestycja = inwestycja;
+        miastoInwestycji.setValue(this.inwestycja.getInwestycjaMiasto());
+        nazwaInwestycji.setValue(this.inwestycja.getInwestycjaNazwa());
+        miastoInwestycji.setReadOnly(true);
+        nazwaInwestycji.setReadOnly(true);
+
         final boolean wycenaIstnieje = w.getId() != null;
         if (wycenaIstnieje) {
             wycena = wycenaRepository.findById(w.getId()).get();

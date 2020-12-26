@@ -96,25 +96,26 @@ public class Wycena {
 //        this.cenaKoncowa = cenaKoncowa;
 //        this.marza = marza;
 //    }
-    public Wycena(Integer iloscSandwich, Integer iloscLaminat,
-            Double cenaKoncowa, Double marza) {
-        this.iloscSandwich = iloscSandwich;
-        this.iloscLaminat = iloscLaminat;
-        this.cenaKoncowa = cenaKoncowa;
-        this.marza = marza;
-    }
-
-    public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
-            Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,
-            Double marza) {
-        this.dlugosc = dlugosc;
-        this.szerokosc = szerokosc;
-        this.srednica = srednica;
-        this.iloscSandwich = iloscSandwich;
-        this.iloscLaminat = iloscLaminat;
-        this.cenaKoncowa = cenaKoncowa;
-        this.marza = marza;
-    }
+    
+//    public Wycena(Integer iloscSandwich, Integer iloscLaminat,
+//            Double cenaKoncowa, Double marza) {
+//        this.iloscSandwich = iloscSandwich;
+//        this.iloscLaminat = iloscLaminat;
+//        this.cenaKoncowa = cenaKoncowa;
+//        this.marza = marza;
+//    }
+//
+//    public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
+//            Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,
+//            Double marza) {
+//        this.dlugosc = dlugosc;
+//        this.szerokosc = szerokosc;
+//        this.srednica = srednica;
+//        this.iloscSandwich = iloscSandwich;
+//        this.iloscLaminat = iloscLaminat;
+//        this.cenaKoncowa = cenaKoncowa;
+//        this.marza = marza;
+//    }
     
         public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
             Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,
