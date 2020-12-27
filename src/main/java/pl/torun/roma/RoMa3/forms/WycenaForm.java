@@ -84,6 +84,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button sPrawo = new Button(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create());
 
     private final Map<String, Double> materialyTemp = new HashMap<String, Double>();
+    //https://vaadin.com/forum/thread/16038356/grid-8-without-bean-class
 
     List<Materialy> listaZywic;
     List<Materialy> listaMat;
@@ -132,8 +133,9 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final VerticalLayout pola2 = new VerticalLayout();
     private final HorizontalLayout strzalki = new HorizontalLayout(sLewo, sPrawo);
 
+//    private final Grid materialyDodane;
+
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
-    //private final Grid materialy;
 
     private WycenaForm.ChangeHandler changeHandler;
 
@@ -155,12 +157,16 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.listaPodstawowych = this.materialyRepository.findByTypMaterialu(Podstawowe);
         this.listaPomocniczych = this.materialyRepository.findByTypMaterialu(Pomocnicze);
 
+//        materialyDodane = new Grid<HashMap<String, Double>>(50);
+//        materialyDodane.setColumns("Materiał", "Ilość");
+
         zywicaDodaj.addClickListener(e -> {
             if ((zywicaPole.getValue() != null) || (zywicaIlosc.getValue() != null)) {
                 materialyTemp.put(zywicaPole.getValue().toString(), Double.parseDouble(zywicaIlosc.getValue()));
                 zywicaPole.clear();
                 zywicaPole.setPlaceholder("Dodano!");
                 zywicaIlosc.clear();
+//                listMaterialy();
             } else {
                 zywicaPole.setPlaceholder("Wybierz");
                 zywicaIlosc.setPlaceholder("Podaj ilość");
@@ -366,6 +372,10 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         //https://vaadin.com/forum/thread/15385912/15640053
         //binderWycena.bindInstanceFields(this);
     }
+
+//    void listMaterialy() {
+//        materialyDodane.setItems(materialyTemp);
+//    }
 
     void save() {
         wycenaRepository.save(wycena);
