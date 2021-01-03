@@ -182,7 +182,9 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         zywicaDodaj.addClickListener(e -> {
             if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
+                //this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
                 this.materialyUzyte = new MaterialyUzyte(null, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
+                materialyUzyteRepository.save(this.materialyUzyte);
                 zywicaPole.clear();
                 zywicaIlosc.clear();
                 zywicaPole.setPlaceholder("Dodano!");
