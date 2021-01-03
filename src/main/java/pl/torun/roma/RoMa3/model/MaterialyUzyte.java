@@ -40,6 +40,11 @@ public class MaterialyUzyte {
 
     }
 
+    public MaterialyUzyte(Materialy materialy, Double iloscMaterialu) {
+        this.materialy = materialy;
+        this.iloscMaterialu = iloscMaterialu;
+    }
+
     public MaterialyUzyte(Wycena wycena, Materialy materialy, Double iloscMaterialu) {
         this.wycena = wycena;
         this.materialy = materialy;

@@ -5,13 +5,15 @@
  */
 package pl.torun.roma.RoMa3.repository;
 
+import java.util.List;
 import pl.torun.roma.RoMa3.model.MaterialyUzyte;
 import org.springframework.data.jpa.repository.JpaRepository;
+import pl.torun.roma.RoMa3.model.Wycena;
 
 /**
  *
  * @author m
  */
 public interface MaterialyUzyteRepository extends JpaRepository<MaterialyUzyte, Long>{
-    
+    List<MaterialyUzyte> findByWycena(Wycena wycena);
 }

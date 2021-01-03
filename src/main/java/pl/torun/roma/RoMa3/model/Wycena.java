@@ -233,5 +233,5 @@ public class Wycena {
     public void setInwestycja(Inwestycja inwestycja) {
         this.inwestycja = inwestycja;
     }
-
+    
 }

@@ -91,6 +91,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         edytuj = new Button("Edytuj");
         wyswietlWyceny = new Button("WYCENY");
         
+        nowaInwestycja.setEnabled(false);
         edytuj.setEnabled(false);
         wyswietlWyceny.setEnabled(false);
         anulujFirme.setEnabled(false);
@@ -197,6 +198,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         } else {
             this.firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
             //filtrInwestycja.setValue(this.firma.toString());
+            nowaInwestycja.setEnabled(true);
             anulujFirme.setEnabled(true);
             aktualnaFirma.setReadOnly(false);
             aktualnaFirma.setValue(this.firma.toString());
