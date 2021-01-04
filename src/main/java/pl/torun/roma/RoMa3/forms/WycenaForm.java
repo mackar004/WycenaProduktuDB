@@ -56,7 +56,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
     private final Button cancel = new Button("Anuluj");
     private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
-    private final Button edit = new Button("Edytuj");
+//    private final Button edit = new Button("Edytuj");
 
     private final Button zywicaDodaj = new Button("Dodaj");
     private final Button mataDodaj = new Button("Dodaj");
@@ -88,11 +88,10 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button sLewo = new Button(VaadinIcon.CHEVRON_CIRCLE_LEFT.create());
     private final Button sPrawo = new Button(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create());
 
-    private final List<HashMap<String, String>> materialyTemp = new ArrayList<>();
-    private final Map<String, String> materialUzyty = new HashMap<>();
-    private final String Nazwa = "Nazwa";
-    private final String Ilosc = "Ilość";
-
+//    private final List<HashMap<String, String>> materialyTemp = new ArrayList<>();
+//    private final Map<String, String> materialUzyty = new HashMap<>();
+//    private final String Nazwa = "Nazwa";
+//    private final String Ilosc = "Ilość";
     List<Materialy> listaZywic;
     List<Materialy> listaMat;
     List<Materialy> listaZelkotow;
@@ -120,7 +119,6 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final TextField podstawoweIlosc = new TextField("Ilość");
     private final TextField pomocniczeIlosc = new TextField("Ilość");
 
-    //private final TextField zywicaPole = new TextField("Zywica");
     private final HorizontalLayout daneInwestycji = new HorizontalLayout(miastoInwestycji, nazwaInwestycji);
     private final HorizontalLayout typWymiary = new HorizontalLayout(typPrzekrycia, srednica, dlugosc, szerokosc);
     private final HorizontalLayout laminatIlosc = new HorizontalLayout(laminat, laminatSztuki);
@@ -139,18 +137,20 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final VerticalLayout pola1 = new VerticalLayout();
     private final VerticalLayout pola2 = new VerticalLayout();
     private final HorizontalLayout strzalki = new HorizontalLayout(sLewo, sPrawo);
+    private final HorizontalLayout buttonBar = new HorizontalLayout(save, cancel, delete);
 
     //private final Grid<HashMap<String, String>> materialyDodane;
     private final Grid materialyDodane;
-    
+
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
+    Binder<MaterialyUzyte> binderMaterialy = new Binder<>(MaterialyUzyte.class);
 
     private WycenaForm.ChangeHandler changeHandler;
 
     @Autowired
     public WycenaForm(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository,
             MaterialyRepository materialyRepository, MaterialyUzyteRepository materialyUzyteRepository) {
-      
+
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
         this.materialyRepository = materialyRepository;
@@ -170,10 +170,10 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         materialyDodane.setColumns("materialy", "iloscMaterialu");
         materialyDodane.setWidth("500px");
         //materialyDodane.getColumnByKey("materialy").setWidth("70px").setFlexGrow(0).setSortProperty("id");
-        
+
         //materialyDodane.setItems(materialyTemp);
         materialyDodane.setVisible(false);
-        
+
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
         System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
@@ -320,7 +320,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         add(materialyDodane);
 
-        add(save, cancel);
+        add(buttonBar);
 
         binderWycena.bind(typPrzekrycia, Wycena::getTypPrzekrycia, Wycena::setTypPrzekrycia);
         binderWycena.forField(dlugosc)
@@ -345,10 +345,12 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
 
-        save.addClickListener(e
-                -> save());
-        cancel.addClickListener(e
-                -> cancel());
+        binderMaterialy.forField(zywicaPole)
+                .bind(MaterialyUzyte::getMaterialy, MaterialyUzyte::setMaterialy);
+
+        save.addClickListener(e -> save());
+        cancel.addClickListener(e -> cancel());
+        delete.addClickListener(e -> delete());
 
         typPrzekrycia.addValueChangeListener(e
                 -> {
@@ -391,14 +393,13 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
             }
         }
         );
-
         //Czy to potrzebne?
         //https://vaadin.com/forum/thread/15385912/15640053
         //binderWycena.bindInstanceFields(this);
     }
 
     void listMaterialy() {
-        if (!materialyDodane.isVisible()){
+        if (!materialyDodane.isVisible()) {
             materialyDodane.setVisible(true);
         }
         materialyDodane.setItems(materialyUzyteRepository.findByWycena(null));
@@ -407,12 +408,14 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     void save() {
         wycenaRepository.save(wycena);
         materialyDodane.select(null);
+        clearFields();
         changeHandler.onChange();
     }
 
     void delete() {
         //       inwestycjeGrid.select(null);
         wycenaRepository.delete(wycena);
+        clearFields();
         changeHandler.onChange();
     }
 
@@ -420,20 +423,43 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.flush();
         materialyDodane.select(null);
+        clearFields();
         //this.materialyTemp.clear();
         changeHandler.onChange();
     }
 
     public interface ChangeHandler {
+
         void onChange();
     }
 
-    public final void editWycena(Wycena w, Inwestycja inwestycja) {
+    public final void clearFields() {
+        zywicaPole.setPlaceholder("");
+        mataPole.setPlaceholder("");
+        zelkotPole.setPlaceholder("");
+        topkotPole.setPlaceholder("");
+        piankaPole.setPlaceholder("");
+        rbhPole.setPlaceholder("");
+        podstawowePole.setPlaceholder("");
+        pomocniczePole.setPlaceholder("");
+        zywicaIlosc.setValue("");
+        mataIlosc.setValue("");
+        zelkotIlosc.setValue("");
+        topkotIlosc.setValue("");
+        piankaIlosc.setValue("");
+        rbhIlosc.setValue("");
+        podstawoweIlosc.setValue("");
+        pomocniczeIlosc.setValue("");
+        materialyDodane.setItems();
+        materialyDodane.setVisible(false);
+    }
+
+    public final void editWycena(Wycena w, Inwestycja i) {
         if (w == null) {
             setVisible(false);
             return;
         }
-        this.inwestycja = inwestycja;
+        inwestycja = i;
         miastoInwestycji.setValue(this.inwestycja.getInwestycjaMiasto());
         nazwaInwestycji.setValue(this.inwestycja.getInwestycjaNazwa());
         miastoInwestycji.setReadOnly(true);
@@ -442,12 +468,13 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         final boolean wycenaIstnieje = w.getId() != null;
         if (wycenaIstnieje) {
             wycena = wycenaRepository.findById(w.getId()).get();
+//            materialyUzyte = (MaterialyUzyte) materialyUzyteRepository.findByWycena(wycena);
             delete.setEnabled(true);
         } else {
             wycena = w;
         }
 
-        binderWycena.setBean(wycena);
+        //binderWycena.setBean(wycena);
         setVisible(true);
     }
 

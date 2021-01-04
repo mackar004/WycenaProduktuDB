@@ -99,12 +99,12 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         });
 
         wyswietlWycene.addClickListener(e -> {
-//            dialogWycena.open();
-//            wyswietlWycene.setEnabled(false);
-            System.out.println(wycenaRepository.findAll());
-            listWyceny();
+            dialogWycena.open();
+            wyswietlWycene.setEnabled(false);
+//            System.out.println(wycenaRepository.findAll());
+//            listWyceny();
         });
-
+        
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
             //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
             if (wycenaGrid.getSelectedItems().isEmpty()) {

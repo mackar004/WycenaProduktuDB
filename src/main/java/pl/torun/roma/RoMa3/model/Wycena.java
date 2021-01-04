@@ -7,6 +7,7 @@ package pl.torun.roma.RoMa3.model;
 
 import java.sql.Time;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -45,8 +46,8 @@ public class Wycena {
 
     private Time dataWyceny;
     private Boolean zaakceptowano;
-
-    @OneToMany(mappedBy = "wycena", fetch = FetchType.LAZY)
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "wycena", fetch = FetchType.LAZY)
     private List<MaterialyUzyte> materialyUzyte;
 
     @ManyToOne

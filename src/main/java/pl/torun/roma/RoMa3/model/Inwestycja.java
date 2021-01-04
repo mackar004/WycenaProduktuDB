@@ -8,6 +8,7 @@ package pl.torun.roma.RoMa3.model;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,8 +34,8 @@ public class Inwestycja {
     private String inwestycjaKod;
     private String inwestycjaNazwa;
     private String inwestycjaOpis;
-
-    @OneToMany(mappedBy = "inwestycja")
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "inwestycja", fetch = FetchType.EAGER)
     private List<Wycena> wycena;
     
     @ManyToOne
