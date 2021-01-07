@@ -29,6 +29,7 @@ import pl.torun.roma.RoMa3.model.Firma;
 import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.repository.FirmaRepository;
 import pl.torun.roma.RoMa3.repository.InwestycjaRepository;
+import pl.torun.roma.RoMa3.repository.WycenaRepository;
 
 /**
  *
@@ -61,14 +62,16 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
     
      HorizontalLayout filterBar = new HorizontalLayout();
 
-    private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository) {
-
+//    private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository, WycenaRepository wycenaRepository) {
+private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository) {
         add(new Button("Powrót", event -> {
+            //setParameter(null,this.inwestycja.getFirma().getId().toString().replace("[", "").replace("]", ""));
             getUI().ifPresent(ui -> ui.navigate("user/firmy"));
         }));
 
         this.firmaRepository = firmaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
+//        this.inwestycjaForm = new InwestycjaForm(inwestycjaRepository, wycenaRepository);
         this.inwestycjaForm = new InwestycjaForm(inwestycjaRepository);
         inwestycjaGrid = new Grid<>(Inwestycja.class);
 
@@ -195,6 +198,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             aktualnaFirma.setVisible(false);
             anulujFirme.setVisible(false);
             filterBar.setVisible(true);
+            getUI().ifPresent(ui -> ui.navigate("main"));
         } else {
             this.firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
             //filtrInwestycja.setValue(this.firma.toString());

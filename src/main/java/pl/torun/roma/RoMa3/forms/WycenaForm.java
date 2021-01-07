@@ -182,8 +182,8 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         zywicaDodaj.addClickListener(e -> {
             if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
-                //this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
-                this.materialyUzyte = new MaterialyUzyte(null, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
+                //this.materialyUzyte = new MaterialyUzyte(null, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
                 materialyUzyteRepository.save(this.materialyUzyte);
                 zywicaPole.clear();
                 zywicaIlosc.clear();
@@ -352,8 +352,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         cancel.addClickListener(e -> cancel());
         delete.addClickListener(e -> delete());
 
-        typPrzekrycia.addValueChangeListener(e
-                -> {
+        typPrzekrycia.addValueChangeListener(e -> {
             if (e.getValue() == null) {
                 dlugosc.setVisible(false);
                 szerokosc.setVisible(false);

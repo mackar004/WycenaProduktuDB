@@ -11,5 +11,10 @@ package pl.torun.roma.RoMa3.model.dane;
  */
 public enum TypPrzekrycia {
     Korytkowo_Zbieżne, Kopuła_samonośna, Korytkowo_proste, Sandwich, Inne;
+    
+    @Override
+    public String toString(){
+        return name();
+    }
 }
 

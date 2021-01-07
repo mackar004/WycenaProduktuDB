@@ -28,6 +28,7 @@ import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.repository.InwestycjaRepository;
 import com.vaadin.flow.data.binder.Binder;
 import pl.torun.roma.RoMa3.model.Firma;
+import pl.torun.roma.RoMa3.repository.WycenaRepository;
 
 /**
  *
@@ -38,6 +39,7 @@ import pl.torun.roma.RoMa3.model.Firma;
 public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
 
     private final InwestycjaRepository inwestycjaRepo;
+//    private final WycenaRepository wycenaRepository;
 
     private Firma firma;
     private Inwestycja inwestycja;
@@ -59,10 +61,13 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
     private InwestycjaForm.ChangeHandler changeHandler;
 
 //    final Grid inwestycjeGrid;
-
     @Autowired
-    public InwestycjaForm(InwestycjaRepository inwestycjaRepo) {
+    public InwestycjaForm(InwestycjaRepository inwestycjaRepo){
+//    public InwestycjaForm(InwestycjaRepository inwestycjaRepo, WycenaRepository wycenaRepository) {
+        
+//        this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepo = inwestycjaRepo;
+
         delete.setEnabled(false);
         nazwaFirmy.setEnabled(false);
 
@@ -70,7 +75,6 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
 //        inwestycjeGrid.setColumns("inwestycjaNazwa", "inwestycjaMiasto");
 //        inwestycjeGrid.getColumnByKey("inwestycjaNazwa").setHeader("Nazwa");
 //        inwestycjeGrid.getColumnByKey("inwestycjaMiasto").setHeader("Miasto");
-
         add(buttonBar, formularz); //, inwestycjeGrid);
 
         binderInwestycja.bindInstanceFields(this);
@@ -99,6 +103,9 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
 
     void delete() {
 //        inwestycjeGrid.select(null);
+//        wycenaRepository.findByInwestycja(inwestycja).forEach(e -> {
+//            wycenaRepository.delete(e);
+//        });
         inwestycjaRepo.delete(inwestycja);
         changeHandler.onChange();
     }

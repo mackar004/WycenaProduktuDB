@@ -61,14 +61,14 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
             MaterialyRepository materialyRepository, MaterialyUzyteRepository materialyUzyteRepository) {
 
         add(new Button("Powrót", event -> {
-            getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje"));
+            getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/" + this.inwestycja.getFirma().getNazwaFirmy().replace("[", "").replace("]", "")));
         }));
 
         this.wycenaRepository = wycenaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
         this.materialyRepository = materialyRepository;
         this.materialyUzyteRepository = materialyUzyteRepository;
-        
+
         this.wycenaForm = new WycenaForm(wycenaRepository, inwestycjaRepository,
                 materialyRepository, materialyUzyteRepository);
         wycenaGrid = new Grid<>(Wycena.class);
@@ -101,10 +101,10 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         wyswietlWycene.addClickListener(e -> {
             dialogWycena.open();
             wyswietlWycene.setEnabled(false);
-//            System.out.println(wycenaRepository.findAll());
+//            materialyUzyteRepository.findAll().forEach(a -> System.out.println(a.getMaterialy().getNazwa()));
 //            listWyceny();
         });
-        
+
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
             //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
             if (wycenaGrid.getSelectedItems().isEmpty()) {
@@ -115,7 +115,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
                 nowaWycena.setEnabled(false);
                 wyswietlWycene.setEnabled(true);
                 this.wycena = (Wycena) e.getValue();
-                //         this.wycenaForm.editWycena((Wycena) e.getValue());
+                this.wycenaForm.editWycena((Wycena) e.getValue(), this.inwestycja);
             }
         });
 
@@ -134,26 +134,17 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
     private void listWyceny() {
         wycenaGrid.setItems(wycenaRepository.findByInwestycja(this.inwestycja));
-//        }
     }
 
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
         if (parameter == null || parameter.isEmpty() || parameter.equals("")) {
             this.inwestycja = null;
-//  Nie działą poniższe przekierowanie gdy nie jest przekazywany żaden parametr
-            //getUI().ifPresent(ui -> ui.navigate("main"));
-            //getUI().get().navigate("main");
-            //        anulujFirme.setEnabled(false);
+//  Nie działa poniższe przekierowanie gdy nie jest przekazywany żaden parametr
+            getUI().ifPresent(ui -> ui.navigate("main"));
         } else {
-            //System.out.println(inwestycjaRepository.findById(Long.parseLong(parameter)).replace("[", "").replace("]", ""));
             this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.parseLong(parameter));
             listWyceny();
-            //this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.valueOf(parameter).longValue());
-//            anulujFirme.setEnabled(true);
-//            aktualnaFirma.setReadOnly(false);
-//            aktualnaFirma.setValue(this.firma.toString());
-//            aktualnaFirma.setReadOnly(true);
         }
     }
 }
