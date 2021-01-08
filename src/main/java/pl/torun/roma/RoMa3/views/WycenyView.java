@@ -61,6 +61,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
             MaterialyRepository materialyRepository, MaterialyUzyteRepository materialyUzyteRepository) {
 
         add(new Button("Powrót", event -> {
+            //Powrót z parametrem dla automatycznego wczytania tej samej firmy
             getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/" + this.inwestycja.getFirma().getNazwaFirmy().replace("[", "").replace("]", "")));
         }));
 
