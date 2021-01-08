@@ -414,6 +414,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         wycena.setInwestycja(null);
         wycenaRepository.save(wycena);
         wycenaRepository.delete(wycena);
+        wycenaRepository.flush();
         //clearFields();
         changeHandler.onChange();
     }

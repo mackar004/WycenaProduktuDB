@@ -107,6 +107,7 @@ public class FirmaForm extends VerticalLayout implements KeyNotifier {
     void delete() {
         //firmaGrid.select(null);
         firmaRepo.delete(firma);
+        firmaRepo.flush();
         changeHandler.onChange();
     }
 
