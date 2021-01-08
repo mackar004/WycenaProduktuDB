@@ -103,6 +103,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
             wyswietlWycene.setEnabled(false);
 //            materialyUzyteRepository.findAll().forEach(a -> System.out.println(a.getMaterialy().getNazwa()));
 //            listWyceny();
+//
         });
 
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
