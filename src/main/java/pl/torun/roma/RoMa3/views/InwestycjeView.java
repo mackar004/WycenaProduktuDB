@@ -21,6 +21,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
+import com.vaadin.ui.components.grid.SingleSelectionModel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.util.StringUtils;
@@ -59,11 +60,11 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
 
     final TextField filtrInwestycja;
     final Dialog dialogInwestycja;
-    
-     HorizontalLayout filterBar = new HorizontalLayout();
+
+    HorizontalLayout filterBar = new HorizontalLayout();
 
 //    private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository, WycenaRepository wycenaRepository) {
-private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository) {
+    private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository) {
         add(new Button("Powrót", event -> {
             //setParameter(null,this.inwestycja.getFirma().getId().toString().replace("[", "").replace("]", ""));
             getUI().ifPresent(ui -> ui.navigate("user/firmy"));
@@ -93,7 +94,7 @@ private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inw
         anulujFirme.setHeight("68px");
         edytuj = new Button("Edytuj");
         wyswietlWyceny = new Button("WYCENY");
-        
+
         nowaInwestycja.setEnabled(false);
         edytuj.setEnabled(false);
         wyswietlWyceny.setEnabled(false);
@@ -152,7 +153,9 @@ private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inw
                 edytuj.setEnabled(true);
                 wyswietlWyceny.setEnabled(true);
                 this.inwestycja = (Inwestycja) e.getValue();
-                this.firma = (Firma) firmaRepository.findByNazwaFirmy(this.inwestycja.getFirma().getNazwaFirmy());
+                if (this.inwestycja.getFirma() != null) {
+                    this.firma = (Firma) firmaRepository.findByNazwaFirmy(this.inwestycja.getFirma().getNazwaFirmy());
+                }
                 this.inwestycjaForm.editInwestycja(this.inwestycja, this.firma);
             }
         });

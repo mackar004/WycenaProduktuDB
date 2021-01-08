@@ -77,9 +77,9 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
 //        inwestycjeGrid.getColumnByKey("inwestycjaMiasto").setHeader("Miasto");
         add(buttonBar, formularz); //, inwestycjeGrid);
 
-        binderInwestycja.bindInstanceFields(this);
-        //binderInwestycja.bind(inwestycjaNazwa, Inwestycja::getInwestycjaNazwa, Inwestycja::setInwestycjaNazwa);
-        //binderInwestycja.bind(inwestycjaMiasto, Inwestycja::getInwestycjaMiasto, Inwestycja::setInwestycjaMiasto);
+        //binderInwestycja.bindInstanceFields(this);
+        binderInwestycja.bind(inwestycjaNazwa, Inwestycja::getInwestycjaNazwa, Inwestycja::setInwestycjaNazwa);
+        binderInwestycja.bind(inwestycjaMiasto, Inwestycja::getInwestycjaMiasto, Inwestycja::setInwestycjaMiasto);
         //binderInwestycja.bind(nazwaFirmy, Inwestycja::getFirma, Inwestycja::setFirma);
 
         setSpacing(false);
@@ -102,12 +102,20 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
     }
 
     void delete() {
-//        inwestycjeGrid.select(null);
-//        wycenaRepository.findByInwestycja(inwestycja).forEach(e -> {
-//            wycenaRepository.delete(e);
-//        });
+        inwestycja.setFirma(null);
+        inwestycjaRepo.save(inwestycja);
         inwestycjaRepo.delete(inwestycja);
+        inwestycjaRepo.flush();
         changeHandler.onChange();
+        /*
+                wycenaRepository.save(wycena);
+        wycena.setInwestycja(null);
+        wycenaRepository.delete(wycena);
+        System.out.println(wycena.getInwestycja());
+        System.out.println(wycenaRepository.findAll());
+        //clearFields();
+        changeHandler.onChange();
+        */
     }
 
     void cancel() {
@@ -126,7 +134,8 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
             return;
         }
         this.firma = firma;
-        nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
+        //if (firma != null) nazwaFirmy.setValue(this.firma.toString().replace("[", "").replace("]", ""));
+        if (firma != null) nazwaFirmy.setValue(this.firma.getNazwaFirmy());
         final boolean inwestycjaIstnieje = i.getInwestycja_id() != null;
         if (inwestycjaIstnieje) {
             inwestycja = inwestycjaRepo.findById(i.getInwestycja_id()).get();

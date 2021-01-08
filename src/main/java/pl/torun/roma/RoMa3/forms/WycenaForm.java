@@ -175,11 +175,10 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         materialyDodane.setVisible(false);
 
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
-        System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
-        materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
-        materialyUzyteRepository.flush();
-        System.out.println("findById(null) POST " + materialyUzyteRepository.findByWycena(null));
-
+//        System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
+//        materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
+//        materialyUzyteRepository.flush();
+//        System.out.println("findById(null) POST " + materialyUzyteRepository.findByWycena(null));
         zywicaDodaj.addClickListener(e -> {
             if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
@@ -412,9 +411,10 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     }
 
     void delete() {
-        //       inwestycjeGrid.select(null);
+        wycena.setInwestycja(null);
+        wycenaRepository.save(wycena);
         wycenaRepository.delete(wycena);
-        clearFields();
+        //clearFields();
         changeHandler.onChange();
     }
 
@@ -423,7 +423,6 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         materialyUzyteRepository.flush();
         materialyDodane.select(null);
         clearFields();
-        //this.materialyTemp.clear();
         changeHandler.onChange();
     }
 
@@ -459,8 +458,15 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
             return;
         }
         inwestycja = i;
-        miastoInwestycji.setValue(this.inwestycja.getInwestycjaMiasto());
-        nazwaInwestycji.setValue(this.inwestycja.getInwestycjaNazwa());
+        
+        /*
+        IF tymczasowy, na potrzeby kasowania wycen bez firmy!
+        Wnętrze ifa zostaje, warunek (L 468 + 471)do wykasowania
+        */
+        if (inwestycja != null) {
+            miastoInwestycji.setValue(this.inwestycja.getInwestycjaMiasto());
+            nazwaInwestycji.setValue(this.inwestycja.getInwestycjaNazwa());
+        }
         miastoInwestycji.setReadOnly(true);
         nazwaInwestycji.setReadOnly(true);
 
@@ -477,6 +483,24 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         setVisible(true);
     }
 
+    /*
+    //
+    //  Tutaj dodać kasowanie materiałów użytych do wyceny
+    //
+            materialyDodane.asSingleSelect().addValueChangeListener(e -> {
+            //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
+            if (materialyDodane.getSelectedItems().isEmpty()) {
+                nowaWycena.setEnabled(true);
+                wyswietlWycene.setEnabled(false);
+                this.wycena = null;
+            } else {
+                nowaWycena.setEnabled(false);
+                wyswietlWycene.setEnabled(true);
+                this.wycena = (Wycena) e.getValue();
+                this.wycenaForm.editWycena((Wycena) e.getValue(), this.inwestycja);
+            }
+        });
+     */
     public void setChangeHandler(ChangeHandler h) {
         changeHandler = h;
     }
