@@ -473,7 +473,7 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
             wycena = w;
         }
 
-        //binderWycena.setBean(wycena);
+        binderWycena.setBean(wycena);
         setVisible(true);
     }
 
