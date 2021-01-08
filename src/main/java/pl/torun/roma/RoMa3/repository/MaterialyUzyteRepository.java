@@ -16,4 +16,6 @@ import pl.torun.roma.RoMa3.model.Wycena;
  */
 public interface MaterialyUzyteRepository extends JpaRepository<MaterialyUzyte, Long>{
     List<MaterialyUzyte> findByWycena(Wycena wycena);
+    List<MaterialyUzyte> findByWycenaAndIsNew(Wycena wycena, Boolean isNew);
+    List<MaterialyUzyte> findByWycenaOrWycena(Wycena wycena, Wycena wycena2);
 }

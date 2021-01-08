@@ -35,6 +35,8 @@ public class MaterialyUzyte {
     private Materialy materialy;
 
     private Double iloscMaterialu;
+    
+    private Boolean isNew;
 
     private MaterialyUzyte() {
 
@@ -44,11 +46,24 @@ public class MaterialyUzyte {
         this.materialy = materialy;
         this.iloscMaterialu = iloscMaterialu;
     }
+    
+    public MaterialyUzyte(Materialy materialy, Double iloscMaterialu, Boolean isNew) {
+        this.materialy = materialy;
+        this.iloscMaterialu = iloscMaterialu;
+        this.isNew = isNew;
+    }
 
     public MaterialyUzyte(Wycena wycena, Materialy materialy, Double iloscMaterialu) {
         this.wycena = wycena;
         this.materialy = materialy;
         this.iloscMaterialu = iloscMaterialu;
+    }
+    
+    public MaterialyUzyte(Wycena wycena, Materialy materialy, Double iloscMaterialu, Boolean isNew) {
+        this.wycena = wycena;
+        this.materialy = materialy;
+        this.iloscMaterialu = iloscMaterialu;
+        this.isNew = isNew;
     }
 
     public Long getId() {
@@ -81,6 +96,14 @@ public class MaterialyUzyte {
 
     public void setIloscMaterialu(Double iloscMaterialu) {
         this.iloscMaterialu = iloscMaterialu;
+    }
+
+    public Boolean getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(Boolean isNew) {
+        this.isNew = isNew;
     }
 
 }

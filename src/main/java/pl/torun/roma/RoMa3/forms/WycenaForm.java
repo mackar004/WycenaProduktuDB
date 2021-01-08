@@ -5,6 +5,7 @@
  */
 package pl.torun.roma.RoMa3.forms;
 
+import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -16,6 +17,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -42,7 +44,7 @@ import pl.torun.roma.RoMa3.repository.WycenaRepository;
  */
 @SpringComponent
 @UIScope
-public class WycenaForm extends VerticalLayout implements KeyNotifier {
+public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     private final WycenaRepository wycenaRepository;
     private final InwestycjaRepository inwestycjaRepository;
@@ -168,20 +170,26 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         //this.materialyTemp = new ArrayList<>();
         materialyDodane = new Grid<>(MaterialyUzyte.class);
         materialyDodane.setColumns("materialy", "iloscMaterialu");
+//        materialyDodane.addColumn(new NativeButtonRenderer<>("Usuń", w -> {
+//            ListDataProvider<MaterialyUzyte> dataProvider = (ListDataProvider<MaterialyUzyte>) materialyDodane.getDataProvider();
+//            dataProvider.getItems().remove((MaterialyUzyte) w);
+//            dataProvider.refreshAll();
+//        }));
         materialyDodane.setWidth("500px");
         //materialyDodane.getColumnByKey("materialy").setWidth("70px").setFlexGrow(0).setSortProperty("id");
 
         //materialyDodane.setItems(materialyTemp);
-        materialyDodane.setVisible(false);
+        materialyDodane.setVisible(true);
+        //materialyDodane.setVisible(!this.materialyUzyteRepository.findByWycena(wycena).isEmpty());
 
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
-//        System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
-//        materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
-//        materialyUzyteRepository.flush();
-//        System.out.println("findById(null) POST " + materialyUzyteRepository.findByWycena(null));
+        System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
+        materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
+        materialyUzyteRepository.flush();
+        System.out.println("findById(null) POST " + materialyUzyteRepository.findByWycena(null));
         zywicaDodaj.addClickListener(e -> {
             if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()), true);
                 //this.materialyUzyte = new MaterialyUzyte(null, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
                 materialyUzyteRepository.save(this.materialyUzyte);
                 zywicaPole.clear();
@@ -394,16 +402,22 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
         //Czy to potrzebne?
         //https://vaadin.com/forum/thread/15385912/15640053
         //binderWycena.bindInstanceFields(this);
+        listMaterialy();
     }
 
-    void listMaterialy() {
-        if (!materialyDodane.isVisible()) {
+    public final void listMaterialy() {
+        //if (!materialyDodane.isVisible()) {
             materialyDodane.setVisible(true);
-        }
-        materialyDodane.setItems(materialyUzyteRepository.findByWycena(null));
+        //}
+        materialyDodane.setItems(materialyUzyteRepository.findByWycenaOrWycena(null, this.wycena));
     }
 
     void save() {
+        materialyUzyteRepository.findByWycenaAndIsNew(null, true).forEach(e -> {
+            e.setIsNew(false);
+            e.setWycena(this.wycena);
+            materialyUzyteRepository.save(e);
+        });
         wycenaRepository.save(wycena);
         materialyDodane.select(null);
         clearFields();
@@ -420,7 +434,8 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     }
 
     void cancel() {
-        materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
+        materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycenaAndIsNew(null, true));
+        //materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.flush();
         materialyDodane.select(null);
         clearFields();
@@ -459,11 +474,11 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
             return;
         }
         inwestycja = i;
-        
+
         /*
         IF tymczasowy, na potrzeby kasowania wycen bez firmy!
         Wnętrze ifa zostaje, warunek (L 468 + 471)do wykasowania
-        */
+         */
         if (inwestycja != null) {
             miastoInwestycji.setValue(this.inwestycja.getInwestycjaMiasto());
             nazwaInwestycji.setValue(this.inwestycja.getInwestycjaNazwa());
@@ -487,6 +502,10 @@ public class WycenaForm extends VerticalLayout implements KeyNotifier {
     /*
     //
     //  Tutaj dodać kasowanie materiałów użytych do wyceny
+    //
+    // grid.addColumn(new NativeButtonRenderer<>("Remove item", clickedItem -> {
+          // remove the item
+        }));
     //
             materialyDodane.asSingleSelect().addValueChangeListener(e -> {
             //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków

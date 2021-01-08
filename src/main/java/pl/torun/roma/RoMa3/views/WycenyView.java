@@ -62,7 +62,13 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
         add(new Button("Powrót", event -> {
             //Powrót z parametrem dla automatycznego wczytania tej samej firmy
-            getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/" + this.inwestycja.getFirma().getNazwaFirmy().replace("[", "").replace("]", "")));
+            if (this.inwestycja.getFirma() == null) {
+                System.out.println("firma " + this.inwestycja.getFirma());
+                getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/"));
+            } else {
+                getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/" + this.inwestycja.getFirma().getNazwaFirmy().replace("[", "").replace("]", "")));
+
+            }
         }));
 
         this.wycenaRepository = wycenaRepository;
@@ -101,6 +107,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
 
         wyswietlWycene.addClickListener(e -> {
             dialogWycena.open();
+            wycenaForm.listMaterialy();
             wyswietlWycene.setEnabled(false);
 //            materialyUzyteRepository.findAll().forEach(a -> System.out.println(a.getMaterialy().getNazwa()));
 //            listWyceny();
