@@ -87,6 +87,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final TextField marza = new TextField("Marża");
     private final TextField cenaKoncowa = new TextField("Cena końcowa");
 
+    private final Button dodajMaterialy = new Button("Dodaj materiały");
     private final Button sLewo = new Button(VaadinIcon.CHEVRON_CIRCLE_LEFT.create());
     private final Button sPrawo = new Button(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create());
 
@@ -144,6 +145,8 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     //private final Grid<HashMap<String, String>> materialyDodane;
     private final Grid materialyDodane;
 
+    Boolean nowaWycLoc;
+
     Binder<Wycena> binderWycena = new Binder<>(Wycena.class);
     Binder<MaterialyUzyte> binderMaterialy = new Binder<>(MaterialyUzyte.class);
 
@@ -179,22 +182,30 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         //materialyDodane.getColumnByKey("materialy").setWidth("70px").setFlexGrow(0).setSortProperty("id");
 
         //materialyDodane.setItems(materialyTemp);
-        materialyDodane.setVisible(true);
+        //materialyDodane.setVisible(true);
         //materialyDodane.setVisible(!this.materialyUzyteRepository.findByWycena(wycena).isEmpty());
-
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
         System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.flush();
         System.out.println("findById(null) POST " + materialyUzyteRepository.findByWycena(null));
+
+        dodajMaterialy.addClickListener(e -> {
+            strzalki.setVisible(true);
+            pola1.setVisible(true);
+            pola2.setVisible(false);
+            dodajMaterialy.setVisible(false);
+            wycenaRepository.save(wycena);
+            System.out.println("Zapisano wycenę " + wycena.getId());
+        });
+
         zywicaDodaj.addClickListener(e -> {
             if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()), true);
-                //this.materialyUzyte = new MaterialyUzyte(null, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue()));
                 materialyUzyteRepository.save(this.materialyUzyte);
                 zywicaPole.clear();
-                zywicaIlosc.clear();
                 zywicaPole.setPlaceholder("Dodano!");
+                zywicaIlosc.clear();
                 listMaterialy();
             } else {
                 zywicaPole.setPlaceholder("Wybierz");
@@ -203,6 +214,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         mataDodaj.addClickListener(e -> {
             if ((mataPole.getValue() != null) || (mataIlosc.getValue() != null)) {
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue()), true);
                 mataPole.clear();
                 mataPole.setPlaceholder("Dodano!");
                 mataIlosc.clear();
@@ -214,6 +226,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         zelkotDodaj.addClickListener(e -> {
             if ((zelkotPole.getValue() != null) || (zelkotIlosc.getValue() != null)) {
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zelkotPole.getValue().toString()), Double.parseDouble(zelkotIlosc.getValue()), true);
                 zelkotPole.clear();
                 zelkotPole.setPlaceholder("Dodano!");
                 zelkotIlosc.clear();
@@ -225,6 +238,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         topkotDodaj.addClickListener(e -> {
             if ((topkotPole.getValue() != null) || (topkotIlosc.getValue() != null)) {
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(topkotPole.getValue().toString()), Double.parseDouble(topkotIlosc.getValue()), true);
                 topkotPole.clear();
                 topkotPole.setPlaceholder("Dodano!");
                 topkotIlosc.clear();
@@ -236,6 +250,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         piankaDodaj.addClickListener(e -> {
             if ((piankaPole.getValue() != null) || (piankaIlosc.getValue() != null)) {
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(piankaPole.getValue().toString()), Double.parseDouble(piankaIlosc.getValue()), true);
                 piankaPole.clear();
                 piankaPole.setPlaceholder("Dodano!");
                 piankaIlosc.clear();
@@ -247,6 +262,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         rbhDodaj.addClickListener(e -> {
             if ((rbhPole.getValue() != null) || (rbhIlosc.getValue() != null)) {
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(rbhPole.getValue().toString()), Double.parseDouble(rbhIlosc.getValue()), true);
                 rbhPole.clear();
                 rbhPole.setPlaceholder("Dodano!");
                 rbhIlosc.clear();
@@ -258,6 +274,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         podstawoweDodaj.addClickListener(e -> {
             if ((podstawowePole.getValue() != null) || (podstawoweIlosc.getValue() != null)) {
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(podstawowePole.getValue().toString()), Double.parseDouble(podstawoweIlosc.getValue()), true);
                 podstawowePole.clear();
                 podstawowePole.setPlaceholder("Dodano!");
                 podstawoweIlosc.clear();
@@ -269,6 +286,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         pomocniczeDodaj.addClickListener(e -> {
             if ((pomocniczePole.getValue() != null) || (pomocniczeIlosc.getValue() != null)) {
+                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(pomocniczePole.getValue().toString()), Double.parseDouble(pomocniczeIlosc.getValue()), true);
                 pomocniczePole.clear();
                 pomocniczePole.setPlaceholder("Dodano!");
                 pomocniczeIlosc.clear();
@@ -304,9 +322,8 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         pola1.add(zywica, mata, zelkot, topkot);
         pola2.add(pianka, rbh, podstawowe, pomocnicze);
 
-        pola1.setVisible(true);
-        pola2.setVisible(false);
-
+//        pola1.setVisible(true);
+//        pola2.setVisible(false);
         sLewo.addClickListener(e -> {
             pola1.setVisible(!pola1.isVisible());
             pola2.setVisible(!pola2.isVisible());
@@ -321,7 +338,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         add(daneInwestycji, typWymiary, laminatSztuki, sandwichSztuki);
 
-        add(strzalki, pola1, pola2);
+        add(dodajMaterialy, strzalki, pola1, pola2);
 
         add(marzaCena);
 
@@ -407,7 +424,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     public final void listMaterialy() {
         //if (!materialyDodane.isVisible()) {
-            materialyDodane.setVisible(true);
+        materialyDodane.setVisible(true);
         //}
         materialyDodane.setItems(materialyUzyteRepository.findByWycenaOrWycena(null, this.wycena));
     }
@@ -434,12 +451,25 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     }
 
     void cancel() {
+        System.out.println(wycenaRepository.findAll());
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycenaAndIsNew(null, true));
         //materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.flush();
         materialyDodane.select(null);
         clearFields();
-        changeHandler.onChange();
+        if (nowaWycLoc) {
+            System.out.println("Cancel nowaWyc:" + nowaWycLoc);
+            delete();
+//            System.out.println("Kasowanie nowej wyceny (id: " + wycena.getId() + ") przez Anulowanie ");
+//            wycena.setInwestycja(null);
+//            wycenaRepository.save(wycena);
+//            wycenaRepository.delete(wycena);
+//            wycenaRepository.flush();
+        } else {
+            System.out.println("Cancel nowaWyc:" + nowaWycLoc);
+            System.out.println(wycenaRepository.findAll());
+            changeHandler.onChange();
+        }
     }
 
     public interface ChangeHandler {
@@ -466,15 +496,17 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         pomocniczeIlosc.setValue("");
         materialyDodane.setItems();
         materialyDodane.setVisible(false);
+
     }
 
-    public final void editWycena(Wycena w, Inwestycja i) {
+    public final void editWycena(Wycena w, Inwestycja i, Boolean nowaWyc) {
         if (w == null) {
             setVisible(false);
             return;
         }
-        inwestycja = i;
-
+        this.inwestycja = i;
+        //this.nowaWyc = nowaWyc;
+        System.out.println("editWycena. Nowa wycena: " + nowaWyc);
         /*
         IF tymczasowy, na potrzeby kasowania wycen bez firmy!
         Wnętrze ifa zostaje, warunek (L 468 + 471)do wykasowania
@@ -493,6 +525,22 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             delete.setEnabled(true);
         } else {
             wycena = w;
+        }
+
+        if (nowaWyc) {
+            dodajMaterialy.setVisible(true);
+            strzalki.setVisible(false);
+            pola1.setVisible(false);
+            pola2.setVisible(false);
+            materialyDodane.setVisible(false);
+            nowaWycLoc = true;
+        } else {
+            dodajMaterialy.setVisible(false);
+            strzalki.setVisible(true);
+            pola1.setVisible(true);
+            pola2.setVisible(false);
+            materialyDodane.setVisible(true);
+            nowaWycLoc = false;
         }
 
         binderWycena.setBean(wycena);
@@ -525,3 +573,9 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         changeHandler = h;
     }
 }
+
+
+/*
+Zamykanie dialog'a
+https://vaadin.com/forum/thread/17054450/best-way-to-close-custom-dialog
+ */

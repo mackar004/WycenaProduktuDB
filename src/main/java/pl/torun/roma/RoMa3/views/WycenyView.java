@@ -102,7 +102,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         // Stworzenie i edytowanie nowej wyceny po kliknięciu przycisku Nowa
         nowaWycena.addClickListener(e -> {
             dialogWycena.open();
-            this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0, this.inwestycja), this.inwestycja);
+            this.wycenaForm.editWycena(new Wycena(0, 0, 0, 0, 0, 0.0, 0.0, this.inwestycja), this.inwestycja, true);
         });
 
         wyswietlWycene.addClickListener(e -> {
@@ -124,7 +124,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
                 nowaWycena.setEnabled(false);
                 wyswietlWycene.setEnabled(true);
                 this.wycena = (Wycena) e.getValue();
-                this.wycenaForm.editWycena((Wycena) e.getValue(), this.inwestycja);
+                this.wycenaForm.editWycena((Wycena) e.getValue(), this.inwestycja, false);
             }
         });
 
