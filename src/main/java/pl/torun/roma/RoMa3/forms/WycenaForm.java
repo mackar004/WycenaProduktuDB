@@ -18,9 +18,12 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.data.renderer.NativeButtonRenderer;
+import com.vaadin.flow.data.renderer.NumberRenderer;
+import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,11 +57,15 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private Inwestycja inwestycja;
     private Wycena wycena;
     private MaterialyUzyte materialyUzyte;
+    private MaterialyUzyte mU;
 
     private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
     private final Button cancel = new Button("Anuluj");
     private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
-//    private final Button edit = new Button("Edytuj");
+    private final Button wylicz = new Button("Oblicz cenę");
+    private final Button edit = new Button("Edytuj");
+    private final Button kasuj = new Button("Usuń pozycję");
+    private final Button zapisz = new Button("Zapisz zmiany");
 
     private final Button zywicaDodaj = new Button("Dodaj");
     private final Button mataDodaj = new Button("Dodaj");
@@ -112,6 +119,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     ComboBox<Materialy> rbhPole;
     ComboBox<Materialy> podstawowePole;
     ComboBox<Materialy> pomocniczePole;
+    ComboBox<Materialy> edytujMaterial;
 
     private final TextField zywicaIlosc = new TextField("Ilość");
     private final TextField mataIlosc = new TextField("Ilość");
@@ -121,6 +129,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final TextField rbhIlosc = new TextField("Ilość");
     private final TextField podstawoweIlosc = new TextField("Ilość");
     private final TextField pomocniczeIlosc = new TextField("Ilość");
+    private final TextField edytujIlosc = new TextField("Ilość");
 
     private final HorizontalLayout daneInwestycji = new HorizontalLayout(miastoInwestycji, nazwaInwestycji);
     private final HorizontalLayout typWymiary = new HorizontalLayout(typPrzekrycia, srednica, dlugosc, szerokosc);
@@ -140,6 +149,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final VerticalLayout pola1 = new VerticalLayout();
     private final VerticalLayout pola2 = new VerticalLayout();
     private final HorizontalLayout strzalki = new HorizontalLayout(sLewo, sPrawo);
+    private final HorizontalLayout editBar = new HorizontalLayout();
     private final HorizontalLayout buttonBar = new HorizontalLayout(save, cancel, delete);
 
     //private final Grid<HashMap<String, String>> materialyDodane;
@@ -173,23 +183,27 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         //this.materialyTemp = new ArrayList<>();
         materialyDodane = new Grid<>(MaterialyUzyte.class);
         materialyDodane.setColumns("materialy", "iloscMaterialu");
-//        materialyDodane.addColumn(new NativeButtonRenderer<>("Usuń", w -> {
-//            ListDataProvider<MaterialyUzyte> dataProvider = (ListDataProvider<MaterialyUzyte>) materialyDodane.getDataProvider();
-//            dataProvider.getItems().remove((MaterialyUzyte) w);
-//            dataProvider.refreshAll();
-//        }));
-        materialyDodane.setWidth("500px");
-        //materialyDodane.getColumnByKey("materialy").setWidth("70px").setFlexGrow(0).setSortProperty("id");
+        materialyDodane.addColumn("materialy.cena");
 
-        //materialyDodane.setItems(materialyTemp);
-        //materialyDodane.setVisible(true);
-        //materialyDodane.setVisible(!this.materialyUzyteRepository.findByWycena(wycena).isEmpty());
+        materialyDodane.setWidth("500px");
+        //materialyDodane.getColumnByKey("materialy").setWidth("70px").setFlexGrow(0);
+
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
         System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.flush();
         System.out.println("findById(null) POST " + materialyUzyteRepository.findByWycena(null));
 
+        materialyDodane.asSingleSelect().addValueChangeListener(e -> {
+            if (materialyDodane.getSelectedItems().isEmpty()) {
+                kasuj.setEnabled(false);
+                this.mU = null;
+            } else {
+                kasuj.setEnabled(true);
+                this.mU = (MaterialyUzyte) e.getValue();
+            }
+        });
+        
         dodajMaterialy.addClickListener(e -> {
             strzalki.setVisible(true);
             pola1.setVisible(true);
@@ -296,6 +310,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
                 pomocniczeIlosc.setPlaceholder("Podaj ilość");
             }
         });
+        wylicz.addClickListener(e -> {
+            //wyliczanie ceny końcowej
+            cenaKoncowa.setReadOnly(false);
+            //ustawienie wartości pola
+            cenaKoncowa.setReadOnly(true);
+        });
 
         zywicaPole = new ComboBox<>("Żywica", listaZywic);
         mataPole = new ComboBox<>("Mata", listaMat);
@@ -305,6 +325,11 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         rbhPole = new ComboBox<>("RBH", listaRBH);
         podstawowePole = new ComboBox<>("Podstawowe", listaPodstawowych);
         pomocniczePole = new ComboBox<>("Pomocnicze", listaPomocniczych);
+
+        edytujMaterial = new ComboBox<>("Materiał", this.materialyRepository.findAll());
+
+        kasuj.setEnabled(false);
+        kasuj.setVisible(false);
 
         zywica.add(zywicaPole, zywicaIlosc, zywicaDodaj);
         mata.add(mataPole, mataIlosc, mataDodaj);
@@ -322,8 +347,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         pola1.add(zywica, mata, zelkot, topkot);
         pola2.add(pianka, rbh, podstawowe, pomocnicze);
 
-//        pola1.setVisible(true);
-//        pola2.setVisible(false);
         sLewo.addClickListener(e -> {
             pola1.setVisible(!pola1.isVisible());
             pola2.setVisible(!pola2.isVisible());
@@ -342,7 +365,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         add(marzaCena);
 
-        add(materialyDodane);
+        add(materialyDodane, kasuj);
 
         add(buttonBar);
 
@@ -375,6 +398,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         save.addClickListener(e -> save());
         cancel.addClickListener(e -> cancel());
         delete.addClickListener(e -> delete());
+        kasuj.addClickListener(e -> kasuj());
 
         typPrzekrycia.addValueChangeListener(e -> {
             if (e.getValue() == null) {
@@ -425,8 +449,16 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     public final void listMaterialy() {
         //if (!materialyDodane.isVisible()) {
         materialyDodane.setVisible(true);
+        kasuj.setVisible(true);
         //}
         materialyDodane.setItems(materialyUzyteRepository.findByWycenaOrWycena(null, this.wycena));
+    }
+    
+    void kasuj() {
+        materialyUzyteRepository.delete(this.mU);
+        materialyUzyteRepository.flush();
+        kasuj.setEnabled(false);
+        listMaterialy();
     }
 
     void save() {
@@ -496,7 +528,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         pomocniczeIlosc.setValue("");
         materialyDodane.setItems();
         materialyDodane.setVisible(false);
-
+        kasuj.setVisible(false);
     }
 
     public final void editWycena(Wycena w, Inwestycja i, Boolean nowaWyc) {
@@ -533,6 +565,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             pola1.setVisible(false);
             pola2.setVisible(false);
             materialyDodane.setVisible(false);
+            kasuj.setVisible(false);
             nowaWycLoc = true;
         } else {
             dodajMaterialy.setVisible(false);
@@ -540,6 +573,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             pola1.setVisible(true);
             pola2.setVisible(false);
             materialyDodane.setVisible(true);
+            kasuj.setVisible(true);
             nowaWycLoc = false;
         }
 
