@@ -229,6 +229,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         mataDodaj.addClickListener(e -> {
             if ((mataPole.getValue() != null) || (mataIlosc.getValue() != null)) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue()), true);
+                materialyUzyteRepository.save(this.materialyUzyte);
                 mataPole.clear();
                 mataPole.setPlaceholder("Dodano!");
                 mataIlosc.clear();
@@ -241,6 +242,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         zelkotDodaj.addClickListener(e -> {
             if ((zelkotPole.getValue() != null) || (zelkotIlosc.getValue() != null)) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zelkotPole.getValue().toString()), Double.parseDouble(zelkotIlosc.getValue()), true);
+                materialyUzyteRepository.save(this.materialyUzyte);
                 zelkotPole.clear();
                 zelkotPole.setPlaceholder("Dodano!");
                 zelkotIlosc.clear();
@@ -253,6 +255,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         topkotDodaj.addClickListener(e -> {
             if ((topkotPole.getValue() != null) || (topkotIlosc.getValue() != null)) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(topkotPole.getValue().toString()), Double.parseDouble(topkotIlosc.getValue()), true);
+                materialyUzyteRepository.save(this.materialyUzyte);
                 topkotPole.clear();
                 topkotPole.setPlaceholder("Dodano!");
                 topkotIlosc.clear();
@@ -265,6 +268,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         piankaDodaj.addClickListener(e -> {
             if ((piankaPole.getValue() != null) || (piankaIlosc.getValue() != null)) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(piankaPole.getValue().toString()), Double.parseDouble(piankaIlosc.getValue()), true);
+                materialyUzyteRepository.save(this.materialyUzyte);
                 piankaPole.clear();
                 piankaPole.setPlaceholder("Dodano!");
                 piankaIlosc.clear();
@@ -277,6 +281,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         rbhDodaj.addClickListener(e -> {
             if ((rbhPole.getValue() != null) || (rbhIlosc.getValue() != null)) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(rbhPole.getValue().toString()), Double.parseDouble(rbhIlosc.getValue()), true);
+                materialyUzyteRepository.save(this.materialyUzyte);
                 rbhPole.clear();
                 rbhPole.setPlaceholder("Dodano!");
                 rbhIlosc.clear();
@@ -289,6 +294,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         podstawoweDodaj.addClickListener(e -> {
             if ((podstawowePole.getValue() != null) || (podstawoweIlosc.getValue() != null)) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(podstawowePole.getValue().toString()), Double.parseDouble(podstawoweIlosc.getValue()), true);
+                materialyUzyteRepository.save(this.materialyUzyte);
                 podstawowePole.clear();
                 podstawowePole.setPlaceholder("Dodano!");
                 podstawoweIlosc.clear();
@@ -301,6 +307,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         pomocniczeDodaj.addClickListener(e -> {
             if ((pomocniczePole.getValue() != null) || (pomocniczeIlosc.getValue() != null)) {
                 this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(pomocniczePole.getValue().toString()), Double.parseDouble(pomocniczeIlosc.getValue()), true);
+                materialyUzyteRepository.save(this.materialyUzyte);
                 pomocniczePole.clear();
                 pomocniczePole.setPlaceholder("Dodano!");
                 pomocniczeIlosc.clear();
