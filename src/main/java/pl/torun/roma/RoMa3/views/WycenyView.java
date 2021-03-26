@@ -86,7 +86,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         //TYMCZASOWA FUNKCJA - Wyświetlanie zapisanych wycen testowych
         wyswietlWycene = new Button("Wyświetl");
 
-        wyswietlWycene.setEnabled(true);
+        wyswietlWycene.setEnabled(false);
 
         dialogWycena.add(this.wycenaForm);
         dialogWycena.setWidth("600px");
@@ -132,7 +132,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         this.wycenaForm.setChangeHandler(() -> {
             this.wycenaForm.setVisible(false);
             listWyceny();
-            wyswietlWycene.setEnabled(true);
+            wyswietlWycene.setEnabled(false);
             dialogWycena.close();
         });
 
