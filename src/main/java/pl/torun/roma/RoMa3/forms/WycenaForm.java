@@ -324,21 +324,16 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         wylicz.addClickListener((ClickEvent<Button> e) -> {
             double sumaTabela = 0;
             double suma;
-            //wyliczanie ceny końcowej
             cenaKoncowa.setReadOnly(false);
-            //ustawienie wartości pola
-
+            
+            //sumowanie tabeli
             List<MaterialyUzyte> materialyDoWyliczenia = materialyUzyteRepository.findByWycena(this.wycena);
             for (int i = 0; i < materialyDoWyliczenia.size(); i++) {
                 sumaTabela += materialyDoWyliczenia.get(i).getIloscMaterialu()
                         * Double.parseDouble(materialyRepository.findByNazwa(materialyDoWyliczenia.get(i).getMaterialy().getNazwa()).getCena());
             }
 
-            //sumaTabela += sumaTabela * (Double.parseDouble("0"+marza.getValue().replace(",", "").replace(".","")));
-            //System.out.println(Double.parseDouble((marza.getValue())));
-//            sumaTabela *= 100;
-//            sumaTabela = Math.round(sumaTabela);
-//            sumaTabela /= 100;
+            //wyliczanie kwoty z uwzględnieniem marży
             suma = sumaTabela * (100+Double.parseDouble(marza.getValue().replace(",", "."))) / 100;
             cenaKoncowa.setValue(String.valueOf(suma).replace(".", ","));
             cenaKoncowa.setReadOnly(true);
