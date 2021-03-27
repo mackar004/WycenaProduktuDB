@@ -323,6 +323,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         wylicz.addClickListener((ClickEvent<Button> e) -> {
             double sumaTabela = 0;
+            double suma;
             //wyliczanie ceny końcowej
             cenaKoncowa.setReadOnly(false);
             //ustawienie wartości pola
@@ -338,7 +339,8 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 //            sumaTabela *= 100;
 //            sumaTabela = Math.round(sumaTabela);
 //            sumaTabela /= 100;
-            cenaKoncowa.setValue(String.valueOf(sumaTabela).replace(".", ","));
+            suma = sumaTabela * (100+Double.parseDouble(marza.getValue().replace(",", "."))) / 100;
+            cenaKoncowa.setValue(String.valueOf(suma).replace(".", ","));
             cenaKoncowa.setReadOnly(true);
         });
 
