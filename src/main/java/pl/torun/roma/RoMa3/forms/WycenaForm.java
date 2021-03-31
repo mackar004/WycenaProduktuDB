@@ -5,7 +5,6 @@
  */
 package pl.torun.roma.RoMa3.forms;
 
-import com.vaadin.data.provider.ListDataProvider;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
@@ -18,19 +17,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.converter.StringToDoubleConverter;
 import com.vaadin.flow.data.converter.StringToIntegerConverter;
-import com.vaadin.flow.data.renderer.NativeButtonRenderer;
-import com.vaadin.flow.data.renderer.NumberRenderer;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
-import com.vaadin.flow.function.ValueProvider;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import com.vaadin.ui.components.grid.MultiSelectionModel;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.torun.roma.RoMa3.model.Inwestycja;
 import pl.torun.roma.RoMa3.model.Materialy;
@@ -414,8 +403,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
 
-//        binderMaterialy.forField(zywicaPole)
-//                .bind(MaterialyUzyte::getMaterialy, MaterialyUzyte::setMaterialy);
         save.addClickListener(e -> save());
         cancel.addClickListener(e -> cancel());
         delete.addClickListener(e -> delete());
@@ -461,17 +448,13 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             }
         }
         );
-        //Czy to potrzebne?
-        //https://vaadin.com/forum/thread/15385912/15640053
-        //binderWycena.bindInstanceFields(this);
+
         listMaterialy();
     }
 
     public final void listMaterialy() {
-        //if (!materialyDodane.isVisible()) {
         materialyDodane.setVisible(true);
         kasuj.setVisible(true);
-        //}
         materialyDodane.setItems(materialyUzyteRepository.findByWycenaOrWycena(null, this.wycena));
     }
 
@@ -500,28 +483,17 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         wycenaRepository.save(wycena);
         wycenaRepository.delete(wycena);
         wycenaRepository.flush();
-        //clearFields();
         changeHandler.onChange();
     }
 
     void cancel() {
-        //System.out.println(wycenaRepository.findAll());
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycenaAndIsNew(null, true));
-        //materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.flush();
         materialyDodane.select(null);
         clearFields();
         if (nowaWycLoc) {
-            //System.out.println("Cancel nowaWyc:" + nowaWycLoc);
             delete();
-//            System.out.println("Kasowanie nowej wyceny (id: " + wycena.getId() + ") przez Anulowanie ");
-//            wycena.setInwestycja(null);
-//            wycenaRepository.save(wycena);
-//            wycenaRepository.delete(wycena);
-//            wycenaRepository.flush();
         } else {
-//            System.out.println("Cancel nowaWyc:" + nowaWycLoc);
-//            System.out.println(wycenaRepository.findAll());
             changeHandler.onChange();
         }
     }
@@ -559,12 +531,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             return;
         }
         this.inwestycja = i;
-        //this.nowaWyc = nowaWyc;
-        //System.out.println("editWycena. Nowa wycena: " + nowaWyc);
-        /*
-        IF tymczasowy, na potrzeby kasowania wycen bez firmy!
-        Wnętrze ifa zostaje, warunek (L 468 + 471)do wykasowania
-         */
         if (inwestycja != null) {
             miastoInwestycji.setValue(this.inwestycja.getInwestycjaMiasto());
             nazwaInwestycji.setValue(this.inwestycja.getInwestycjaNazwa());
@@ -575,7 +541,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         final boolean wycenaIstnieje = w.getId() != null;
         if (wycenaIstnieje) {
             wycena = wycenaRepository.findById(w.getId()).get();
-//            materialyUzyte = (MaterialyUzyte) materialyUzyteRepository.findByWycena(wycena);
             delete.setEnabled(true);
         } else {
             wycena = w;
@@ -603,35 +568,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         setVisible(true);
     }
 
-    /*
-    //
-    //  Tutaj dodać kasowanie materiałów użytych do wyceny
-    //
-    // grid.addColumn(new NativeButtonRenderer<>("Remove item", clickedItem -> {
-          // remove the item
-        }));
-    //
-            materialyDodane.asSingleSelect().addValueChangeListener(e -> {
-            //sprawdzenie czy w tabeli jest wybrany jakiś klucz i odpowiednie ustawienie dostępności przycisków
-            if (materialyDodane.getSelectedItems().isEmpty()) {
-                nowaWycena.setEnabled(true);
-                wyswietlWycene.setEnabled(false);
-                this.wycena = null;
-            } else {
-                nowaWycena.setEnabled(false);
-                wyswietlWycene.setEnabled(true);
-                this.wycena = (Wycena) e.getValue();
-                this.wycenaForm.editWycena((Wycena) e.getValue(), this.inwestycja);
-            }
-        });
-     */
     public void setChangeHandler(ChangeHandler h) {
         changeHandler = h;
     }
 }
-
-
-/*
-Zamykanie dialog'a
-https://vaadin.com/forum/thread/17054450/best-way-to-close-custom-dialog
- */

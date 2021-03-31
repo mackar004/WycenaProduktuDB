@@ -69,8 +69,6 @@ public class MaterialForm extends VerticalLayout implements KeyNotifier {
         save.getElement().getThemeList().add("primary");
         delete.getElement().getThemeList().add("error");
 
-        //Zapisywanie na klawisz Enter
-        //addKeyPressListener(Key.ENTER, e -> save());
         save.addClickListener(e -> save());
         delete.addClickListener(e -> delete());
         cancel.addClickListener(e -> cancel());
