@@ -39,15 +39,6 @@ public class Firma {
     private String osobaEmail;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "firma", fetch = FetchType.EAGER)
-    //orphanRemoval=true
-    
-    /*
-    fetch main row to be deleted
-    fetch child elements
-    delete all child elements
-    delete main row
-    close session
-    */
     
     private List<Inwestycja> inwestycja;
 
@@ -166,7 +157,6 @@ public class Firma {
 
     @Override
     public String toString() {
-        //return String.format("%s", nazwaFirmy);
         return this.nazwaFirmy;
     }
 

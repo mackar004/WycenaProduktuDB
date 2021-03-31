@@ -39,7 +39,6 @@ public class Inwestycja {
     private List<Wycena> wycena;
     
     @ManyToOne
-    //@MapsId
     @JoinColumn(name = "firma_id")//, nullable = false)
     private Firma firma;
     
@@ -119,7 +118,6 @@ public class Inwestycja {
 
         @Override
     public String toString() {
-        //return String.format("%s", nazwaFirmy);
         return this.inwestycjaNazwa;
     }
     

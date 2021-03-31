@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import pl.pracaInzynierska.dane.TypPrzekrycia;
@@ -56,67 +55,6 @@ public class Wycena {
 
     private Wycena() {
     }
-
-//    public Wycena(Long id, TypPrzekrycia typPrzekrycia, Double srednica, Integer iloscSandwich,
-//            Integer iloscLaminat, Double cenaKoncowa, Double marza, Time dataWyceny,
-//            Boolean zaakceptowano, List<MaterialyUzyte> materialyUzyte) {
-//        this.id = id;
-//        this.typPrzekrycia = typPrzekrycia;
-//        this.srednica = srednica;
-//        this.iloscSandwich = iloscSandwich;
-//        this.iloscLaminat = iloscLaminat;
-//        this.cenaKoncowa = cenaKoncowa;
-//        this.marza = marza;
-//        this.dataWyceny = dataWyceny;
-//        this.zaakceptowano = zaakceptowano;
-//        this.materialyUzyte = materialyUzyte;
-//    }
-//
-//    public Wycena(Long id, TypPrzekrycia typPrzekrycia, String dlugosc, Double szerokosc,
-//            Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa, Double marza,
-//            Time dataWyceny, Boolean zaakceptowano,
-//            List<MaterialyUzyte> materialyUzyte) {
-//        this.id = id;
-//        this.typPrzekrycia = typPrzekrycia;
-//        this.dlugosc = dlugosc;
-//        this.szerokosc = szerokosc;
-//        this.iloscSandwich = iloscSandwich;
-//        this.iloscLaminat = iloscLaminat;
-//        this.cenaKoncowa = cenaKoncowa;
-//        this.marza = marza;
-//        this.dataWyceny = dataWyceny;
-//        this.zaakceptowano = zaakceptowano;
-//        this.materialyUzyte = materialyUzyte;
-//    }
-//
-//    public Wycena(TypPrzekrycia typPrzekrycia, Integer iloscSandwich,
-//            Integer iloscLaminat, Double cenaKoncowa, Double marza) {
-//        this.typPrzekrycia = typPrzekrycia;
-//        this.iloscSandwich = iloscSandwich;
-//        this.iloscLaminat = iloscLaminat;
-//        this.cenaKoncowa = cenaKoncowa;
-//        this.marza = marza;
-//    }
-    
-//    public Wycena(Integer iloscSandwich, Integer iloscLaminat,
-//            Double cenaKoncowa, Double marza) {
-//        this.iloscSandwich = iloscSandwich;
-//        this.iloscLaminat = iloscLaminat;
-//        this.cenaKoncowa = cenaKoncowa;
-//        this.marza = marza;
-//    }
-//
-//    public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
-//            Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,
-//            Double marza) {
-//        this.dlugosc = dlugosc;
-//        this.szerokosc = szerokosc;
-//        this.srednica = srednica;
-//        this.iloscSandwich = iloscSandwich;
-//        this.iloscLaminat = iloscLaminat;
-//        this.cenaKoncowa = cenaKoncowa;
-//        this.marza = marza;
-//    }
     
         public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
             Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,

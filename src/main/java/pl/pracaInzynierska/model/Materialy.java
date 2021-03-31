@@ -43,7 +43,6 @@ public class Materialy {
     public Materialy(String nazwa, String cena) {
         this.nazwa = nazwa;
         this.cena = cena;
-        this.dataWprowadzenia = LocalDate.now(Clock.systemDefaultZone());
     }
 
     public Long getId() {
