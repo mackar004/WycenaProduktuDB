@@ -27,7 +27,7 @@ import pl.pracaInzynierska.repository.MaterialyRepository;
  */
 @SpringComponent
 @UIScope
-public class MaterialForm extends VerticalLayout implements KeyNotifier {
+public class MaterialForm extends VerticalLayout {
 
     private final MaterialyRepository materialyRepo;
 
