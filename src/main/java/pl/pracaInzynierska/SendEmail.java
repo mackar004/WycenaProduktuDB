@@ -6,15 +6,12 @@
 package pl.pracaInzynierska;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
  *
