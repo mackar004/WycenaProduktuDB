@@ -20,7 +20,14 @@ import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import java.util.List;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+//import pl.pracaInzynierska.EmailService;
+import pl.pracaInzynierska.SendEmail;
 import pl.pracaInzynierska.model.Inwestycja;
 import pl.pracaInzynierska.model.Materialy;
 import pl.pracaInzynierska.model.MaterialyUzyte;
@@ -49,6 +56,9 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private Wycena wycena;
     private MaterialyUzyte materialyUzyte;
     private MaterialyUzyte mU;
+
+    //private EmailService emailServ;// = new EmailService();
+    private SendEmail sendEmail;
 
     private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
     private final Button cancel = new Button("Anuluj");
@@ -172,6 +182,9 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.listaRBH = this.materialyRepository.findByTypMaterialu(RBH);
         this.listaPodstawowych = this.materialyRepository.findByTypMaterialu(Podstawowe);
         this.listaPomocniczych = this.materialyRepository.findByTypMaterialu(Pomocnicze);
+
+        //emailServ = new EmailService();
+        sendEmail = new SendEmail();
 
         //this.materialyTemp = new ArrayList<>();
         materialyDodane = new Grid<>(MaterialyUzyte.class);
@@ -314,7 +327,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             double sumaTabela = 0;
             double suma;
             cenaKoncowa.setReadOnly(false);
-            
+
             //sumowanie tabeli
             List<MaterialyUzyte> materialyDoWyliczenia = materialyUzyteRepository.findByWycena(this.wycena);
             for (int i = 0; i < materialyDoWyliczenia.size(); i++) {
@@ -323,7 +336,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             }
 
             //wyliczanie kwoty z uwzględnieniem marży
-            suma = sumaTabela * (100+Double.parseDouble(marza.getValue().replace(",", "."))) / 100;
+            suma = sumaTabela * (100 + Double.parseDouble(marza.getValue().replace(",", "."))) / 100;
             cenaKoncowa.setValue(String.valueOf(suma).replace(".", ","));
             cenaKoncowa.setReadOnly(true);
         });
@@ -403,7 +416,15 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
 
-        save.addClickListener(e -> save());
+        save.addClickListener(e -> {
+            save();
+//            emailServ.send("inzmailserv@gmail.com", "Wycena " + this.inwestycja, "Nowa wycena dla " + this.inwestycja + " o wartości " + String.valueOf(suma));
+//https://github.com/alejandro-du/java-email-tutorial/blob/master/spring-mail-example/src/main/java/com/example/javamail/SpringEmailService.java
+//https://github.com/alejandro-du/java-email-tutorial/blob/master/javamail-example/src/main/java/com/example/javamail/JavaMailService.java
+            sendEmail.SendEmail("Wycena " + this.inwestycja, 
+                    "Nowa wycena dla " + this.inwestycja + " o wartości " + String.valueOf(cenaKoncowa.getValue()),
+                    "inzmailserv@gmail.com");
+        });
         cancel.addClickListener(e -> cancel());
         delete.addClickListener(e -> delete());
         kasuj.addClickListener(e -> kasuj());
