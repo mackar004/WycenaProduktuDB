@@ -52,7 +52,7 @@
             <version>8.4.4</version>
             <type>jar</type>
         </dependency>
-        <!-- 
+         
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-security</artifactId>
@@ -62,8 +62,8 @@
                     <artifactId>spring-security-test</artifactId>
                     <scope>test</scope>
                 </dependency>
-         nie dla vaadina niestety       
-        -->        
+       <!--nie dla vaadina niestety-->       
+                
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

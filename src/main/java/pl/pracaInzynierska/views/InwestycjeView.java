@@ -204,7 +204,6 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             getUI().ifPresent(ui -> ui.navigate("main"));
         } else {
             this.firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
-            //filtrInwestycja.setValue(this.firma.toString());
             nowaInwestycja.setEnabled(true);
             anulujFirme.setEnabled(true);
             aktualnaFirma.setReadOnly(false);

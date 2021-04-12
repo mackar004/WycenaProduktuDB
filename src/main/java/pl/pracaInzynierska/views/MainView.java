@@ -99,8 +99,8 @@ public class MainView extends VerticalLayout {
         wyloguj.setWidth("250px");
         wyloguj.getElement().setAttribute("theme", "error tertiary");
         wyloguj.addClickListener(event -> {
-//            getUI().get().getPage().executeJavaScript("window.location.href='logout'");
-//            getUI().get().getSession().close();
+            getUI().get().getPage().executeJavaScript("window.location.href='logout'");
+            getUI().get().getSession().close();
         });
 
     }
