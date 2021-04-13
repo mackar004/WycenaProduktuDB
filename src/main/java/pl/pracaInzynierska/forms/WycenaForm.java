@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.pracaInzynierska.forms;
 
 import com.vaadin.flow.component.ClickEvent;
@@ -20,13 +15,7 @@ import com.vaadin.flow.data.converter.StringToIntegerConverter;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
 import java.util.List;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-//import pl.pracaInzynierska.EmailService;
 import pl.pracaInzynierska.SendEmail;
 import pl.pracaInzynierska.model.Inwestycja;
 import pl.pracaInzynierska.model.Materialy;
@@ -57,7 +46,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private MaterialyUzyte materialyUzyte;
     private MaterialyUzyte mU;
 
-    //private EmailService emailServ;// = new EmailService();
     private SendEmail sendEmail;
 
     private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
@@ -99,10 +87,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button sLewo = new Button(VaadinIcon.CHEVRON_CIRCLE_LEFT.create());
     private final Button sPrawo = new Button(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create());
 
-//    private final List<HashMap<String, String>> materialyTemp = new ArrayList<>();
-//    private final Map<String, String> materialUzyty = new HashMap<>();
-//    private final String Nazwa = "Nazwa";
-//    private final String Ilosc = "Ilość";
     List<Materialy> listaZywic;
     List<Materialy> listaMat;
     List<Materialy> listaZelkotow;
@@ -150,10 +134,8 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final VerticalLayout pola1 = new VerticalLayout();
     private final VerticalLayout pola2 = new VerticalLayout();
     private final HorizontalLayout strzalki = new HorizontalLayout(sLewo, sPrawo);
-    //private final HorizontalLayout editBar = new HorizontalLayout();
     private final HorizontalLayout buttonBar = new HorizontalLayout(save, cancel, delete);
 
-    //private final Grid<HashMap<String, String>> materialyDodane;
     private final Grid materialyDodane;
 
     Boolean nowaWycLoc;
@@ -195,10 +177,8 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         //materialyDodane.getColumnByKey("materialy").setWidth("70px").setFlexGrow(0);
 
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
-        //System.out.println("findById(null) PRE " + materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
         materialyUzyteRepository.flush();
-        //System.out.println("findById(null) POST " + materialyUzyteRepository.findByWycena(null));
 
         materialyDodane.asSingleSelect().addValueChangeListener(e -> {
             if (materialyDodane.getSelectedItems().isEmpty()) {
@@ -216,7 +196,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             pola2.setVisible(false);
             dodajMaterialy.setVisible(false);
             wycenaRepository.save(wycena);
-            //System.out.println("Zapisano wycenę " + wycena.getId());
         });
 
         zywicaDodaj.addClickListener(e -> {
@@ -420,9 +399,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         save.addClickListener(e -> {
             save();
-//            emailServ.send("inzmailserv@gmail.com", "Wycena " + this.inwestycja, "Nowa wycena dla " + this.inwestycja + " o wartości " + String.valueOf(suma));
-//https://github.com/alejandro-du/java-email-tutorial/blob/master/spring-mail-example/src/main/java/com/example/javamail/SpringEmailService.java
-//https://github.com/alejandro-du/java-email-tutorial/blob/master/javamail-example/src/main/java/com/example/javamail/JavaMailService.java
             sendEmail.SendEmail("Wycena " + this.inwestycja, 
                     "Nowa wycena dla " + this.inwestycja + " o wartości " + String.valueOf(cenaKoncowa.getValue()),
                     "inzmailserv@gmail.com");

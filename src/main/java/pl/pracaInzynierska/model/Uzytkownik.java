@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.pracaInzynierska.model;
 
 import java.util.Arrays;
@@ -13,13 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  *
@@ -29,11 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Table(name = "Uzytkownik")
 public class Uzytkownik implements UserDetails {
 
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
-//    @Autowired
-//    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -41,6 +28,7 @@ public class Uzytkownik implements UserDetails {
     private String username;
     private Boolean isEnabled;
     private String role;
+    @Transient
     private String password;
     private String passwordEncrypted;
 
@@ -90,12 +78,11 @@ public class Uzytkownik implements UserDetails {
 
     @Override
     public String getPassword() {
-//        setPassword(passwordEncoder.encode(this.getPassword()));
-        return password;
+        return passwordEncrypted;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.passwordEncrypted = password;
     }
 
     public String getPasswordEncrypted() {
