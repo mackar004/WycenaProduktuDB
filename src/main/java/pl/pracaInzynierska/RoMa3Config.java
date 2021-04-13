@@ -34,13 +34,16 @@ public class RoMa3Config extends WebSecurityConfigurerAdapter {
     @Autowired
     private UzytkownikRepository userRepo;
 
-//    @Override
-//    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("adam").password(passwordEncoder().encode("pass")).roles("ADMIN")
-//                .and()
-//                .withUser("user").password(passwordEncoder().encode("userpass")).roles("USER");
-//    }
+// I    
+    @Override
+    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("adam").password(passwordEncoder().encode("pass")).roles("ADMIN")
+                .and()
+                .withUser("user").password(passwordEncoder().encode("userpass")).roles("USER");
+    }
+    
+//    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
@@ -53,38 +56,37 @@ public class RoMa3Config extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling().accessDeniedPage("/403");
     }
 
-    @Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(username ->
-				userRepo.getUzytkownikByUsername(username));//.passwordEncoder(passwordEncoder());
-	}
+//    @Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.userDetailsService(username ->
+//				userRepo.getUzytkownikByUsername(username)).passwordEncoder(passwordEncoder());
+//	}
 
-        
-//Użyć szyfrowania!
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-    
+        
+//  II  Użyć szyfrowania!    
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.userDetailsService(new UserDetailsService() {
 //            @Override
 //            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //                Uzytkownik user = userRepo.getUzytkownikByUsername(username);
-//                System.out.println(user.getPassword());
 //                //return userRepo.getUzytkownikByUsername(username);
-//                if (null == user) {
-//                    System.out.println("tu jest null");
-//                }
-//                return new org.springframework.security.core.userdetails.User(
+//                UserDetails us = new org.springframework.security.core.userdetails.User(
 //                        user.getUsername(),
 //                        user.getPassword(),
 //                        user.getAuthorities());
+//                System.out.println("us" + us);
+//                return us;
 //            }
 //        });
 //    }
-
+//
+        
 //    https://stackoverflow.com/questions/54431305/configuring-authenticationmanagerbuilder-to-use-user-repository
 }
 

@@ -100,7 +100,7 @@ public class Uzytkownik implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("USER_ROLE"));
+        return Arrays.asList(new SimpleGrantedAuthority("USER"));
     }
 
     @Override
