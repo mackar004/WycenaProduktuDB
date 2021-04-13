@@ -7,63 +7,91 @@ package pl.pracaInzynierska;
 // */
 //package pl.torun.roma.RoMa3;
 //
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.vaadin.flow.spring.annotation.EnableVaadin;
+import pl.pracaInzynierska.model.Uzytkownik;
+import pl.pracaInzynierska.repository.UzytkownikRepository;
+
 
 /**
  *
  * @author m
  */
-
-//https://vaadin.com/learn/tutorials/securing-your-app-with-spring-security/fine-grained-access-control
-
-
 @Configuration
-@EnableWebSecurity
-@EnableVaadin
+//@EnableWebSecurity
+//@EnableVaadin
 public class RoMa3Config extends WebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("adam").password(passwordEncoder().encode("pass")).roles("ADMIN")
-                .and()
-                .withUser("user").password(passwordEncoder().encode("userpass")).roles("USER");
-    }
+    @Autowired
+    private UzytkownikRepository userRepo;
 
+//    @Override
+//    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("adam").password(passwordEncoder().encode("pass")).roles("ADMIN")
+//                .and()
+//                .withUser("user").password(passwordEncoder().encode("userpass")).roles("USER");
+//    }
     @Override
-    protected void configure(final HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                
-                /*
-                .antMatchers("/public").permitAll()
-                .antMatchers("/user").hasRole("USER")
-                .antMatchers("/admin").hasRole("ADMIN")
-                .and()
-                .formLogin()
-                .and()
-                .exceptionHandling().accessDeniedPage("/403");
-                */
- //               .requestMatchers(SecurityUtils::isFrameworkInternalRequest).permitAll()
-                .antMatchers("/user/**").hasRole("USER")
+                .antMatchers("/login*").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/login*").permitAll().anyRequest().authenticated()
-   //             .anyRequest().authenticated()
+                .antMatchers("/user/**").hasRole("USER")
+                .anyRequest().authenticated()
                 .and().formLogin().defaultSuccessUrl("/main", true)
                 .and().logout().logoutUrl("/logout").deleteCookies("JSESSIONID")
                 .and().exceptionHandling().accessDeniedPage("/403");
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(username ->
+				userRepo.getUzytkownikByUsername(username));//.passwordEncoder(passwordEncoder());
+	}
 
+        
+//Użyć szyfrowania!
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+    
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(new UserDetailsService() {
+//            @Override
+//            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//                Uzytkownik user = userRepo.getUzytkownikByUsername(username);
+//                System.out.println(user.getPassword());
+//                //return userRepo.getUzytkownikByUsername(username);
+//                if (null == user) {
+//                    System.out.println("tu jest null");
+//                }
+//                return new org.springframework.security.core.userdetails.User(
+//                        user.getUsername(),
+//                        user.getPassword(),
+//                        user.getAuthorities());
+//            }
+//        });
+//    }
+
+//    https://stackoverflow.com/questions/54431305/configuring-authenticationmanagerbuilder-to-use-user-repository
 }
+
+
+
+/*
+https://github.com/MaciekBro/szafbook/blob/b33ee2119ee5b91d4a944bed5b744a81f5b41ceb/src/main/java/pl/namiekko/configuration/SecurityConfiguration.java#L57
+https://github.com/MaciekBro/szafbook/blob/master/src/main/java/pl/namiekko/controllers/UserController.java
+http://namiekko.pl/2016/08/31/spring-boot-autoryzacja-uzytkownikow-w-oparciu-o-baze-danych/
+*/
