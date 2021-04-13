@@ -35,13 +35,13 @@ public class RoMa3Config extends WebSecurityConfigurerAdapter {
     private UzytkownikRepository userRepo;
 
 // I    
-    @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("adam").password(passwordEncoder().encode("pass")).roles("ADMIN")
-                .and()
-                .withUser("user").password(passwordEncoder().encode("userpass")).roles("USER");
-    }
+//    @Override
+//    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication()
+//                .withUser("adam").password(passwordEncoder().encode("pass")).roles("ADMIN")
+//                .and()
+//                .withUser("user").password(passwordEncoder().encode("userpass")).roles("USER");
+//    }
     
 //    
     @Override
@@ -69,22 +69,22 @@ public class RoMa3Config extends WebSecurityConfigurerAdapter {
 	}
         
 //  II  Użyć szyfrowania!    
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(new UserDetailsService() {
-//            @Override
-//            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//                Uzytkownik user = userRepo.getUzytkownikByUsername(username);
-//                //return userRepo.getUzytkownikByUsername(username);
-//                UserDetails us = new org.springframework.security.core.userdetails.User(
-//                        user.getUsername(),
-//                        user.getPassword(),
-//                        user.getAuthorities());
-//                System.out.println("us" + us);
-//                return us;
-//            }
-//        });
-//    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                Uzytkownik user = userRepo.getUzytkownikByUsername(username);
+                //return userRepo.getUzytkownikByUsername(username);
+                UserDetails us = new org.springframework.security.core.userdetails.User(
+                        user.getUsername(),
+                        user.getPasswordEncrypted(),
+                        user.getAuthorities());
+                System.out.println("us" + us);
+                return us;
+            }
+        });
+    }
 //
         
 //    https://nullpointerexception.pl/spring-security-uwierzytelnienie-przy-pomocy-jsona/        

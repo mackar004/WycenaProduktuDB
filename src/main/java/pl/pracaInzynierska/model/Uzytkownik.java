@@ -31,6 +31,8 @@ public class Uzytkownik implements UserDetails {
 
 //    @Autowired
 //    PasswordEncoder passwordEncoder;
+//    @Autowired
+//    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,15 +42,17 @@ public class Uzytkownik implements UserDetails {
     private Boolean isEnabled;
     private String role;
     private String password;
+    private String passwordEncrypted;
 
     private Uzytkownik() {
     }
 
-    private Uzytkownik(String username, Boolean isEnabled, String role, String password) {
+    public Uzytkownik(String username, Boolean isEnabled, String role, String password) {
         this.username = username;
         this.isEnabled = isEnabled;
         this.role = "USER";
         this.password = password;
+        this.passwordEncrypted = getPasswordEncrypted();
     }
 
     public Long getId() {
@@ -92,6 +96,15 @@ public class Uzytkownik implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordEncrypted() {
+        this.passwordEncrypted = new BCryptPasswordEncoder().encode(getPassword());
+        return passwordEncrypted;
+    }
+
+    public void setPasswordEncrypted(String passwordencrypted) {
+        this.passwordEncrypted = passwordencrypted;
     }
 
     public String toString(String username) {
