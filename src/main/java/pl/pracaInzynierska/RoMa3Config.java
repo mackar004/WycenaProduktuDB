@@ -87,6 +87,7 @@ public class RoMa3Config extends WebSecurityConfigurerAdapter {
 //    }
 //
         
+//    https://nullpointerexception.pl/spring-security-uwierzytelnienie-przy-pomocy-jsona/        
 //    https://stackoverflow.com/questions/54431305/configuring-authenticationmanagerbuilder-to-use-user-repository
 }
 
