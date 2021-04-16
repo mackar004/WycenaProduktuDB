@@ -39,7 +39,6 @@ public class InwestycjaForm extends VerticalLayout implements KeyNotifier {
     private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
     private final Button cancel = new Button("Anuluj");
     private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
-    private final Button edit = new Button("Edytuj");
     private final HorizontalLayout buttonBar = new HorizontalLayout(save, cancel, delete);
     private final HorizontalLayout formularz = new HorizontalLayout(inwestycjaNazwa, inwestycjaMiasto, nazwaFirmy);
 

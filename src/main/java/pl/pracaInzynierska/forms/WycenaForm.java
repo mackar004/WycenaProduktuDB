@@ -52,9 +52,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private final Button cancel = new Button("Anuluj");
     private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
     private final Button wylicz = new Button("Oblicz cenę");
-    private final Button edit = new Button("Edytuj");
     private final Button kasuj = new Button("Usuń pozycję");
-    private final Button zapisz = new Button("Zapisz zmiany");
 
     private final Button zywicaDodaj = new Button("Dodaj");
     private final Button mataDodaj = new Button("Dodaj");
@@ -67,7 +65,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     ComboBox<TypPrzekrycia> typPrzekrycia = new ComboBox<>("Typ przekrycia", TypPrzekrycia.values());
 
-    //wyszukać wartości dla poniższych pól
     private final TextField nazwaInwestycji = new TextField("Inwestycja");
     private final TextField miastoInwestycji = new TextField("Miasto");
 
@@ -165,16 +162,13 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         this.listaPodstawowych = this.materialyRepository.findByTypMaterialu(Podstawowe);
         this.listaPomocniczych = this.materialyRepository.findByTypMaterialu(Pomocnicze);
 
-        //emailServ = new EmailService();
         sendEmail = new SendEmail();
 
-        //this.materialyTemp = new ArrayList<>();
         materialyDodane = new Grid<>(MaterialyUzyte.class);
         materialyDodane.setColumns("materialy", "iloscMaterialu");
         materialyDodane.addColumn("materialy.cena");
 
         materialyDodane.setWidth("500px");
-        //materialyDodane.getColumnByKey("materialy").setWidth("70px").setFlexGrow(0);
 
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
@@ -313,7 +307,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             List<MaterialyUzyte> materialyDoWyliczenia = materialyUzyteRepository.findByWycena(this.wycena);
             for (int i = 0; i < materialyDoWyliczenia.size(); i++) {
                 sumaTabela += materialyDoWyliczenia.get(i).getIloscMaterialu()
-                        * Double.parseDouble(materialyRepository.findByNazwa(materialyDoWyliczenia.get(i).getMaterialy().getNazwa()).getCena());
+                        * Double.parseDouble(materialyRepository.findByNazwa(materialyDoWyliczenia.get(i).getMaterialy().getNazwa()).getCena().replace(",", "."));
             }
 
             //wyliczanie kwoty z uwzględnieniem marży

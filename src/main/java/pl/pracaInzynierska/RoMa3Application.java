@@ -14,15 +14,16 @@ public class RoMa3Application {
     public static void main(String[] args) {
         SpringApplication.run(RoMa3Application.class, args);
     }
-    
+
+//      Mockowanie użytkowników    
 //    @Autowired
 //    UzytkownikRepository repository;
 //
 //    @Bean
 //    public CommandLineRunner loadData() {
 //        return (args -> {
-//            Uzytkownik jb = new Uzytkownik("Jack", true, "user", "bauer");
-//            Uzytkownik co = new Uzytkownik("Chloe", true, "user", "pass");
+//            Uzytkownik jb = new Uzytkownik("user", true, "user", "password");
+//            Uzytkownik co = new Uzytkownik("Slawek", true, "user", "pass");
 //            
 //            System.out.println(jb);
 //            System.out.println(co);

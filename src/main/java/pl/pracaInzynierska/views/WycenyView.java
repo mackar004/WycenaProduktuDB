@@ -83,7 +83,6 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         this.dialogWycena = new Dialog();
 
         nowaWycena = new Button("Nowa", VaadinIcon.PLUS.create());
-        //TYMCZASOWA FUNKCJA - Wyświetlanie zapisanych wycen testowych
         wyswietlWycene = new Button("Wyświetl");
 
         wyswietlWycene.setEnabled(false);
@@ -95,7 +94,7 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         dialogWycena.setCloseOnOutsideClick(false);
 
         wycenaGrid.setColumns("id", "typPrzekrycia", "cenaKoncowa");
-        wycenaGrid.getColumnByKey("id").setWidth("250px").setFlexGrow(0).setSortProperty("id");
+        wycenaGrid.getColumnByKey("id").setWidth("120px").setFlexGrow(0).setSortProperty("id");
 
         HorizontalLayout menuBar = new HorizontalLayout(nowaWycena, wyswietlWycene);
 
@@ -109,9 +108,6 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
             dialogWycena.open();
             wycenaForm.listMaterialy();
             wyswietlWycene.setEnabled(false);
-//            materialyUzyteRepository.findAll().forEach(a -> System.out.println(a.getMaterialy().getNazwa()));
-//            listWyceny();
-//
         });
 
         wycenaGrid.asSingleSelect().addValueChangeListener(e -> {
@@ -149,7 +145,6 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
     public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
         if (parameter == null || parameter.isEmpty() || parameter.equals("")) {
             this.inwestycja = null;
-//  Nie działa poniższe przekierowanie gdy nie jest przekazywany żaden parametr
             getUI().ifPresent(ui -> ui.navigate("main"));
         } else {
             this.inwestycja = (Inwestycja) inwestycjaRepository.findById(Long.parseLong(parameter));

@@ -14,13 +14,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.pracaInzynierska.model.Uzytkownik;
 import pl.pracaInzynierska.repository.UzytkownikRepository;
 
-
 /**
  *
  * @author m
  */
 @Configuration
-public class RoMa3Config extends WebSecurityConfigurerAdapter {
+public class LoginConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UzytkownikRepository userRepo;
@@ -36,34 +35,26 @@ public class RoMa3Config extends WebSecurityConfigurerAdapter {
                 .and().logout().logoutUrl("/logout").deleteCookies("JSESSIONID")
                 .and().exceptionHandling().accessDeniedPage("/403");
     }
-   
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+            public UserDetails loadUserByUsername(String username)
+                    throws UsernameNotFoundException {
                 Uzytkownik user = userRepo.getUzytkownikByUsername(username);
-                //return userRepo.getUzytkownikByUsername(username);
-                UserDetails us = new org.springframework.security.core.userdetails.User(
-                        user.getUsername(),
-                        user.getPassword(),
-                        user.getAuthorities());
-                System.out.println("us" + us.getPassword());
-                return us;
+                UserDetails userDetails
+                        = new org.springframework.security.core.userdetails.User(
+                                user.getUsername(),
+                                user.getPassword(),
+                                user.getAuthorities());
+                return userDetails;
             }
         });
     }
-    
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
-
-
-
-/*
-https://github.com/MaciekBro/szafbook/blob/b33ee2119ee5b91d4a944bed5b744a81f5b41ceb/src/main/java/pl/namiekko/configuration/SecurityConfiguration.java#L57
-https://github.com/MaciekBro/szafbook/blob/master/src/main/java/pl/namiekko/controllers/UserController.java
-http://namiekko.pl/2016/08/31/spring-boot-autoryzacja-uzytkownikow-w-oparciu-o-baze-danych/
-*/

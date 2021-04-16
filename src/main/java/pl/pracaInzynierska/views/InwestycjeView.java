@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.pracaInzynierska.views;
 
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -21,16 +15,12 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
-import com.vaadin.ui.components.grid.SingleSelectionModel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.util.StringUtils;
 import pl.pracaInzynierska.forms.InwestycjaForm;
 import pl.pracaInzynierska.model.Firma;
 import pl.pracaInzynierska.model.Inwestycja;
 import pl.pracaInzynierska.repository.FirmaRepository;
 import pl.pracaInzynierska.repository.InwestycjaRepository;
-import pl.pracaInzynierska.repository.WycenaRepository;
 
 /**
  *
@@ -48,9 +38,6 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
     private Firma firma = null;
     final InwestycjaForm inwestycjaForm;
 
-    private TextField nazwaInwestycji = new TextField("Nazwa");
-    private TextField miasto = new TextField("Miasto");
-    private TextField nazwaFirma = new TextField("Firma");
     private TextField aktualnaFirma = new TextField();
     final Grid inwestycjaGrid;
     private final Button nowaInwestycja;
@@ -63,16 +50,13 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
 
     HorizontalLayout filterBar = new HorizontalLayout();
 
-//    private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository, WycenaRepository wycenaRepository) {
     private InwestycjeView(FirmaRepository firmaRepository, InwestycjaRepository inwestycjaRepository) {
         add(new Button("Powrót", event -> {
-            //setParameter(null,this.inwestycja.getFirma().getId().toString().replace("[", "").replace("]", ""));
             getUI().ifPresent(ui -> ui.navigate("user/firmy"));
         }));
 
         this.firmaRepository = firmaRepository;
         this.inwestycjaRepository = inwestycjaRepository;
-//        this.inwestycjaForm = new InwestycjaForm(inwestycjaRepository, wycenaRepository);
         this.inwestycjaForm = new InwestycjaForm(inwestycjaRepository);
         inwestycjaGrid = new Grid<>(Inwestycja.class);
 
@@ -83,7 +67,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         this.dialogInwestycja = new Dialog();
 
         dialogInwestycja.add(this.inwestycjaForm);
-        dialogInwestycja.setWidth("600px");
+        dialogInwestycja.setWidth("630px");
         dialogInwestycja.setHeight("400px");
         dialogInwestycja.setCloseOnEsc(false);
         dialogInwestycja.setCloseOnOutsideClick(false);
@@ -111,10 +95,8 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
         filtrInwestycja.addValueChangeListener(e -> listInwestycje(e.getValue()));
 
         inwestycjaGrid.setColumns("inwestycja_id", "inwestycjaNazwa", "inwestycjaMiasto", "firma");
-        //inwestycjaGrid.getColumnByKey("inwestycjaNazwa").setWidth("250px").setFlexGrow(0).setSortProperty("inwestycjaNazwa");
-        inwestycjaGrid.getColumnByKey("inwestycja_id").setWidth("250px").setFlexGrow(0).setSortProperty("inwestycja_id");
+        inwestycjaGrid.getColumnByKey("inwestycja_id").setWidth("120px").setFlexGrow(0).setSortProperty("inwestycja_id");
 
-        //Listenery
         anulujFirme.addClickListener(e -> {
             this.firma = null;
             anulujFirme.setEnabled(false);

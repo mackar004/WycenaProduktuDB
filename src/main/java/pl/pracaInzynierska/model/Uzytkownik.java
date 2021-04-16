@@ -27,9 +27,9 @@ public class Uzytkownik implements UserDetails {
 
     private String username;
     private Boolean isEnabled;
-    private String role;
+    private String user_role;
     @Transient
-    private String password;
+    private String haslo;
     private String passwordEncrypted;
 
     private Uzytkownik() {
@@ -38,8 +38,8 @@ public class Uzytkownik implements UserDetails {
     public Uzytkownik(String username, Boolean isEnabled, String role, String password) {
         this.username = username;
         this.isEnabled = isEnabled;
-        this.role = "USER";
-        this.password = password;
+        this.user_role = "USER";
+        this.haslo = password;
         this.passwordEncrypted = getPasswordEncrypted();
     }
 
@@ -69,11 +69,11 @@ public class Uzytkownik implements UserDetails {
     }
 
     public String getRole() {
-        return role;
+        return user_role;
     }
 
     public void setRole(String role) {
-        this.role = role;
+        this.user_role = role;
     }
 
     @Override

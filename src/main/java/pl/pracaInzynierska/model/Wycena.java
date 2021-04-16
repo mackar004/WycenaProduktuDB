@@ -32,7 +32,6 @@ public class Wycena {
     private Long id;
 
     private TypPrzekrycia typPrzekrycia;
-    //ksztalt
     private Integer srednica;
     private Integer dlugosc;
     private Integer szerokosc;

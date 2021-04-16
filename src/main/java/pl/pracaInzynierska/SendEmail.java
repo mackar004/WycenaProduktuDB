@@ -17,7 +17,6 @@ import javax.mail.internet.MimeMessage;
  *
  * @author m
  */
-
 public class SendEmail {
 
     public void SendEmail(String subject, String text, String email) {
@@ -43,7 +42,7 @@ public class SendEmail {
             }
 
             Transport.send(msg);
-            
+
         } catch (MessagingException mex) {
             System.out.println("send failed, exception: " + mex);
         }

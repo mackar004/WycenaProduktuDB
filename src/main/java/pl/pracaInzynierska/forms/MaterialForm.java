@@ -5,7 +5,6 @@
  */
 package pl.pracaInzynierska.forms;
 
-import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -43,7 +42,6 @@ public class MaterialForm extends VerticalLayout {
     private final Button save = new Button("Zapisz", VaadinIcon.CHECK.create());
     private final Button cancel = new Button("Anuluj");
     private final Button delete = new Button("Usuń", VaadinIcon.TRASH.create());
-    private final Button edit = new Button("Edytuj");
     private final HorizontalLayout buttonBar = new HorizontalLayout(save, cancel, delete);
     private final VerticalLayout formularz = new VerticalLayout(nazwaMaterialu, cena, typMaterialu);
 

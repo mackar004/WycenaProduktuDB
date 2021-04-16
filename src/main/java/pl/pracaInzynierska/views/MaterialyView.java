@@ -34,6 +34,7 @@ public class MaterialyView extends VerticalLayout {
     private final MaterialyRepository materialyRepository;
 
     private Materialy material;
+    
     final private MaterialForm materialForm;
 
     private TextField nazwaMaterialu = new TextField("Nazwa");
@@ -66,13 +67,13 @@ public class MaterialyView extends VerticalLayout {
         filtrMaterial.addValueChangeListener(e -> listMaterialy(e.getValue()));
 
         dialog.add(this.materialForm);
-        dialog.setWidth("600px");
+        dialog.setWidth("630px");
         dialog.setHeight("400px");
         dialog.setCloseOnEsc(false);
         dialog.setCloseOnOutsideClick(false);
 
         materialyGrid.setColumns("nazwa", "cena", "dataWprowadzenia");
-        materialyGrid.getColumnByKey("nazwa").setWidth("250px").setFlexGrow(0).setSortProperty("nazwa");
+        materialyGrid.getColumnByKey("nazwa").setWidth("120px").setFlexGrow(0).setSortProperty("nazwa");
 
         materialyGrid.asSingleSelect().addValueChangeListener(e -> {
             nowyMaterial.setEnabled(false);
