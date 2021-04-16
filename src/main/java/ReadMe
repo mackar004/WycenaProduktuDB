@@ -32,4 +32,3 @@ Baza danych:
 url= postgresql://localhost:5432/roma_db
 username=roma_admin
 password=pass
-
