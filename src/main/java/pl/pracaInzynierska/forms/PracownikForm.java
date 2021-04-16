@@ -1,4 +1,4 @@
-package pl.pracaInzynierska.views;
+package pl.pracaInzynierska.forms;
 
 import com.vaadin.flow.component.KeyNotifier;
 import com.vaadin.flow.component.button.Button;

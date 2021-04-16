@@ -22,8 +22,8 @@ public class RoMa3Application {
 //    @Bean
 //    public CommandLineRunner loadData() {
 //        return (args -> {
-//            Uzytkownik jb = new Uzytkownik("user", true, "user", "password");
-//            Uzytkownik co = new Uzytkownik("Slawek", true, "user", "pass");
+//            Uzytkownik jb = new Uzytkownik("Jack", true, "user", "bauer");
+//            Uzytkownik co = new Uzytkownik("Chloe", true, "user", "pass");
 //            
 //            System.out.println(jb);
 //            System.out.println(co);
