@@ -34,7 +34,6 @@ public class Firma {
     private String osobaEmail;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "firma", fetch = FetchType.EAGER)
-    
     private List<Inwestycja> inwestycja;
 
     public Firma() {
