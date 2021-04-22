@@ -15,7 +15,7 @@ public class RoMa3Application {
         SpringApplication.run(RoMa3Application.class, args);
     }
 
-//      Mockowanie użytkowników    
+//      //Mockowanie użytkowników    
 //    @Autowired
 //    UzytkownikRepository repository;
 //

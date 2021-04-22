@@ -191,31 +191,38 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
 
         zywicaDodaj.addClickListener(e -> {
-            if (checkField(zywicaIlosc)) {
-                if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
+            if (checkField(zywicaPole,zywicaIlosc)) {
+//                try {
+                if (!(zywicaPole.getValue().equals(null)) || !(zywicaIlosc.getValue().equals(null))) {
                     this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue().replace(",", ".")), true);
                     materialyUzyteRepository.save(this.materialyUzyte);
                     zywicaPole.clear();
                     zywicaPole.setPlaceholder("Dodano!");
                     zywicaIlosc.clear();
                     listMaterialy();
-                } else {
-                    zywicaPole.setPlaceholder("Wybierz");
-                    zywicaIlosc.setPlaceholder("Podaj ilość");
                 }
+//                } catch (NullPointerException exep) {
+//                    zywicaPole.setPlaceholder("Wybierz");
+//                    zywicaIlosc.setPlaceholder("Podaj ilość");
+//                }
             }
         });
         mataDodaj.addClickListener(e -> {
-            if ((mataPole.getValue() != null) || (mataIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                mataPole.clear();
-                mataPole.setPlaceholder("Dodano!");
-                mataIlosc.clear();
-                listMaterialy();
-            } else {
-                mataPole.setPlaceholder("");
-                mataIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(mataPole,mataIlosc)) {
+                try {
+                    if (!(mataPole.getValue().equals(null)) || !(mataIlosc.getValue().equals(null))) {
+                        System.out.println("wewnatrz ifa");
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        mataPole.clear();
+                        mataPole.setPlaceholder("Dodano!");
+                        mataIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    mataPole.setPlaceholder("Wybierz");
+                    mataIlosc.setPlaceholder("Podaj ilość");
+                }
             }
         });
         zelkotDodaj.addClickListener(e -> {
@@ -568,12 +575,17 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         changeHandler = h;
     }
 
-    private boolean checkField(TextField field) {
-        String fieldValue = field.getValue().replace(",", ".");
+    private boolean checkField(ComboBox field1, TextField field2) {
+        String fieldValue = field2.getValue().replace(",", ".");
         if (fieldValue.matches("^(0|([1-9][0-9]*))(\\.[0-9]+)?$")) {
-            return true;
+            if (!(field1.equals(null))) {
+                return true;
+            } else {
+                field1.setValue("Wybierz");
+                return false;
+            }
         }
-        field.setValue("Błąd danych!");
+        field2.setValue("Błąd danych!");
         return false;
     }
 }

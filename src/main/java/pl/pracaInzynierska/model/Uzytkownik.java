@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author m
  */
 @Entity
+@Table(name = "Uzytkownik")
 public class Uzytkownik implements UserDetails {
 
     @Id
@@ -121,4 +122,5 @@ public class Uzytkownik implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
+//http://namiekko.pl/2016/08/31/spring-boot-autoryzacja-uzytkownikow-w-oparciu-o-baze-danych/
 }
