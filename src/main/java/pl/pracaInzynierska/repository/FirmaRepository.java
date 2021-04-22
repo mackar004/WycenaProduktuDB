@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FirmaRepository extends JpaRepository<Firma, Long>{
-    List<Firma> findById(long id);
     List<Firma> findByNazwaFirmyContainsIgnoreCase(String nazwaFirmy);
     Firma findByNazwaFirmy(String nazwaFirmy);
+    Firma findById(long id);
 }

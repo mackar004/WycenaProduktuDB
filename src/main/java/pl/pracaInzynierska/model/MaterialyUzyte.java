@@ -51,6 +51,7 @@ public class MaterialyUzyte {
         this.wycena = wycena;
         this.materialy = materialy;
         this.iloscMaterialu = iloscMaterialu;
+        this.isNew = isNew;
     }
     
     public MaterialyUzyte(Wycena wycena, Materialy materialy, Double iloscMaterialu, Boolean isNew) {

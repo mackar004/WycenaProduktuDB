@@ -121,7 +121,8 @@ public class FirmyView extends VerticalLayout {
 
         pokazInwestycje.addClickListener(e -> {
             getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/"
-                    + firmaGrid.getSelectedItems().toString().replace("[", "").replace("]", "")));
+                    + this.firma.getId()));
+                          //  .toString().replace("[", "").replace("]", "")));
 
             edytuj.setEnabled(false);
             pokazInwestycje.setEnabled(false);

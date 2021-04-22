@@ -58,10 +58,9 @@ public class WycenyView extends VerticalLayout implements HasUrlParameter<String
         add(new Button("Powrót", event -> {
             //Powrót z parametrem dla automatycznego wczytania tej samej firmy
             if (this.inwestycja.getFirma() == null) {
-                System.out.println("firma " + this.inwestycja.getFirma());
                 getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/"));
             } else {
-                getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/" + this.inwestycja.getFirma().getNazwaFirmy().replace("[", "").replace("]", "")));
+                getUI().ifPresent(ui -> ui.navigate("user/firmy/inwestycje/" + this.inwestycja.getFirma().getId()));
 
             }
         }));

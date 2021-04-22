@@ -160,9 +160,13 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
 
     private void listInwestycje(String filterText) {
         if (StringUtils.isEmpty(filterText)) {
-            inwestycjaGrid.setItems(inwestycjaRepository.findAll());
+            if (aktualnaFirma.isEmpty()) {
+                inwestycjaGrid.setItems(inwestycjaRepository.findAll());
+            } else {
+                listInwestycje(this.firma);
+            }
         } else {
-            inwestycjaGrid.setItems(inwestycjaRepository.findByInwestycjaNazwaContainsIgnoreCaseOrInwestycjaMiastoContainsIgnoreCase(filterText, filterText));
+            inwestycjaGrid.setItems(inwestycjaRepository.findInwestycjaByInwestycjaNazwaContainsIgnoreCaseOrInwestycjaMiastoContainsIgnoreCaseOrFirmaNazwaFirmyContainsIgnoreCase(filterText, filterText, filterText));
         }
     }
 
@@ -185,7 +189,7 @@ public class InwestycjeView extends VerticalLayout implements HasUrlParameter<St
             filterBar.setVisible(true);
             getUI().ifPresent(ui -> ui.navigate("main"));
         } else {
-            this.firma = (Firma) firmaRepository.findByNazwaFirmy(parameter);
+            this.firma = firmaRepository.findById(Long.parseLong(parameter));
             nowaInwestycja.setEnabled(true);
             anulujFirme.setEnabled(true);
             aktualnaFirma.setReadOnly(false);

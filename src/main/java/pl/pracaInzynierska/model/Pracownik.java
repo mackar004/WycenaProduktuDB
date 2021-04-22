@@ -18,7 +18,6 @@ import pl.pracaInzynierska.dane.Stanowisko;
  * @author maciek
  */
 @Entity
-@Table(name = "pracownik")
 public class Pracownik {
 
     @Id
@@ -29,6 +28,7 @@ public class Pracownik {
     @Column(nullable = true)
     private Stanowisko obecneStanowisko;
     private int premia;
+    private int pesel;
 
     @ManyToOne
     @JoinColumn(name = "grupa_id")
@@ -38,6 +38,9 @@ public class Pracownik {
 
     @OneToMany(mappedBy = "pracownik", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Notatka> notatka;
+
+//    @OneToMany(mappedBy = "pracownik", fetch = FetchType.EAGER)
+//    private Wycena wycena;
 
     protected Pracownik() {
     }
@@ -121,4 +124,21 @@ public class Pracownik {
     public String toString() {
         return nazwisko + " " + imie.charAt(0) + ".";
     }
+
+    public int getPesel() {
+        return pesel;
+    }
+
+    public void setPesel(int pesel) {
+        this.pesel = pesel;
+    }
+
+//    public Wycena getWycena() {
+//        return wycena;
+//    }
+//
+//    public void setWycena(Wycena wycena) {
+//        this.wycena = wycena;
+//    }
+
 }

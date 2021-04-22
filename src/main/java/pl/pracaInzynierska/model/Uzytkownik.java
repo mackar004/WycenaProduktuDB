@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @author m
  */
 @Entity
-@Table(name = "Uzytkownik")
 public class Uzytkownik implements UserDetails {
 
     @Id

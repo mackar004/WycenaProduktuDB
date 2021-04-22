@@ -19,7 +19,6 @@ import pl.pracaInzynierska.dane.TypPrzekrycia;
  * @author m
  */
 @Entity
-@Table(name = "Wycena")
 public class Wycena {
 
     @Id
@@ -39,7 +38,7 @@ public class Wycena {
 
     private Time dataWyceny;
     private Boolean zaakceptowano;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "wycena", fetch = FetchType.LAZY)
     private List<MaterialyUzyte> materialyUzyte;
 
@@ -47,10 +46,14 @@ public class Wycena {
     @JoinColumn(name = "inwestycja_id")
     private Inwestycja inwestycja;
 
+//    @ManyToOne
+//    @JoinColumn(name = "pracownik_id")
+//    private Pracownik pracownik;
+
     private Wycena() {
     }
-    
-        public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
+
+    public Wycena(Integer dlugosc, Integer szerokosc, Integer srednica,
             Integer iloscSandwich, Integer iloscLaminat, Double cenaKoncowa,
             Double marza, Inwestycja inwestycja) {
         this.dlugosc = dlugosc;
@@ -166,5 +169,12 @@ public class Wycena {
     public void setInwestycja(Inwestycja inwestycja) {
         this.inwestycja = inwestycja;
     }
-    
+
+//    public Pracownik getPracownik() {
+//        return pracownik;
+//    }
+//
+//    public void setPracownik(Pracownik pracownik) {
+//        this.pracownik = pracownik;
+//    }
 }
