@@ -193,14 +193,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         zywicaDodaj.addClickListener(e -> {
             if (checkField(zywicaPole, zywicaIlosc)) {
                 try {
-                    if (!(zywicaPole.getValue() != null) || !(zywicaIlosc.getValue() != null)) {
-                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue().replace(",", ".")), true);
-                        materialyUzyteRepository.save(this.materialyUzyte);
-                        zywicaPole.clear();
-                        zywicaPole.setPlaceholder("Dodano!");
-                        zywicaIlosc.clear();
-                        listMaterialy();
-                    }
+                    this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue().replace(",", ".")), true);
+                    materialyUzyteRepository.save(this.materialyUzyte);
+                    zywicaPole.clear();
+                    zywicaPole.setPlaceholder("Dodano!");
+                    zywicaIlosc.clear();
+                    listMaterialy();
                 } catch (NullPointerException exep) {
                     zywicaPole.setPlaceholder("Wybierz");
                     zywicaIlosc.setPlaceholder("Podaj ilość");
@@ -210,12 +208,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         mataDodaj.addClickListener(e -> {
             if (checkField(mataPole, mataIlosc)) {
                 try {
-                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue().replace(",", ".")), true);
-                        materialyUzyteRepository.save(this.materialyUzyte);
-                        mataPole.clear();
-                        mataPole.setPlaceholder("Dodano!");
-                        mataIlosc.clear();
-                        listMaterialy();
+                    this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue().replace(",", ".")), true);
+                    materialyUzyteRepository.save(this.materialyUzyte);
+                    mataPole.clear();
+                    mataPole.setPlaceholder("Dodano!");
+                    mataIlosc.clear();
+                    listMaterialy();
                 } catch (NullPointerException exep) {
                     mataPole.setPlaceholder("Wybierz");
                     mataIlosc.setPlaceholder("Podaj ilość");
