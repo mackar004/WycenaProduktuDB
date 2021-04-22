@@ -28,7 +28,7 @@ public class Pracownik {
     @Column(nullable = true)
     private Stanowisko obecneStanowisko;
     private int premia;
-    private int pesel;
+    private String pesel;
 
     @ManyToOne
     @JoinColumn(name = "grupa_id")
@@ -125,11 +125,11 @@ public class Pracownik {
         return nazwisko + " " + imie.charAt(0) + ".";
     }
 
-    public int getPesel() {
+    public String getPesel() {
         return pesel;
     }
 
-    public void setPesel(int pesel) {
+    public void setPesel(String pesel) {
         this.pesel = pesel;
     }
 

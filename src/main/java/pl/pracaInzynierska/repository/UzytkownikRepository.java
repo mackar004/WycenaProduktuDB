@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface UzytkownikRepository extends JpaRepository<Uzytkownik, Long>{
     Uzytkownik findByUsername(String username);
     Uzytkownik getUzytkownikByUsername(String username);
-    
+    Uzytkownik findByUsernameContainsIgnoreCase(String username);
 }

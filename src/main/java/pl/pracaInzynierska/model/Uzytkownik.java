@@ -2,6 +2,7 @@ package pl.pracaInzynierska.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +28,8 @@ public class Uzytkownik implements UserDetails {
 
     private String username;
     private Boolean isEnabled;
-    private String user_role;
+    @Column(name = "Rola")
+    private String role;
     @Transient
     private String haslo;
     private String passwordEncrypted;
@@ -35,11 +37,11 @@ public class Uzytkownik implements UserDetails {
     private Uzytkownik() {
     }
 
-    public Uzytkownik(String username, Boolean isEnabled, String role, String password) {
+    public Uzytkownik(String username, Boolean isEnabled, String role, String haslo) {
         this.username = username;
         this.isEnabled = isEnabled;
-        this.user_role = "USER";
-        this.haslo = password;
+        this.role = role;
+        this.haslo = haslo;
         this.passwordEncrypted = getPasswordEncrypted();
     }
 
@@ -69,11 +71,11 @@ public class Uzytkownik implements UserDetails {
     }
 
     public String getRole() {
-        return user_role;
+        return role;
     }
 
     public void setRole(String role) {
-        this.user_role = role;
+        this.role = role;
     }
 
     @Override
@@ -86,12 +88,12 @@ public class Uzytkownik implements UserDetails {
     }
 
     public String getPasswordEncrypted() {
-        this.passwordEncrypted = new BCryptPasswordEncoder().encode(getPassword());
+        this.passwordEncrypted = new BCryptPasswordEncoder().encode(this.haslo);
         return passwordEncrypted;
     }
 
-    public void setPasswordEncrypted(String passwordencrypted) {
-        this.passwordEncrypted = passwordencrypted;
+    public void setPasswordEncrypted(String passwordEncrypted) {
+        this.passwordEncrypted = passwordEncrypted;
     }
 
     public String toString(String username) {

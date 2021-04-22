@@ -191,34 +191,31 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
 
         zywicaDodaj.addClickListener(e -> {
-            if (checkField(zywicaPole,zywicaIlosc)) {
-//                try {
-                if (!(zywicaPole.getValue().equals(null)) || !(zywicaIlosc.getValue().equals(null))) {
-                    this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue().replace(",", ".")), true);
-                    materialyUzyteRepository.save(this.materialyUzyte);
-                    zywicaPole.clear();
-                    zywicaPole.setPlaceholder("Dodano!");
-                    zywicaIlosc.clear();
-                    listMaterialy();
+            if (checkField(zywicaPole, zywicaIlosc)) {
+                try {
+                    if (!(zywicaPole.getValue() != null) || !(zywicaIlosc.getValue() != null)) {
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        zywicaPole.clear();
+                        zywicaPole.setPlaceholder("Dodano!");
+                        zywicaIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    zywicaPole.setPlaceholder("Wybierz");
+                    zywicaIlosc.setPlaceholder("Podaj ilość");
                 }
-//                } catch (NullPointerException exep) {
-//                    zywicaPole.setPlaceholder("Wybierz");
-//                    zywicaIlosc.setPlaceholder("Podaj ilość");
-//                }
             }
         });
         mataDodaj.addClickListener(e -> {
-            if (checkField(mataPole,mataIlosc)) {
+            if (checkField(mataPole, mataIlosc)) {
                 try {
-                    if (!(mataPole.getValue().equals(null)) || !(mataIlosc.getValue().equals(null))) {
-                        System.out.println("wewnatrz ifa");
                         this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue().replace(",", ".")), true);
                         materialyUzyteRepository.save(this.materialyUzyte);
                         mataPole.clear();
                         mataPole.setPlaceholder("Dodano!");
                         mataIlosc.clear();
                         listMaterialy();
-                    }
                 } catch (NullPointerException exep) {
                     mataPole.setPlaceholder("Wybierz");
                     mataIlosc.setPlaceholder("Podaj ilość");
@@ -226,82 +223,107 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
             }
         });
         zelkotDodaj.addClickListener(e -> {
-            if ((zelkotPole.getValue() != null) || (zelkotIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zelkotPole.getValue().toString()), Double.parseDouble(zelkotIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                zelkotPole.clear();
-                zelkotPole.setPlaceholder("Dodano!");
-                zelkotIlosc.clear();
-                listMaterialy();
-            } else {
-                zelkotPole.setPlaceholder("Wybierz");
-                zelkotIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(zelkotPole, zelkotIlosc)) {
+                try {
+                    if ((zelkotPole.getValue() != null) || (zelkotIlosc.getValue() != null)) {
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zelkotPole.getValue().toString()), Double.parseDouble(zelkotIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        zelkotPole.clear();
+                        zelkotPole.setPlaceholder("Dodano!");
+                        zelkotIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    zelkotPole.setPlaceholder("Wybierz");
+                    zelkotIlosc.setPlaceholder("Podaj ilość");
+                }
             }
+
         });
         topkotDodaj.addClickListener(e -> {
-            if ((topkotPole.getValue() != null) || (topkotIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(topkotPole.getValue().toString()), Double.parseDouble(topkotIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                topkotPole.clear();
-                topkotPole.setPlaceholder("Dodano!");
-                topkotIlosc.clear();
-                listMaterialy();
-            } else {
-                topkotPole.setPlaceholder("Wybierz");
-                topkotIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(topkotPole, topkotIlosc)) {
+                try {
+                    if ((topkotPole.getValue() != null) || (topkotIlosc.getValue() != null)) {
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(topkotPole.getValue().toString()), Double.parseDouble(topkotIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        topkotPole.clear();
+                        topkotPole.setPlaceholder("Dodano!");
+                        topkotIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    topkotPole.setPlaceholder("Wybierz");
+                    topkotIlosc.setPlaceholder("Podaj ilość");
+                }
             }
         });
         piankaDodaj.addClickListener(e -> {
-            if ((piankaPole.getValue() != null) || (piankaIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(piankaPole.getValue().toString()), Double.parseDouble(piankaIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                piankaPole.clear();
-                piankaPole.setPlaceholder("Dodano!");
-                piankaIlosc.clear();
-                listMaterialy();
-            } else {
-                piankaPole.setPlaceholder("Wybierz");
-                piankaIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(piankaPole, piankaIlosc)) {
+                try {
+                    if ((piankaPole.getValue() != null) || (piankaIlosc.getValue() != null)) {
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(piankaPole.getValue().toString()), Double.parseDouble(piankaIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        piankaPole.clear();
+                        piankaPole.setPlaceholder("Dodano!");
+                        piankaIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    piankaPole.setPlaceholder("Wybierz");
+                    piankaIlosc.setPlaceholder("Podaj ilość");
+                }
             }
         });
         rbhDodaj.addClickListener(e -> {
-            if ((rbhPole.getValue() != null) || (rbhIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(rbhPole.getValue().toString()), Double.parseDouble(rbhIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                rbhPole.clear();
-                rbhPole.setPlaceholder("Dodano!");
-                rbhIlosc.clear();
-                listMaterialy();
-            } else {
-                rbhPole.setPlaceholder("Wybierz");
-                rbhIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(rbhPole, rbhIlosc)) {
+                try {
+                    if ((rbhPole.getValue() != null) || (rbhIlosc.getValue() != null)) {
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(rbhPole.getValue().toString()), Double.parseDouble(rbhIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        rbhPole.clear();
+                        rbhPole.setPlaceholder("Dodano!");
+                        rbhIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    rbhPole.setPlaceholder("Wybierz");
+                    rbhIlosc.setPlaceholder("Podaj ilość");
+                }
             }
         });
         podstawoweDodaj.addClickListener(e -> {
-            if ((podstawowePole.getValue() != null) || (podstawoweIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(podstawowePole.getValue().toString()), Double.parseDouble(podstawoweIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                System.out.println(this.materialyUzyte);
-                podstawowePole.clear();
-                podstawowePole.setPlaceholder("Dodano!");
-                podstawoweIlosc.clear();
-                listMaterialy();
-            } else {
-                podstawowePole.setPlaceholder("Wybierz");
-                podstawoweIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(podstawowePole, podstawoweIlosc)) {
+                try {
+                    if ((podstawowePole.getValue() != null) || (podstawoweIlosc.getValue() != null)) {
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(podstawowePole.getValue().toString()), Double.parseDouble(podstawoweIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        System.out.println(this.materialyUzyte);
+                        podstawowePole.clear();
+                        podstawowePole.setPlaceholder("Dodano!");
+                        podstawoweIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    podstawowePole.setPlaceholder("Wybierz");
+                    podstawoweIlosc.setPlaceholder("Podaj ilość");
+                }
             }
         });
         pomocniczeDodaj.addClickListener(e -> {
-            if ((pomocniczePole.getValue() != null) || (pomocniczeIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(pomocniczePole.getValue().toString()), Double.parseDouble(pomocniczeIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                pomocniczePole.clear();
-                pomocniczePole.setPlaceholder("Dodano!");
-                pomocniczeIlosc.clear();
-                listMaterialy();
-            } else {
-                pomocniczePole.setPlaceholder("Wybierz");
-                pomocniczeIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(pomocniczePole, pomocniczeIlosc)) {
+                try {
+                    if ((pomocniczePole.getValue() != null) || (pomocniczeIlosc.getValue() != null)) {
+                        this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(pomocniczePole.getValue().toString()), Double.parseDouble(pomocniczeIlosc.getValue().replace(",", ".")), true);
+                        materialyUzyteRepository.save(this.materialyUzyte);
+                        pomocniczePole.clear();
+                        pomocniczePole.setPlaceholder("Dodano!");
+                        pomocniczeIlosc.clear();
+                        listMaterialy();
+                    }
+                } catch (NullPointerException exep) {
+                    pomocniczePole.setPlaceholder("Wybierz");
+                    pomocniczeIlosc.setPlaceholder("Podaj ilość");
+                }
             }
         });
         wylicz.addClickListener((ClickEvent<Button> e) -> {
@@ -578,7 +600,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     private boolean checkField(ComboBox field1, TextField field2) {
         String fieldValue = field2.getValue().replace(",", ".");
         if (fieldValue.matches("^(0|([1-9][0-9]*))(\\.[0-9]+)?$")) {
-            if (!(field1.equals(null))) {
+            if (!(field1 == null)) {
                 return true;
             } else {
                 field1.setValue("Wybierz");

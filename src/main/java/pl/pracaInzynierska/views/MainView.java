@@ -21,6 +21,7 @@ public class MainView extends VerticalLayout {
     private final Button inwestycje = new Button("Inwestycje");
     private final Button materialy = new Button("Materiały");
     private final Button wyloguj = new Button("Wyloguj");
+    private final Button adminMenu = new Button("Admin");
 
     public MainView() {
         setAlignItems(Alignment.CENTER);
@@ -48,7 +49,13 @@ public class MainView extends VerticalLayout {
         materialy.addClickListener(event -> {
             getUI().ifPresent(ui -> ui.navigate("user/materialy"));
         });
-
+      
+       add(adminMenu);
+        adminMenu.setWidth("250px");
+        adminMenu.addClickListener(event -> {
+            getUI().ifPresent(ui -> ui.navigate("admin/menu"));
+        });
+        
         add(wyloguj);
         wyloguj.setWidth("250px");
         wyloguj.getElement().setAttribute("theme", "error tertiary");

@@ -37,6 +37,7 @@ public class PracownikForm extends VerticalLayout implements KeyNotifier {
 
     private final TextField nazwisko = new TextField("Nazwisko");
     private final TextField imie = new TextField("Imię");
+    private final TextField pesel = new TextField("PESEL");
     private final TextArea poleNotatki = new TextArea("Nowa notatka");
 
     Button save = new Button("Save", VaadinIcon.CHECK.create());
@@ -72,10 +73,11 @@ public class PracownikForm extends VerticalLayout implements KeyNotifier {
             getNotatka((Notatka) event.getValue());
         });
 
-        add(buttonBar, nazwisko, imie, stanowiskoBox, poleNotatki, dodajN, usunN, gridNotatka);
+        add(buttonBar, nazwisko, imie, pesel, stanowiskoBox, poleNotatki, dodajN, usunN, gridNotatka);
 
         binder.bind(nazwisko, Pracownik::getNazwisko, Pracownik::setNazwisko);
         binder.bind(imie, Pracownik::getImie, Pracownik::setImie);
+        binder.bind(pesel, Pracownik::getPesel, Pracownik::setPesel);
         binder.bind(stanowiskoBox, Pracownik::getObecneStanowisko, Pracownik::setObecneStanowisko);
         
         setSpacing(false);
@@ -153,6 +155,7 @@ public class PracownikForm extends VerticalLayout implements KeyNotifier {
             pracownik = p;
             nazwisko.setValue(p.getNazwisko());
             imie.setValue(p.getImie());
+            //pesel.setValue(p.getPesel());
             nazwisko.focus();
         }
         //elementy widoczne tylko przy edycji pracownika

@@ -19,7 +19,6 @@ import pl.pracaInzynierska.model.Pracownik;
 import org.springframework.util.StringUtils;
 
 @Route(value = "user/pracownicy")
-@Theme(value = Lumo.class, variant = Lumo.LIGHT)
 public class PracownicyView extends VerticalLayout {
 
     private final PracownikRepository repo;
@@ -58,7 +57,7 @@ public class PracownicyView extends VerticalLayout {
         dialog.setCloseOnEsc(false);
         dialog.setCloseOnOutsideClick(false);
         
-        grid.setColumns("id", "nazwisko", "imie");
+        grid.setColumns("id", "nazwisko", "imie", "pesel");
         grid.getColumnByKey("id").setWidth("50px").setFlexGrow(0).setSortProperty("id");
 
         // Edycja istniejącego pracownika po wybraniu go z tabeli
