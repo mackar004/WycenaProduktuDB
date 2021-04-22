@@ -142,8 +142,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     private WycenaForm.ChangeHandler changeHandler;
 
-    private double wspKsztaltu;
-
     @Autowired
     public WycenaForm(WycenaRepository wycenaRepository, InwestycjaRepository inwestycjaRepository,
             MaterialyRepository materialyRepository, MaterialyUzyteRepository materialyUzyteRepository) {
@@ -193,36 +191,36 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
 
         zywicaDodaj.addClickListener(e -> {
-            if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
-                this.materialyUzyte = 
-                        new MaterialyUzyte(materialyRepository.findByNazwa(zywicaPole.getValue().toString()),
-                        Double.parseDouble(zywicaIlosc.getValue().replace(",", ".")), true);
-                materialyUzyteRepository.save(this.materialyUzyte);
-                zywicaPole.clear();
-                zywicaPole.setPlaceholder("Dodano!");
-                zywicaIlosc.clear();
-                listMaterialy();
-            } else {
-                zywicaPole.setPlaceholder("Wybierz");
-                zywicaIlosc.setPlaceholder("Podaj ilość");
+            if (checkField(zywicaIlosc)) {
+                if ((zywicaPole.getValue() != null) || ((zywicaIlosc.getValue() != null))) {
+                    this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zywicaPole.getValue().toString()), Double.parseDouble(zywicaIlosc.getValue().replace(",", ".")), true);
+                    materialyUzyteRepository.save(this.materialyUzyte);
+                    zywicaPole.clear();
+                    zywicaPole.setPlaceholder("Dodano!");
+                    zywicaIlosc.clear();
+                    listMaterialy();
+                } else {
+                    zywicaPole.setPlaceholder("Wybierz");
+                    zywicaIlosc.setPlaceholder("Podaj ilość");
+                }
             }
         });
         mataDodaj.addClickListener(e -> {
             if ((mataPole.getValue() != null) || (mataIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue().replace(",", ".")), true);
+                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(mataPole.getValue().toString()), Double.parseDouble(mataIlosc.getValue().replace(",", ".")), true);
                 materialyUzyteRepository.save(this.materialyUzyte);
                 mataPole.clear();
                 mataPole.setPlaceholder("Dodano!");
                 mataIlosc.clear();
                 listMaterialy();
             } else {
-                mataPole.setPlaceholder("Wybierz");
+                mataPole.setPlaceholder("");
                 mataIlosc.setPlaceholder("Podaj ilość");
             }
         });
         zelkotDodaj.addClickListener(e -> {
             if ((zelkotPole.getValue() != null) || (zelkotIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(zelkotPole.getValue().toString()), Double.parseDouble(zelkotIlosc.getValue().replace(",", ".")), true);
+                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zelkotPole.getValue().toString()), Double.parseDouble(zelkotIlosc.getValue().replace(",", ".")), true);
                 materialyUzyteRepository.save(this.materialyUzyte);
                 zelkotPole.clear();
                 zelkotPole.setPlaceholder("Dodano!");
@@ -235,7 +233,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         topkotDodaj.addClickListener(e -> {
             if ((topkotPole.getValue() != null) || (topkotIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(topkotPole.getValue().toString()), Double.parseDouble(topkotIlosc.getValue().replace(",", ".")), true);
+                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(topkotPole.getValue().toString()), Double.parseDouble(topkotIlosc.getValue().replace(",", ".")), true);
                 materialyUzyteRepository.save(this.materialyUzyte);
                 topkotPole.clear();
                 topkotPole.setPlaceholder("Dodano!");
@@ -248,7 +246,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         piankaDodaj.addClickListener(e -> {
             if ((piankaPole.getValue() != null) || (piankaIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(piankaPole.getValue().toString()), Double.parseDouble(piankaIlosc.getValue().replace(",", ".")), true);
+                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(piankaPole.getValue().toString()), Double.parseDouble(piankaIlosc.getValue().replace(",", ".")), true);
                 materialyUzyteRepository.save(this.materialyUzyte);
                 piankaPole.clear();
                 piankaPole.setPlaceholder("Dodano!");
@@ -261,7 +259,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         rbhDodaj.addClickListener(e -> {
             if ((rbhPole.getValue() != null) || (rbhIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(rbhPole.getValue().toString()), Double.parseDouble(rbhIlosc.getValue().replace(",", ".")), true);
+                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(rbhPole.getValue().toString()), Double.parseDouble(rbhIlosc.getValue().replace(",", ".")), true);
                 materialyUzyteRepository.save(this.materialyUzyte);
                 rbhPole.clear();
                 rbhPole.setPlaceholder("Dodano!");
@@ -274,8 +272,9 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         podstawoweDodaj.addClickListener(e -> {
             if ((podstawowePole.getValue() != null) || (podstawoweIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(podstawowePole.getValue().toString()), Double.parseDouble(podstawoweIlosc.getValue().replace(",", ".")), true);
+                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(podstawowePole.getValue().toString()), Double.parseDouble(podstawoweIlosc.getValue().replace(",", ".")), true);
                 materialyUzyteRepository.save(this.materialyUzyte);
+                System.out.println(this.materialyUzyte);
                 podstawowePole.clear();
                 podstawowePole.setPlaceholder("Dodano!");
                 podstawoweIlosc.clear();
@@ -287,7 +286,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         });
         pomocniczeDodaj.addClickListener(e -> {
             if ((pomocniczePole.getValue() != null) || (pomocniczeIlosc.getValue() != null)) {
-                this.materialyUzyte = new MaterialyUzyte(materialyRepository.findByNazwa(pomocniczePole.getValue().toString()), Double.parseDouble(pomocniczeIlosc.getValue().replace(",", ".")), true);
+                this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(pomocniczePole.getValue().toString()), Double.parseDouble(pomocniczeIlosc.getValue().replace(",", ".")), true);
                 materialyUzyteRepository.save(this.materialyUzyte);
                 pomocniczePole.clear();
                 pomocniczePole.setPlaceholder("Dodano!");
@@ -390,10 +389,13 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         binderWycena.forField(cenaKoncowa)
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
+//        binderWycena.forField(zywicaIlosc)
+//                .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
+//                .bind(MaterialyUzyte::getIloscMaterialu, MaterialyUzyte::setIloscMaterialu);
 
         save.addClickListener(e -> {
             save();
-            sendEmail.SendEmail("Wycena " + this.inwestycja, 
+            sendEmail.SendEmail("Wycena " + this.inwestycja,
                     "Nowa wycena dla " + this.inwestycja + " o wartości " + String.valueOf(cenaKoncowa.getValue()),
                     "inzmailserv@gmail.com");
         });
@@ -480,7 +482,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     }
 
     void cancel() {
-        materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycenaAndIsNew(null, true));
+        materialyUzyteRepository.deleteByWycenaAndIsNew(this.wycena, true);
         materialyUzyteRepository.flush();
         materialyDodane.select(null);
         clearFields();
@@ -519,6 +521,7 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
     }
 
     public final void editWycena(Wycena w, Inwestycja i, Boolean nowaWyc) {
+        materialyUzyteRepository.deleteByWycenaAndIsNew(null, true);
         if (w == null) {
             setVisible(false);
             return;
@@ -563,5 +566,14 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     public void setChangeHandler(ChangeHandler h) {
         changeHandler = h;
+    }
+
+    private boolean checkField(TextField field) {
+        String fieldValue = field.getValue().replace(",", ".");
+        if (fieldValue.matches("^(0|([1-9][0-9]*))(\\.[0-9]+)?$")) {
+            return true;
+        }
+        field.setValue("Błąd danych!");
+        return false;
     }
 }
