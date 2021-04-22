@@ -509,7 +509,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
     void cancel() {
         materialyUzyteRepository.deleteByWycenaAndIsNew(this.wycena, true);
-        materialyUzyteRepository.flush();
         materialyDodane.select(null);
         clearFields();
         if (nowaWycLoc) {
