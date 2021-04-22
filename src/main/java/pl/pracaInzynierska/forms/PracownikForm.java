@@ -155,7 +155,6 @@ public class PracownikForm extends VerticalLayout implements KeyNotifier {
             pracownik = p;
             nazwisko.setValue(p.getNazwisko());
             imie.setValue(p.getImie());
-            //pesel.setValue(p.getPesel());
             nazwisko.focus();
         }
         //elementy widoczne tylko przy edycji pracownika

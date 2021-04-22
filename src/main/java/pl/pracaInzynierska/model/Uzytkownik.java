@@ -124,5 +124,4 @@ public class Uzytkownik implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
-//http://namiekko.pl/2016/08/31/spring-boot-autoryzacja-uzytkownikow-w-oparciu-o-baze-danych/
 }

@@ -418,9 +418,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         binderWycena.forField(cenaKoncowa)
                 .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
                 .bind(Wycena::getCenaKoncowa, Wycena::setCenaKoncowa);
-//        binderWycena.forField(zywicaIlosc)
-//                .withConverter(new StringToDoubleConverter("Potrzebna liczba!"))
-//                .bind(MaterialyUzyte::getIloscMaterialu, MaterialyUzyte::setIloscMaterialu);
 
         save.addClickListener(e -> {
             save();

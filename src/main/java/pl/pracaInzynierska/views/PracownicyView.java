@@ -10,9 +10,6 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
-
 import pl.pracaInzynierska.repository.NotatkaRepository;
 import pl.pracaInzynierska.repository.PracownikRepository;
 import pl.pracaInzynierska.model.Pracownik;
