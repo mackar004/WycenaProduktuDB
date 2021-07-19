@@ -170,7 +170,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
 
         //Kasowanie wszystkich istniejących materialów użytych z tabeli bez przypisanej wyceny (tempy nie zapisane)
         materialyUzyteRepository.deleteAll(materialyUzyteRepository.findByWycena(null));
-        materialyUzyteRepository.flush();
 
         materialyDodane.asSingleSelect().addValueChangeListener(e -> {
             if (materialyDodane.getSelectedItems().isEmpty()) {
@@ -223,14 +222,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         zelkotDodaj.addClickListener(e -> {
             if (checkField(zelkotPole, zelkotIlosc)) {
                 try {
-                    if ((zelkotPole.getValue() != null) || (zelkotIlosc.getValue() != null)) {
                         this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(zelkotPole.getValue().toString()), Double.parseDouble(zelkotIlosc.getValue().replace(",", ".")), true);
                         materialyUzyteRepository.save(this.materialyUzyte);
                         zelkotPole.clear();
                         zelkotPole.setPlaceholder("Dodano!");
                         zelkotIlosc.clear();
                         listMaterialy();
-                    }
                 } catch (NullPointerException exep) {
                     zelkotPole.setPlaceholder("Wybierz");
                     zelkotIlosc.setPlaceholder("Podaj ilość");
@@ -241,14 +238,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         topkotDodaj.addClickListener(e -> {
             if (checkField(topkotPole, topkotIlosc)) {
                 try {
-                    if ((topkotPole.getValue() != null) || (topkotIlosc.getValue() != null)) {
                         this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(topkotPole.getValue().toString()), Double.parseDouble(topkotIlosc.getValue().replace(",", ".")), true);
                         materialyUzyteRepository.save(this.materialyUzyte);
                         topkotPole.clear();
                         topkotPole.setPlaceholder("Dodano!");
                         topkotIlosc.clear();
                         listMaterialy();
-                    }
                 } catch (NullPointerException exep) {
                     topkotPole.setPlaceholder("Wybierz");
                     topkotIlosc.setPlaceholder("Podaj ilość");
@@ -258,14 +253,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         piankaDodaj.addClickListener(e -> {
             if (checkField(piankaPole, piankaIlosc)) {
                 try {
-                    if ((piankaPole.getValue() != null) || (piankaIlosc.getValue() != null)) {
                         this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(piankaPole.getValue().toString()), Double.parseDouble(piankaIlosc.getValue().replace(",", ".")), true);
                         materialyUzyteRepository.save(this.materialyUzyte);
                         piankaPole.clear();
                         piankaPole.setPlaceholder("Dodano!");
                         piankaIlosc.clear();
                         listMaterialy();
-                    }
                 } catch (NullPointerException exep) {
                     piankaPole.setPlaceholder("Wybierz");
                     piankaIlosc.setPlaceholder("Podaj ilość");
@@ -275,14 +268,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         rbhDodaj.addClickListener(e -> {
             if (checkField(rbhPole, rbhIlosc)) {
                 try {
-                    if ((rbhPole.getValue() != null) || (rbhIlosc.getValue() != null)) {
                         this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(rbhPole.getValue().toString()), Double.parseDouble(rbhIlosc.getValue().replace(",", ".")), true);
                         materialyUzyteRepository.save(this.materialyUzyte);
                         rbhPole.clear();
                         rbhPole.setPlaceholder("Dodano!");
                         rbhIlosc.clear();
                         listMaterialy();
-                    }
                 } catch (NullPointerException exep) {
                     rbhPole.setPlaceholder("Wybierz");
                     rbhIlosc.setPlaceholder("Podaj ilość");
@@ -292,7 +283,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         podstawoweDodaj.addClickListener(e -> {
             if (checkField(podstawowePole, podstawoweIlosc)) {
                 try {
-                    if ((podstawowePole.getValue() != null) || (podstawoweIlosc.getValue() != null)) {
                         this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(podstawowePole.getValue().toString()), Double.parseDouble(podstawoweIlosc.getValue().replace(",", ".")), true);
                         materialyUzyteRepository.save(this.materialyUzyte);
                         System.out.println(this.materialyUzyte);
@@ -300,7 +290,6 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
                         podstawowePole.setPlaceholder("Dodano!");
                         podstawoweIlosc.clear();
                         listMaterialy();
-                    }
                 } catch (NullPointerException exep) {
                     podstawowePole.setPlaceholder("Wybierz");
                     podstawoweIlosc.setPlaceholder("Podaj ilość");
@@ -310,14 +299,12 @@ public final class WycenaForm extends VerticalLayout implements KeyNotifier {
         pomocniczeDodaj.addClickListener(e -> {
             if (checkField(pomocniczePole, pomocniczeIlosc)) {
                 try {
-                    if ((pomocniczePole.getValue() != null) || (pomocniczeIlosc.getValue() != null)) {
                         this.materialyUzyte = new MaterialyUzyte(this.wycena, materialyRepository.findByNazwa(pomocniczePole.getValue().toString()), Double.parseDouble(pomocniczeIlosc.getValue().replace(",", ".")), true);
                         materialyUzyteRepository.save(this.materialyUzyte);
                         pomocniczePole.clear();
                         pomocniczePole.setPlaceholder("Dodano!");
                         pomocniczeIlosc.clear();
                         listMaterialy();
-                    }
                 } catch (NullPointerException exep) {
                     pomocniczePole.setPlaceholder("Wybierz");
                     pomocniczeIlosc.setPlaceholder("Podaj ilość");

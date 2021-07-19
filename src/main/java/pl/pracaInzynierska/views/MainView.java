@@ -22,7 +22,7 @@ public class MainView extends VerticalLayout {
     private final Button materialy = new Button("Materiały");
     private final Button wyloguj = new Button("Wyloguj");
     private final Button adminMenu = new Button("Admin");
-
+    
     public MainView() {
         setAlignItems(Alignment.CENTER);
 
