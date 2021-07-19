@@ -9,10 +9,10 @@ import pl.wycenaProduktuDB.model.Uzytkownik;
 import pl.wycenaProduktuDB.repository.UzytkownikRepository;
 
 @SpringBootApplication
-public class RoMa3Application {
+public class WycenaProduktuDB {
 
     public static void main(String[] args) {
-        SpringApplication.run(RoMa3Application.class, args);
+        SpringApplication.run(WycenaProduktuDB.class, args);
     }
 
 //      //Mockowanie użytkowników    
