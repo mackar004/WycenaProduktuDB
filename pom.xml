@@ -11,9 +11,9 @@
         <version>2.0.2.RELEASE</version>
     </parent>
     <groupId>pl.torun.roma</groupId>
-    <artifactId>RoMa3</artifactId>
+    <artifactId>WycenaProduktuDB</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>RoMa3</name>
+    <name>WycenaProduktuDB</name>
     <description>Aplikacja wspomagająca wycenę produktów</description>
 
     <properties>
